@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "name": "gnome-remote-desktop",
+      "version": "50.2",
+      "url": "https://download.gnome.org/sources/gnome-remote-desktop/50/gnome-remote-desktop-50.2.tar.xz",
+      "sha256": "31df628f4113573f136ffc8dc001763aed633cd85bed21e58bc61f8a17df091f",
+      "license": "GPL-2.0-or-later",
+      "patches": [
+        "0001-client-lifetime.patch",
+        "0002-buffer-fd-lifetime.patch",
+        "0003-memfd-bounds.patch",
+        "0004-private-compatibility-profile.patch",
+        "0005-advertised-depth.patch",
+        "0006-queued-dead-connections.patch",
+        "0007-listen-address.patch",
+        "0008-pipewire-data-loop-not-realtime.patch"
+      ]
+    },
+    {
+      "name": "libvncserver",
+      "version": "0.9.15",
+      "url": "https://codeload.github.com/LibVNC/libvncserver/tar.gz/refs/tags/LibVNCServer-0.9.15",
+      "sha256": "62352c7795e231dfce044beb96156065a05a05c974e5de9e023d688d8ff675d7",
+      "license": "GPL-2.0-or-later",
+      "patches": [
+        "0001-private-zrle-preference.patch",
+        "0002-drain-client-messages.patch",
+        "0003-size-change-in-update.patch"
+      ]
+    },
+    {
+      "name": "tigervnc",
+      "version": "1.16.2",
+      "url": "https://codeload.github.com/TigerVNC/tigervnc/tar.gz/refs/tags/v1.16.2",
+      "sha256": "b107c0c8b8a962594281690366c24186e95c2ea4a169acbc0076aa62ed01f467",
+      "license": "GPL-2.0-or-later",
+      "patches": []
+    }
+  ]
+}

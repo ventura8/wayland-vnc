@@ -1,0 +1,10 @@
+FROM ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367
+# SDK/system image are official, separately provisioned read-only mounts, never redistributed.
+# Development fixture only; pin apt snapshot before release qualification.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libnss3 libpulse0 libx11-6 libxcb1 libxcomposite1 libxcursor1 libxi6 libxtst6 \
+    libxrandr2 libxrender1 libasound2t64 libglu1-mesa libgl1 libegl1 procps \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /lab
+COPY tests/fixtures/android-session.sh /lab/android-session.sh
+ENTRYPOINT ["/lab/android-session.sh"]

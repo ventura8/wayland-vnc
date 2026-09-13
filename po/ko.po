@@ -1,0 +1,552 @@
+# 한국어 translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: 한국어\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), 인증 %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "캡처/입력 인터페이스 %d개"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "데스크톱 %d개"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s이(가) 없습니다. 이 데스크톱에는 필요합니다"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: 이 컴퓨터만. 0.0.0.0: 이 컴퓨터가 연결된 모든 네트워크이며 다른 울타리는 없습니다. 1024 이하의 포트는 거부됩니다."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "네이티브 Wayland 세션이 필요합니다. X11로의 대체는 금지됩니다."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Wayland VNC 정보"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "주소"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "알림됨"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "모두 있음"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "적용"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "자동(데스크톱에 맞춤)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "백엔드"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "백엔드 후보"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "이 데스크톱의 백엔드"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "실행 파일"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "바인딩 주소 및 포트"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "바인딩 주소와 포트를 적용했습니다"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "취소"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "기능 판정"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "캡처, 가상 키보드, 가상 포인터 프로토콜을 감지했습니다."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "닫기"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "구성"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "비밀번호 확인"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "다른 기기에서 연결"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "이 컴퓨터를 Wi-Fi 또는 이더넷에 연결한 뒤 다시 여세요"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "복사"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "자격 증명 파일에 사용자 이름 또는 비밀번호가 없습니다"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "데스크톱"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "데스크톱 서비스"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "진단"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "여기의 모든 옵션은 실제 구성이나 설치된 서비스를 변경합니다."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "이 데스크톱에 필요한 모든 것; 설치되지 않음: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME 원격 데스크톱 서버"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "GNOME 원격 데스크톱 자체 데몬은 모든 네트워크에서 수신합니다. 이를 제어하려면 wayland-vnc-grd를 설치하십시오"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME 화면 전송"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "일반"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "RealVNC Viewer에서 이 주소 중 하나로 연결을 추가하십시오. 로컬 네트워크 접근이 켜져 있는 동안 같은 네트워크의 모든 기기에서 사용할 수 있습니다. 인터넷에서 포트를 전달하지 마십시오."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "systemd 사용자 유닛을 사용하려면 wayland-vnc 패키지를 설치하세요"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "KWin과 캡처/입력 포털 인터페이스를 감지했습니다."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin에는 ScreenCast와 RemoteDesktop 포털 인터페이스가 모두 필요합니다."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "키보드 바로 가기"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "키보드 바로 가기"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "언어"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "같은 Wi-Fi 또는 LAN의 기기가 연결하도록 허용합니다. 끔: 이 컴퓨터만."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "라이선스"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "로컬 네트워크 접근"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "로컬 네트워크 접근을 껐습니다"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "로컬 네트워크 접근을 켰습니다"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "주 메뉴"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "휴대전화나 다른 컴퓨터의 RealVNC Viewer에서 이 Wayland 데스크톱에 접속할 수 있게 합니다. 로컬 네트워크 접근을 켜기 전까지는 이 컴퓨터에서만 수신합니다."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Mutter 캡처 및 원격 입력 서비스를 감지했습니다. 전용 빌드가 필요합니다."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "아니요"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "결과 없음"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "로컬 네트워크 주소를 찾을 수 없습니다"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "지원되는 백엔드가 없습니다"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "설치된 번역이 없어 창은 영어로 표시됩니다."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "없음"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "알림된 것이 없습니다"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "사용 가능한 것이 없습니다"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "확인한 것이 없습니다"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "감지된 것이 없습니다"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "알림되지 않음"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "확인되지 않음"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "설치되지 않음"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "준비되지 않음"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "설정되지 않음"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "주 메뉴 열기"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "공용 주소 - 로컬 네트워크 밖에서도 접근 가능"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "비밀번호"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "비밀번호는 ASCII 문자 6~64자여야 합니다"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "비밀번호가 일치하지 않습니다"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "포트"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "포트는 비특권 TCP 포트여야 합니다"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "포털"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "프로젝트 웹사이트"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "끝내기"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "설치 준비됨"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, 클라이언트. 서비스에는 필요 없음"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "이유"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "릴리스 대상"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop 포털"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "문제 신고"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "필요한 캡처 및 입력 기능을 감지하지 못했습니다."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "실행 중"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "저장"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast 포털"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "검색"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "진단 검색"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "언어 검색"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "GNOME Remote Desktop VNC가 제공(포트 5900). 공개 범위는 GNOME 설정 > 공유를 따릅니다"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "서버 구성"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "서비스"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "세션"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "세션 유형"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "비밀번호 설정"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "뷰어 비밀번호 설정"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "먼저 뷰어 비밀번호를 설정하세요"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "로그인 시 시작"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "상태"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "저장됨(%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "대상"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "설정 창에는 GTK4와 libadwaita가 필요합니다(python3-gi, gir1.2-gtk-4.0, gir1.2-adw-1을 설치하세요)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "설정 창에는 libadwaita %(needed)s 이상이 필요합니다. 이 시스템은 %(found)s입니다"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "다른 언어를 선택하지 않으면 창은 데스크톱 언어를 따릅니다."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "이 데스크톱은 GNOME 원격 데스크톱을 통해 VNC를 제공하며, 최대 8자 암호만 허용합니다"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "이 데스크톱의 백엔드는 항상 이 컴퓨터에서만 수신합니다"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC 서버, KDE Plasma용"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "다른 검색어를 입력해 보세요."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "다른 기기의 RealVNC Viewer에 이 값을 입력하세요. 눈 아이콘으로 현재 비밀번호를 볼 수 있습니다. 모드 600으로 저장됩니다."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "사용자 이름"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "사용자 이름은 출력 가능한 ASCII여야 합니다"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "판정"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "뷰어 자격 증명"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "뷰어 비밀번호를 저장했습니다"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC 서버, wlroots 컴포지터용"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Wayland 프로토콜"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "이 데스크톱이 알리는 내용과 그것이 원격 접속에 의미하는 바."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "예"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "이 컴퓨터가 연결된 모든 네트워크"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "로컬 네트워크만"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS 이름"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "모드 %s(너무 개방적)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "모드 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "이 컴퓨터만"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "유닛이 설치되지 않음"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "알 수 없음"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "Wayland 프로토콜을 조사하는 데 사용"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "D-Bus로 포털을 조사하는 데 사용"
+
+#~ msgid "Qualification"
+#~ msgstr "인증 상태"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0으로 설정하면 로컬 네트워크의 기기에서 서버에 접속할 수 있습니다. 서비스는 계속 인터넷을 차단합니다. 127.0.0.1은 이 컴퓨터로만 제한합니다. 1024 이하의 포트는 거부됩니다."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "로컬 네트워크 전용. 인터넷은 유닛이 차단합니다"

@@ -1,0 +1,16 @@
+{
+  // MD013 is configured to the 140-column width AGENTS.md documents, rather than
+  // switched off. Turning a rule off hides whatever drifts past it; this matches
+  // .pymarkdown.json, so both Markdown linters enforce the same width and neither can
+  // pass something the other would reject. 140 rather than the Python limit of 100
+  // because a Markdown table row cannot be wrapped: at 100 the only failures in this
+  // repository are table rows, and shortening their cells loses meaning.
+  "config": {
+    "MD013": {
+      "line_length": 140,
+      "heading_line_length": 140,
+      "code_block_line_length": 140
+    }
+  },
+  "ignores": ["vendor/**", "artifacts/**", "LICENSE"]
+}

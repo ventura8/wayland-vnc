@@ -1,0 +1,44 @@
+Source: wayland-vnc
+Section: admin
+Priority: optional
+Standards-Version: 4.7.2
+Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 13),
+ python3
+Maintainer: ventura8 <alexandrescu.sergiu@gmail.com>
+Vcs-Git: https://github.com/ventura8/wayland-vnc.git
+Vcs-Browser: https://github.com/ventura8/wayland-vnc
+Homepage: https://github.com/ventura8/wayland-vnc
+
+Package: wayland-vnc
+Architecture: all
+Depends:
+ ${misc:Depends},
+ python3,
+ wayvnc,
+ openssl
+Suggests:
+ wayland-vnc-grd
+Recommends:
+ wayland-utils,
+ python3-gi,
+ gir1.2-gtk-4.0 (>= 4.14),
+ gir1.2-adw-1 (>= 1.5),
+ librsvg2-common
+Description: Wayland VNC server and compatibility toolkit for RealVNC viewers
+ wayland-vnc makes a native Wayland desktop reachable with actual RealVNC
+ viewers. It installs a systemd user service that runs the WayVNC server inside
+ the logged-in Wayland session, bound to this machine only (127.0.0.1:5900) until
+ local network access is turned on in the settings app, plus provisioning helpers
+ (`wayland-vnc set-password`, `provision`) and a read-only capability diagnostic
+ (`wayland-vnc doctor`).
+ .
+ Installing enables and starts the service for every logged-in user; a random
+ viewer password is generated on first start, so the server is never unauthenticated.
+ View or change it in the Wayland VNC settings app, or with `wayland-vnc
+ set-password`. To let a phone or another computer on the same Wi-Fi or LAN
+ connect, turn on Local Network Access in the settings app: the server then binds
+ every interface, and is reachable from every network this machine is on -- a user
+ service cannot fence that, so do not forward the port from the internet.
+ Per-desktop viewer qualification evidence lives upstream.

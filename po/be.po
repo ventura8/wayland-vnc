@@ -1,0 +1,552 @@
+# Беларуская translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Беларуская\n"
+"Language: be\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), аўтэнтыфікацыя %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d інтэрфейсаў захопу/уводу"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d працоўных сталоў"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s АДСУТНІЧАЕ, а гэтаму працоўнаму сталу ён патрэбны"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: толькі гэты камп’ютар. 0.0.0.0: усе сеткі, да якіх падключаны гэты камп’ютар, без якой-небудзь іншай абароны. Парты 1024 і ніжэй адхіляюцца."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Патрабуецца родны сеанс Wayland; вяртанне да X11 забаронена."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Пра Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Адрас"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Абвешчаны"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Усе прысутныя"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Ужыць"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Аўтаматычна (паводле працоўнага стала)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Бэкенд"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Кандыдат у бэкенды"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Бэкенд на гэтым працоўным стале"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Выканальныя файлы"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Адрас і порт праслухоўвання"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Адрас і порт ужытыя"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Скасаваць"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Ацэнка магчымасцей"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Выяўлены пратаколы захопу, віртуальнай клавіятуры і віртуальнага паказальніка."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Закрыць"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Канфігурацыя"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Пацвердзіце пароль"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Падключыцца з іншай прылады"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Падключыце гэтую машыну да Wi-Fi або Ethernet, потым адкрыйце зноў"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Капіяваць"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "У файле ўліковых даных адсутнічае імя карыстальніка або пароль"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Працоўны стол"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Службы працоўнага стала"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Дыягностыка"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Кожны параметр тут змяняе рэальную канфігурацыю або ўсталяваную службу."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Усё, што патрэбна гэтаму працоўнаму сталу; не ўсталявана: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Сервер GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Уласная служба GNOME Аддалены працоўны стол слухае ва ўсіх сетках; усталюйце wayland-vnc-grd, каб кіраваць гэтым"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "Трансляцыя экрана GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Агульныя"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "У RealVNC Viewer дадайце падключэнне да аднаго з гэтых адрасоў. Яны працуюць, пакуль уключаны доступ з лакальнай сеткі, для любой прылады ў той жа сетцы. Не перанакіроўвайце порт з Інтэрнэту."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Усталюйце пакет wayland-vnc, каб атрымаць карыстальніцкі юніт systemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "Выяўлены KWin і партальныя інтэрфейсы захопу/уводу."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin патрабуе абодвух партальных інтэрфейсаў: ScreenCast і RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Спалучэнні клавіш"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Спалучэнні клавіш"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Мова"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Дазволіць падключэнне прыладам у той жа сетцы Wi-Fi або LAN. Выключана: толькі гэты камп’ютар."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Ліцэнзія"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Доступ з лакальнай сеткі"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Доступ з лакальнай сеткі выключаны"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Доступ з лакальнай сеткі ўключаны"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Галоўнае меню"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Робіць гэты працоўны стол Wayland даступным з RealVNC Viewer на вашым тэлефоне або іншым камп'ютары. Пакуль вы не ўключыце «Доступ з лакальнай сеткі», ён слухае толькі на гэтым камп'ютары."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Выяўлены службы Mutter для захопу і аддаленага ўводу; патрабуецца прыватная зборка."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Не"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Нічога не знойдзена"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Адрас лакальнай сеткі не знойдзены"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Няма падтрымліваемага бэкенда"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Пераклады не ўсталяваны, таму акно застаецца на англійскай."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Няма"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Нічога не абвешчана"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Нічога не даступна"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Нічога не праверана"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Нічога не выяўлена"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Не абвешчана"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Не праверана"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Не ўсталявана"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Не падрыхтавана"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Не зададзена"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Адкрыць галоўнае меню"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "ПУБЛІЧНЫ АДРАС - даступны за межамі лакальнай сеткі"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Пароль"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Пароль павінен утрымліваць 6–64 сімвалы ASCII"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Паролі не супадаюць"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Порт"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Порт павінен быць непрывілеяваным портам TCP"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Парталы"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Сайт праекта"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Выйсці"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Гатова да ўсталявання"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, кліент; для абслугоўвання не патрэбны"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Прычына"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Мэты выпуску"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Партал RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Паведаміць пра праблему"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Патрэбныя магчымасці захопу І ўводу не выяўлены."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Зараз працуе"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Захаваць"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Партал ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Пошук"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Пошук у дыягностыцы"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Пошук моў"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Абслугоўваецца GNOME Remote Desktop VNC (порт 5900); даступнасць вызначаецца ў Налады GNOME > Абагульванне"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Канфігурацыя сервера"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Служба"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Сеанс"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Тып сеанса"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Задаць пароль"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Задаць пароль праглядальніка"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Спачатку задайце пароль праглядальніка"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Запускаць пры ўваходзе"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Стан"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Захавана (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Мэтавы"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Акну налад патрэбныя GTK4 і libadwaita (усталюйце python3-gi, gir1.2-gtk-4.0 і gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Акну налад патрэбна libadwaita %(needed)s або навейшая; у гэтай сістэме %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Акно прытрымліваецца мовы вашага працоўнага стала, калі вы не выбераце іншую."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Гэты працоўны стол абслугоўвае VNC праз GNOME Remote Desktop, які прымае паролі не даўжэйшыя за 8 знакаў"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Сервер гэтага працоўнага стала заўсёды слухае толькі на гэтым камп’ютары"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Сервер TigerVNC, для KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Паспрабуйце іншы пошук."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Увядзіце гэта ў RealVNC Viewer на іншай прыладзе. Націсніце на вока, каб паказаць бягучы пароль. Захавана з рэжымам 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Імя карыстальніка"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Імя карыстальніка павінна быць друкавальным ASCII"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Вердыкт"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Уліковыя даныя праглядальніка"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Пароль праглядальніка захаваны"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Сервер WayVNC, для кампазітараў wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Пратаколы Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Што абвяшчае гэты працоўны стол і што гэта значыць для аддаленага доступу."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Так"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "усе сеткі, да якіх падключаны гэты камп’ютар"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "толькі лакальная сетка"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Імя mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "рэжым %s (занадта адкрыты)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "рэжым 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "толькі гэтая машына"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "юніт не ўсталяваны"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "невядома"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "выкарыстоўваецца для праверкі пратаколаў Wayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "выкарыстоўваецца для праверкі парталаў праз D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Кваліфікацыя"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 робіць сервер даступным для прылад у вашай лакальнай сетцы; служба па-ранейшаму блакуе інтэрнэт. 127.0.0.1 абмяжоўвае яго гэтай машынай. Парты 1024 і ніжэй адхіляюцца."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "толькі лакальная сетка; інтэрнэт заблакаваны юнітам"

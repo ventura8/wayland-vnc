@@ -1,0 +1,552 @@
+# Íslenska translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Íslenska\n"
+"Language: is\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n%10!=1 || n%100==11);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), auðkenning %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d upptöku-/inntaksviðmót"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d skjáborð"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s VANTAR og þetta skjáborð þarfnast þess"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: aðeins þessi tölva. 0.0.0.0: öll net sem þessi tölva er tengd við, án annarrar varnar. Gáttum 1024 og lægri er hafnað."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Krafist er innbyggðrar Wayland-setu; að falla aftur í X11 er bannað."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Um Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Vistfang"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Tilkynnt"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Allt til staðar"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Virkja"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Sjálfvirkt (fylgja skjáborði)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Bakendi"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Bakendaframbjóðandi"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Bakendi á þessu skjáborði"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Keyrsluskrár"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Hlustunarvistfang og -gátt"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Vistfang og gátt virkjuð"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Hætta við"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Mat á getu"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Samskiptareglur fyrir upptöku, sýndarlyklaborð og sýndarbendil fundust."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Loka"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Uppsetning"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Staðfesta lykilorð"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Tengjast frá öðru tæki"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Tengdu þessa vél við Wi-Fi eða Ethernet og opnaðu svo aftur"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Afrita"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Auðkenningarskrána vantar notandanafn eða lykilorð"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Skjáborð"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Skjáborðsþjónustur"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Greining"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Hver valkostur hér breytir raunverulegri uppsetningu eða uppsettri þjónustu."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Allt sem þetta skjáborð þarfnast; ekki uppsett: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME Remote Desktop-þjónn"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Eigin púki GNOME Fjarskjáborðs hlustar á öllum netum; settu upp wayland-vnc-grd til að stýra þessu"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME skjáútsending"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Almennt"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "Bættu við tengingu við eitt þessara vistfanga í RealVNC Viewer. Þau virka á meðan aðgangur frá staðarneti er kveiktur, fyrir hvaða tæki sem er á sama neti. Ekki áframsenda gáttina af netinu."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Settu upp pakkann wayland-vnc til að fá systemd notandaeininguna"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "KWin og gáttaviðmót fyrir upptöku/inntak fundust."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin þarf báðar gáttaviðmótin: ScreenCast og RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Flýtilyklar"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Flýtilyklar"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Tungumál"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Leyfa tækjum á sama Wi-Fi eða staðarneti að tengjast. Slökkt: aðeins þessi tölva."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Notkunarleyfi"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Aðgangur frá staðarneti"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Slökkt á aðgangi frá staðarneti"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Kveikt á aðgangi frá staðarneti"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Aðalvalmynd"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Gerir þetta Wayland-skjáborð aðgengilegt frá RealVNC Viewer í símanum þínum eða annarri tölvu. Það hlustar aðeins á þessari tölvu þar til þú kveikir á Aðgangur frá staðarneti."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Mutter-þjónustur fyrir upptöku og fjarinntak fundust; krafist er einkasmíðar."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Nei"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Engar niðurstöður fundust"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Ekkert staðarnetsvistfang fannst"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Enginn studdur bakendi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Engar þýðingar eru uppsettar, svo glugginn er áfram á ensku."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Ekkert"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Ekkert tilkynnt"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Ekkert tiltækt"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Ekkert athugað"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Ekkert fannst"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Ekki tilkynnt"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Ekki athugað"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Ekki uppsett"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Ekki undirbúið"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Ekki stillt"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Opna aðalvalmynd"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "OPINBERT VISTFANG - aðgengilegt utan staðarnetsins"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Lykilorð"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Lykilorðið verður að vera 6–64 ASCII-tákn"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Lykilorðin stemma ekki"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Gátt"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Gáttin verður að vera óforréttinda TCP-gátt"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Gáttir"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Vefsvæði verkefnisins"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Hætta"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Tilbúið til uppsetningar"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, biðlari; ekki þörf til að þjóna"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Ástæða"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Útgáfumarkmið"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop-gátt"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Tilkynna vandamál"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Nauðsynleg geta til upptöku OG inntaks fannst ekki."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Í gangi núna"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Vista"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast-gátt"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Leita"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Leita í greiningu"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Leita að tungumálum"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Þjónað af GNOME Remote Desktop VNC (gátt 5900); sýnileiki fylgir GNOME-stillingum > Deiling"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Uppsetning þjóns"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Þjónusta"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Seta"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Tegund setu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Stilla lykilorð"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Stilla lykilorð skoðara"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Stilltu fyrst lykilorð skoðara"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Ræsa við innskráningu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Staða"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Vistað (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Miðað"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Stillingaglugginn þarfnast GTK4 og libadwaita (settu upp python3-gi, gir1.2-gtk-4.0 og gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Stillingaglugginn þarfnast libadwaita %(needed)s eða nýrri; þetta kerfi er með %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Glugginn fylgir tungumáli skjáborðsins þíns nema þú veljir annað."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Þetta skjáborð þjónar VNC um GNOME Remote Desktop, sem tekur við lykilorðum með mest 8 stöfum"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Bakendi þessa skjáborðs hlustar alltaf aðeins á þessari tölvu"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC-þjónn, fyrir KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Prófaðu aðra leit."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Sláðu þetta inn í RealVNC Viewer á hinu tækinu. Notaðu augað til að sýna núverandi lykilorð. Vistað með ham 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Notandanafn"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Notandanafnið verður að vera prentanlegt ASCII"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Mat"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Auðkenni skoðara"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Lykilorð skoðara vistað"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC-þjónn, fyrir wlroots-samsetjara"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Wayland-samskiptareglur"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Hvað þetta skjáborð tilkynnir og hvað það þýðir fyrir fjaraðgang."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Já"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "öll net sem þessi tölva er tengd við"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "aðeins staðarnet"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS-heiti"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "hamur %s (of opinn)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "hamur 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "aðeins þessi vél"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "einingin er ekki uppsett"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "óþekkt"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "notað til að kanna Wayland-samskiptareglur"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "notað til að kanna gáttir um D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Hæfi"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 gerir þjóninn aðgengilegan tækjum á staðarnetinu þínu; þjónustan lokar áfram á internetið. 127.0.0.1 takmarkar hann við þessa vél. Gáttum 1024 og lægri er hafnað."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "aðeins staðarnet; einingin lokar á internetið"

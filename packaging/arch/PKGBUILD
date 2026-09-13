@@ -1,0 +1,24 @@
+# Maintainer: ventura8 <alexandrescu.sergiu@gmail.com>
+# pkgver is read from the repo-root VERSION at build time by the release driver.
+pkgname=wayland-vnc
+pkgver=0.0.0
+pkgrel=1
+pkgdesc="Wayland VNC server and compatibility toolkit for RealVNC viewers"
+arch=('any')
+url="https://github.com/ventura8/wayland-vnc"
+license=('GPL-2.0-or-later')
+depends=('python' 'wayvnc' 'openssl')
+optdepends=('python-gobject: GTK settings app'
+            'gtk4: GTK settings app'
+            'libadwaita: GTK settings app'
+            'librsvg: renders the SVG app icon')
+options=('!debug')
+
+package() {
+  # The release/smoke driver runs makepkg from a tree containing the repo at
+  # $startdir/repo and the shared stage-payload.sh.
+  WAYLAND_VNC_REPO_ROOT="$startdir/repo" \
+    "$startdir/repo/packaging/stage-payload.sh" "$pkgdir" /usr
+  install -Dm644 "$startdir/repo/README.md" \
+    "$pkgdir/usr/share/doc/${pkgname}/README.md"
+}

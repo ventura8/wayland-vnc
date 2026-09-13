@@ -1,0 +1,552 @@
+# ქართული translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: ქართული\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), ავთენტიკაცია %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d ჩაწერის/შეყვანის ინტერფეისი"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d სამუშაო მაგიდა"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s აკლია და ამ სამუშაო მაგიდას ის სჭირდება"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: მხოლოდ ეს კომპიუტერი. 0.0.0.0: ყველა ქსელი, რომელსაც ეს კომპიუტერი უკავშირდება, სხვა ყოველგვარი დაცვის გარეშე. პორტები 1024 და ქვემოთ უარყოფილია."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "საჭიროა მშობლიური Wayland სესია; X11-ზე დაბრუნება აკრძალულია."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Wayland VNC-ის შესახებ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "მისამართი"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "გამოცხადებული"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "ყველა არსებობს"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "გამოყენება"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "ავტომატური (სამუშაო მაგიდის მიხედვით)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "უკანა ნაწილი"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "უკანა ნაწილის კანდიდატი"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "უკანა ნაწილი ამ სამუშაო მაგიდაზე"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "ბინარული ფაილები"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "მოსმენის მისამართი და პორტი"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "მისამართი და პორტი გამოყენებულია"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "გაუქმება"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "შესაძლებლობების ვერდიქტი"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "აღმოჩენილია ჩაწერის, ვირტუალური კლავიატურისა და ვირტუალური მაჩვენებლის პროტოკოლები."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "დახურვა"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "კონფიგურაცია"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "პაროლის დადასტურება"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "სხვა მოწყობილობიდან დაკავშირება"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "დააკავშირეთ ეს მანქანა Wi-Fi-თან ან Ethernet-თან, შემდეგ ხელახლა გახსენით"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "კოპირება"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "ავტორიზაციის ფაილს აკლია მომხმარებლის სახელი ან პაროლი"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "სამუშაო მაგიდა"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "სამუშაო მაგიდის სერვისები"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "დიაგნოსტიკა"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "აქ ყოველი პარამეტრი ცვლის რეალურ კონფიგურაციას ან დაყენებულ სერვისს."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "ყველაფერი, რაც ამ სამუშაო მაგიდას სჭირდება; არ არის დაყენებული: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME Remote Desktop სერვერი"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "GNOME დისტანციური სამუშაო მაგიდის საკუთარი დემონი ყველა ქსელზე უსმენს; ამის სამართავად დააყენეთ wayland-vnc-grd"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME ეკრანის გადაცემა"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "ზოგადი"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "RealVNC Viewer-ში დაამატეთ კავშირი ერთ-ერთ ამ მისამართთან. ისინი მუშაობს, სანამ ლოკალური ქსელიდან წვდომა ჩართულია, იმავე ქსელის ნებისმიერი მოწყობილობისთვის. არ გადაამისამართოთ პორტი ინტერნეტიდან."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "დააყენეთ wayland-vnc პაკეტი systemd მომხმარებლის ერთეულის მისაღებად"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "აღმოჩენილია KWin და ჩაწერის/შეყვანის პორტალის ინტერფეისები."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin მოითხოვს ორივე პორტალის ინტერფეისს: ScreenCast და RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "კლავიატურის მალსახმობები"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "კლავიატურის მალსახმობები"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "ენა"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "იმავე Wi-Fi-ს ან LAN-ის მოწყობილობებს დაკავშირების უფლება მიეცით. გამორთული: მხოლოდ ეს კომპიუტერი."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "ლიცენზია"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "წვდომა ლოკალური ქსელიდან"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "წვდომა ლოკალური ქსელიდან გამოირთო"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "წვდომა ლოკალური ქსელიდან ჩაირთო"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "მთავარი მენიუ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "ამ Wayland სამუშაო მაგიდას ხელმისაწვდომს ხდის თქვენი ტელეფონის ან სხვა კომპიუტერის RealVNC Viewer-იდან. სანამ „წვდომა ლოკალური ქსელიდან“-ს არ ჩართავთ, ის მხოლოდ ამ კომპიუტერზე უსმენს."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "აღმოჩენილია Mutter-ის ჩაწერისა და დისტანციური შეყვანის სერვისები; საჭიროა კერძო აგება."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "არა"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "შედეგები ვერ მოიძებნა"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "ლოკალური ქსელის მისამართი ვერ მოიძებნა"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "მხარდაჭერილი უკანა ნაწილი არ არის"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "თარგმანები არ არის დაყენებული, ამიტომ ფანჯარა ინგლისურად რჩება."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "არცერთი"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "არცერთი არ არის გამოცხადებული"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "არცერთი არ არის ხელმისაწვდომი"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "არცერთი არ არის შემოწმებული"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "არცერთი არ არის აღმოჩენილი"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "არ არის გამოცხადებული"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "არ არის შემოწმებული"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "არ არის დაყენებული"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "არ არის მომზადებული"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "არ არის დაყენებული"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "მთავარი მენიუს გახსნა"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "საჯარო მისამართი - ხელმისაწვდომია ლოკალური ქსელის გარეთ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "პაროლი"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "პაროლი უნდა იყოს 6–64 ASCII სიმბოლო"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "პაროლები არ ემთხვევა"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "პორტი"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "პორტი უნდა იყოს არაპრივილეგირებული TCP პორტი"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "პორტალები"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "პროექტის ვებგვერდი"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "გასვლა"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "დაყენებისთვის მზადაა"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, კლიენტი; მომსახურებისთვის საჭირო არ არის"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "მიზეზი"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "გამოშვების სამიზნეები"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop პორტალი"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "პრობლემის შეტყობინება"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "საჭირო ჩაწერისა და შეყვანის შესაძლებლობები არ არის აღმოჩენილი."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "ახლა მუშაობს"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "შენახვა"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast პორტალი"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "ძებნა"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "დიაგნოსტიკაში ძებნა"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "ენების ძებნა"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "ემსახურება GNOME Remote Desktop VNC (პორტი 5900); ხელმისაწვდომობა მიჰყვება GNOME პარამეტრები > გაზიარება"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "სერვერის კონფიგურაცია"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "სერვისი"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "სესია"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "სესიის ტიპი"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "პაროლის დაყენება"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "მაყურებლის პაროლის დაყენება"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "ჯერ დააყენეთ მაყურებლის პაროლი"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "გაშვება შესვლისას"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "სტატუსი"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "შენახულია (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "სამიზნე"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "პარამეტრების ფანჯარას სჭირდება GTK4 და libadwaita (დააყენეთ python3-gi, gir1.2-gtk-4.0 და gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "პარამეტრების ფანჯარას სჭირდება libadwaita %(needed)s ან უფრო ახალი; ამ სისტემას აქვს %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "ფანჯარა მიჰყვება თქვენი სამუშაო მაგიდის ენას, თუ სხვას არ აირჩევთ."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "ეს სამუშაო მაგიდა VNC-ს GNOME Remote Desktop-ით ემსახურება, რომელიც იღებს მაქსიმუმ 8 სიმბოლოიან პაროლებს"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "ამ სამუშაო მაგიდის უკანა სისტემა ყოველთვის მხოლოდ ამ კომპიუტერზე უსმენს"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC სერვერი, KDE Plasma-სთვის"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "სცადეთ სხვა ძებნა."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "ჩაწერეთ ეს RealVNC Viewer-ში მეორე მოწყობილობაზე. მიმდინარე პაროლის საჩვენებლად გამოიყენეთ თვალი. შენახულია 600 რეჟიმით."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "მომხმარებლის სახელი"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "მომხმარებლის სახელი უნდა იყოს დასაბეჭდი ASCII"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "ვერდიქტი"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "მაყურებლის ავტორიზაცია"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "მაყურებლის პაროლი შენახულია"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC სერვერი, wlroots კომპოზიტორებისთვის"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Wayland პროტოკოლები"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "რას აცხადებს ეს სამუშაო მაგიდა და რას ნიშნავს ეს დისტანციური წვდომისთვის."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "დიახ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "ყველა ქსელი, რომელსაც ეს კომპიუტერი უკავშირდება"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "მხოლოდ ლოკალური ქსელი"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS სახელი"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "%s რეჟიმი (ზედმეტად ღია)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "600 რეჟიმი"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "მხოლოდ ეს მანქანა"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "ერთეული არ არის დაყენებული"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "უცნობი"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "გამოიყენება Wayland პროტოკოლების შესამოწმებლად"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "გამოიყენება პორტალების D-Bus-ით შესამოწმებლად"
+
+#~ msgid "Qualification"
+#~ msgstr "კვალიფიკაცია"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 სერვერს ხელმისაწვდომს ხდის თქვენი ლოკალური ქსელის მოწყობილობებისთვის; სერვისი მაინც ბლოკავს ინტერნეტს. 127.0.0.1 მას ამ მანქანით ზღუდავს. 1024 და უფრო დაბალი პორტები უარყოფილია."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "მხოლოდ ლოკალური ქსელი; ინტერნეტი დაბლოკილია ერთეულის მიერ"

@@ -1,0 +1,33 @@
+Subject: Advertise the colour depth the ZRLE encoder actually uses
+Base: GNOME Remote Desktop 50.2
+License: GPL-2.0-or-later (upstream-derived)
+Status: local candidate; not upstream-submitted or release-qualified
+
+LibVNCServer's rfbGetScreen sets depth = 8 * bytesPerPixel, so a BGRX framebuffer
+is announced in ServerInit as depth 32 although only 24 bits carry colour. Its
+ZRLE encoder, however, picks the 3-byte CPIXEL form whenever the colour bits fit
+in three bytes, ignoring the announced depth. A viewer that keeps the server's
+pixel format (RealVNC Viewer for Android does; the desktop viewer negotiates
+depth 24 first and so never sees this) follows the RFB specification, expects
+4-byte CPIXELs at depth 32, and abandons the stream with "bad xrle data" a few
+hundred milliseconds after the first frame, then reconnects for ever. Announce
+depth 24, which is what the pixels are and what the encoder emits.
+
+--- a/src/grd-session-vnc.c
++++ b/src/grd-session-vnc.c
+@@ -113,6 +113,15 @@
+    */
+   swap_uint8 (&rfb_screen->serverFormat.redShift,
+               &rfb_screen->serverFormat.blueShift);
++
++  /*
++   * Only 24 of the 32 bits carry colour, and LibVNCServer's ZRLE encoder emits
++   * 3-byte CPIXELs for such a format regardless of the announced depth. A viewer
++   * that keeps our format decides the CPIXEL size from the depth we announce, so
++   * it must be 24, or the stream is unreadable to it ("bad xrle data").
++   */
++  rfb_screen->depth = 24;
++  rfb_screen->serverFormat.depth = 24;
+ }
+ 
+ static void

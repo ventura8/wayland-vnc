@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Wayland VNC synthetic scene
+Comment=Native GTK Wayland qualification scene started by the genuine desktop session
+Exec=env -u DISPLAY /usr/bin/python3 /fixture/scene.py
+Terminal=false
+OnlyShowIn=XFCE;LXQt;
+X-GNOME-Autostart-enabled=true

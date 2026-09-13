@@ -1,0 +1,27 @@
+#!/bin/sh
+set -e
+
+# The payload lives outside site-packages, so any byte-compiled artifact created at
+# runtime would not be tracked by dpkg. Remove exactly those and then the directories
+# this package owns; `rm -rf` on the whole tree would also delete anything an
+# administrator or another package put under it.
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+  if [ -d /usr/lib/wayland-vnc ]; then
+    find /usr/lib/wayland-vnc -type d -name __pycache__ -prune \
+      -exec rm -rf -- '{}' + 2>/dev/null || true
+    # rmdir refuses a directory that still holds anything we do not own.
+    rmdir /usr/lib/wayland-vnc/wayland_vnc /usr/lib/wayland-vnc 2>/dev/null || true
+  fi
+fi
+
+# Refresh the desktop and icon caches so the settings app appears in the app drawer
+# straight away. Both are optional tools; a missing one is not an error.
+if command -v update-desktop-database >/dev/null 2>&1; then
+  update-desktop-database -q /usr/share/applications || true
+fi
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+  gtk-update-icon-cache -qtf /usr/share/icons/hicolor || true
+fi
+
+#DEBHELPER#
+exit 0

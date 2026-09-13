@@ -1,0 +1,105 @@
+Subject: Send the framebuffer-size change inside the update it belongs to, not alone
+Base: LibVNCServer 0.9.15 after 0001 and 0002
+License: GPL-2.0-or-later (upstream-derived)
+Status: local workaround for RealVNC Viewer request bookkeeping; not upstream-submitted
+
+When the framebuffer is resized (GNOME Remote Desktop does it on every session,
+from its 1920x1080 placeholder to the real screen), rfbSendFramebufferUpdate sent
+a FramebufferUpdate holding only the NewFBSize/ExtendedDesktopSize rectangle and
+returned; the content the client had requested followed in a second update that
+no request matched. RealVNC Viewer for Linux counts the size-only update as the
+reply to its request and the content update as unsolicited, and once it changes
+pixel format (its 8-bit probe to 32-bit switch) it decodes one more update in the
+old format and drops the connection with "bad rectangle: 65535x65535 at
+65535,65535". Every loopback session against the private daemon failed that way;
+a proxy that merged the two updates made every one succeed. The size rectangle
+now leads the same update as the content, so there is one reply per request.
+--- a/src/libvncserver/rfbserver.c
++++ b/src/libvncserver/rfbserver.c
+@@ -3132,6 +3132,7 @@
+     rfbBool sendSupportedMessages = FALSE;
+     rfbBool sendSupportedEncodings = FALSE;
+     rfbBool sendServerIdentity = FALSE;
++    rfbBool sendNewFBSize = FALSE;
+     rfbBool result = TRUE;
+     
+ 
+@@ -3140,33 +3141,23 @@
+ 
+     /*
+      * If framebuffer size was changed and the client supports NewFBSize
+-     * encoding, just send NewFBSize marker and return.
++     * encoding, the size rectangle leads THIS update and the content the
++     * client asked for follows in the same message.
++     *
++     * wayland-vnc: upstream sent the size marker as an update of its own and
++     * returned, so the content went out afterwards as an update nobody had
++     * requested. RealVNC Viewer for Linux takes the size-only update as the
++     * reply to its request, miscounts the unsolicited one, and after its next
++     * pixel-format change decodes one more update in the old format and drops
++     * the connection ("bad rectangle: 65535x65535 at 65535,65535"). One update
++     * per request keeps its bookkeeping straight.
+      */
+ 
+     if (cl->useNewFBSize && cl->newFBSizePending) {
+       LOCK(cl->updateMutex);
+       cl->newFBSizePending = FALSE;
+       UNLOCK(cl->updateMutex);
+-      fu->type = rfbFramebufferUpdate;
+-      fu->nRects = Swap16IfLE(1);
+-      cl->ublen = sz_rfbFramebufferUpdateMsg;
+-
+-      if (cl->useExtDesktopSize) {
+-        if (!rfbSendExtDesktopSize(cl, cl->scaledScreen->width, cl->scaledScreen->height)) {
+-          if(cl->screen->displayFinishedHook)
+-            cl->screen->displayFinishedHook(cl, FALSE);
+-          return FALSE;
+-        }
+-      }
+-      else if (!rfbSendNewFBSize(cl, cl->scaledScreen->width, cl->scaledScreen->height)) {
+-	if(cl->screen->displayFinishedHook)
+-	  cl->screen->displayFinishedHook(cl, FALSE);
+-        return FALSE;
+-      }
+-      result = rfbSendUpdateBuf(cl);
+-      if(cl->screen->displayFinishedHook)
+-	cl->screen->displayFinishedHook(cl, result);
+-      return result;
++      sendNewFBSize = TRUE;
+     }
+     
+     /*
+@@ -3279,7 +3270,8 @@
+        (cl->enableCursorShapeUpdates ||
+ 	(cl->cursorX == cl->screen->cursorX && cl->cursorY == cl->screen->cursorY)) &&
+        !sendCursorShape && !sendCursorPos && !sendKeyboardLedState &&
+-       !sendSupportedMessages && !sendSupportedEncodings && !sendServerIdentity) {
++       !sendSupportedMessages && !sendSupportedEncodings && !sendServerIdentity &&
++       !sendNewFBSize) {
+       sraRgnDestroy(updateRegion);
+       UNLOCK(cl->updateMutex);
+       if(cl->screen->displayFinishedHook)
+@@ -3471,12 +3463,22 @@
+ 	fu->nRects = Swap16IfLE((uint16_t)(sraRgnCountRects(updateCopyRegion) +
+ 					   nUpdateRegionRects +
+ 					   !!sendCursorShape + !!sendCursorPos + !!sendKeyboardLedState +
+-					   !!sendSupportedMessages + !!sendSupportedEncodings + !!sendServerIdentity));
++					   !!sendSupportedMessages + !!sendSupportedEncodings + !!sendServerIdentity +
++					   !!sendNewFBSize));
+     } else {
+ 	fu->nRects = 0xFFFF;
+     }
+     cl->ublen = sz_rfbFramebufferUpdateMsg;
+ 
++   if (sendNewFBSize) {
++      if (cl->useExtDesktopSize) {
++        if (!rfbSendExtDesktopSize(cl, cl->scaledScreen->width, cl->scaledScreen->height))
++          goto updateFailed;
++      }
++      else if (!rfbSendNewFBSize(cl, cl->scaledScreen->width, cl->scaledScreen->height))
++        goto updateFailed;
++   }
++
+    if (sendCursorShape) {
+ 	cl->cursorWasChanged = FALSE;
+ 	if (!rfbSendCursorShape(cl))

@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ventura8/wayland-vnc/qualification/schema-v2.json",
+  "title": "wayland-vnc qualification record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "recorded_at",
+    "commit",
+    "target",
+    "viewer",
+    "session_type",
+    "status",
+    "versions",
+    "scenarios",
+    "first_frame_seconds",
+    "reconnect_cycles",
+    "artifacts"
+  ],
+  "allOf": [
+    {
+      "$comment": "A record may only call itself passed with the evidence that word implies: every scenario it lists passed, the fixture was still healthy afterwards, and it carries artifacts. Without this the schema accepted status=passed beside failed scenarios, an absent health check, or no evidence at all, and only the semantic checks in wayland_vnc.qualification stood between that and a release.",
+      "if": {
+        "required": ["status"],
+        "properties": { "status": { "const": "passed" } }
+      },
+      "then": {
+        "required": ["status", "scenarios", "post_run_smoke", "artifacts"],
+        "properties": {
+          "scenarios": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": { "const": "passed" }
+          },
+          "post_run_smoke": { "const": "passed" },
+          "artifacts": { "minItems": 1 }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "schema_version": { "const": 2 },
+    "run_id": { "type": "string", "format": "uuid" },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "commit": { "type": "string", "minLength": 7 },
+    "target": {
+      "enum": ["gnome", "plasma", "xfce-labwc", "lxqt-labwc", "sway", "hyprland", "wayfire"]
+    },
+    "viewer": { "enum": ["realvnc-android", "realvnc-desktop"] },
+    "session_type": { "const": "wayland" },
+    "status": { "enum": ["incomplete", "passed", "failed"] },
+    "versions": {
+      "type": "object",
+      "required": ["compositor", "backend", "viewer", "distribution", "renderer"],
+      "additionalProperties": { "type": "string" }
+    },
+    "scenarios": {
+      "type": "object",
+      "additionalProperties": { "enum": ["passed", "failed", "not-run"] }
+    },
+    "scenario_details": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "post_run_smoke": { "enum": ["passed", "failed"] },
+    "first_frame_seconds": {
+      "type": ["number", "null"],
+      "minimum": 0
+    },
+    "reconnect_cycles": { "type": "integer", "minimum": 0 },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "size", "kind"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "size": { "type": "integer", "minimum": 0 },
+          "kind": { "enum": ["viewer-capture", "input-results", "runner-log"] }
+        }
+      }
+    }
+  }
+}

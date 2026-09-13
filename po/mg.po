@@ -1,0 +1,552 @@
+# Malagasy translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Malagasy\n"
+"Language: mg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), fanamarinana %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d fitaovana fakana/fampidirana"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d birao"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "TSY HITA ny %s ary mila azy ity birao ity"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: ity solosaina ity ihany. 0.0.0.0: ny tambajotra rehetra ifandraisan'ity solosaina ity, tsy misy fefy hafa. Lavina ny seranana 1024 sy ambany."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Ilaina ny fotoam-piasana Wayland tena izy; voarara ny fiverenana amin'ny X11."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Momba ny Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Adiresy"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Nambara"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Misy avokoa"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Ampihatra"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Mandeha ho azy (manaraka ny birao)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Backend"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Backend kandidà"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Backend amin'ity birao ity"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Rakitra binary"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Adiresy sy seranana hihainoana"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Nampiharina ny adiresy sy ny seranana"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Foano"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Fanapahan-kevitra momba ny fahaiza-manao"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Hita ny protokoly fakana, fitendry virtoaly ary tondro virtoaly."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Akatona"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Fikirakirana"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Hamafiso ny teny miafina"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Mifandray avy amin'ny fitaovana hafa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Ampifandraiso amin'ny Wi-Fi na Ethernet ity milina ity, dia sokafy indray"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Adikao"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Tsy misy anaran'ny mpampiasa na teny miafina ao amin'ny rakitra fanamarinana"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Birao"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Serivisy birao"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Fitiliana"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Ny safidy rehetra eto dia manova ny fikirakirana tena izy na ny serivisy napetraka."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Izay rehetra ilain'ity birao ity; tsy napetraka: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Mpizara GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Ny daemon-an'ny GNOME Birao lavitra mihitsy no mihaino amin'ny tambajotra rehetra; ametraho wayland-vnc-grd mba hifehezana izany"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "Fampitana efijery GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Ankapobeny"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "Ao amin'ny RealVNC Viewer, ampio fifandraisana amin'ny iray amin'ireto adiresy ireto. Mandeha izy ireo raha mbola velona ny fidirana avy amin'ny tambajotra eo an-toerana, ho an'ny fitaovana rehetra ao amin'ny tambajotra iray. Aza mampita ny seranana avy amin'ny Internet."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Apetraho ny fonosana wayland-vnc mba hahazoana ny singa mpampiasa systemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "Hita ny KWin sy ny fitaovana vavahady fakana/fampidirana."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "Mila ireo tambajotra portal roa ny KWin: ScreenCast sy RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Hitsin-dàlana fitendry"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Hitsin-dàlana fitendry"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Fiteny"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Avelao hifandray ny fitaovana ao amin'ny Wi-Fi na LAN iray. Vonoina: ity solosaina ity ihany."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Fahazoan-dàlana"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Fidirana avy amin'ny tambajotra eo an-toerana"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Novonoina ny fidirana avy amin'ny tambajotra eo an-toerana"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Navelona ny fidirana avy amin'ny tambajotra eo an-toerana"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Menio lehibe"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Mampahazo ity birao Wayland ity avy amin'ny RealVNC Viewer ao amin'ny findainao na solosaina hafa. Mihaino eto amin'ity solosaina ity ihany izy mandra-pandrehitrao ny Fidirana avy amin'ny tambajotra eo an-toerana."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Hita ny serivisy fakana sy fampidirana lavitra Mutter; ilaina ny fananganana manokana."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Tsia"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Tsy nahitana valiny"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Tsy nahitana adiresy tambajotra eo an-toerana"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Tsy misy backend tohanana"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Tsy misy fandikan-teny napetraka, ka mijanona amin'ny teny anglisy ny varavarankely."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Tsy misy"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Tsy misy nambara"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Tsy misy azo ampiasaina"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Tsy misy nojerena"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Tsy misy hita"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Tsy nambara"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Tsy nojerena"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Tsy napetraka"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Tsy nomanina"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Tsy nofaritana"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Sokafy ny menio lehibe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "ADIRESY BE ROA - azo tratrarina ivelan'ny tambajotra eo an-toerana"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Teny miafina"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Tsy maintsy 6–64 tarehintsoratra ASCII ny teny miafina"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Tsy mifanaraka ny teny miafina"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Seranana"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Tsy maintsy seranana TCP tsy manana tombontsoa ny seranana"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Vavahady"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Tranonkalan'ny tetikasa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Hiala"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Vonona hapetraka"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, mpanjifa; tsy ilaina mba hanompoana"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Antony"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Tanjona famoahana"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Vavahady RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Mitatitra olana"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Tsy hita ny fahaiza-manao fakana SY fampidirana ilaina."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Mandeha izao"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Tehirizo"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Vavahady ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Karohy"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Karohy ao amin'ny fitiliana"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Karohy fiteny"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Omen'ny GNOME Remote Desktop VNC (seranana 5900); ny fampisehoana dia manaraka ny Fikirakirana GNOME > Fizarana"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Fikirakirana mpizara"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Serivisy"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Fotoam-piasana"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Karazana fotoam-piasana"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Apetraho ny teny miafina"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Apetraho ny teny miafin'ny mpijery"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Apetraho aloha ny teny miafin'ny mpijery"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Atombohy rehefa miditra"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Toetra"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Voatahiry (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Nokendrena"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Mila GTK4 sy libadwaita ny varavarankelin'ny fikirakirana (apetraho ny python3-gi, gir1.2-gtk-4.0 ary gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Mila libadwaita %(needed)s na vaovao kokoa ny varavarankelin'ny fikirakirana; manana %(found)s ity rafitra ity"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Manaraka ny fitenin'ny biraonao ny varavarankely raha tsy misafidy hafa ianao."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Ity desktop ity dia manome VNC amin'ny alalan'ny GNOME Remote Desktop, izay manaiky tenimiafina tsy mihoatra ny 8 tarehintsoratra"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Ny rafitra ao ambadik'ity birao ity dia mihaino amin'ity solosaina ity ihany foana"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Mpizara TigerVNC, ho an'ny KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Andramo fikarohana hafa."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Soraty ireto ao amin'ny RealVNC Viewer amin'ny fitaovana hafa. Ampiasao ny maso mba hampisehoana ny teny miafina ankehitriny. Voatahiry amin'ny fomba 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Anaran'ny mpampiasa"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Tsy maintsy ASCII azo atonta ny anaran'ny mpampiasa"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Fanapahan-kevitra"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Fanamarinana mpijery"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Voatahiry ny teny miafin'ny mpijery"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Mpizara WayVNC, ho an'ny mpanangona wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Protokoly Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Izay ambaran'ity birao ity, ary ny dikan'izany ho an'ny fidirana lavitra."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Eny"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "ny tambajotra rehetra ifandraisan'ity solosaina ity"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "tambajotra eo an-toerana ihany"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Anarana mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "fomba %s (misokatra loatra)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "fomba 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "ity milina ity ihany"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "tsy napetraka ny singa"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "tsy fantatra"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "ampiasaina hitiliana ny protokôla Wayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "ampiasaina hitiliana ny portal amin'ny D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Fahafenoana"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "Ny 0.0.0.0 dia mampahazo ny mpizara ho an'ny fitaovana ao amin'ny tambajotranao eo an-toerana; mbola manakana ny Internet ny serivisy. Ny 127.0.0.1 dia mametra azy amin'ity milina ity. Lavina ny seranana 1024 sy ambany."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "tambajotra eo an-toerana ihany; sakanan'ny singa ny Internet"

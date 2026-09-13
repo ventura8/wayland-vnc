@@ -1,0 +1,552 @@
+# ລາວ translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: ລາວ\n"
+"Language: lo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), ການພິສູດຢືນຢັນ %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "ສ່ວນຕິດຕໍ່ຈັບພາບ/ປ້ອນຂໍ້ມູນ %d"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "ໜ້າຈໍ %d"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "ບໍ່ມີ %s ແລະໜ້າຈໍນີ້ຕ້ອງການມັນ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: ສະເພາະຄອມພິວເຕີເຄື່ອງນີ້. 0.0.0.0: ທຸກເຄືອຂ່າຍທີ່ຄອມພິວເຕີເຄື່ອງນີ້ເຊື່ອມຕໍ່ຢູ່ ໂດຍບໍ່ມີການປ້ອງກັນອື່ນ. ພອດ 1024 ແລະຕໍ່າກວ່າຈະຖືກປະຕິເສດ."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "ຕ້ອງການເຊດຊັນ Wayland ແທ້; ການກັບໄປ X11 ຖືກຫ້າມ."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "ກ່ຽວກັບ Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "ທີ່ຢູ່"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "ປະກາດແລ້ວ"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "ມີຄົບທັງໝົດ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "ນຳໃຊ້"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "ອັດຕະໂນມັດ (ຕາມໜ້າຈໍ)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "ແບັກເອັນ"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "ຜູ້ສະໝັກແບັກເອັນ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "ແບັກເອັນຢູ່ໜ້າຈໍນີ້"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "ໄຟລ໌ໄບນາຣີ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "ທີ່ຢູ່ ແລະພອດຮັບຟັງ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "ນຳໃຊ້ທີ່ຢູ່ ແລະພອດແລ້ວ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "ຍົກເລີກ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "ຄຳຕັດສິນຄວາມສາມາດ"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "ພົບໂປຣໂຕຄອນຈັບພາບ, ແປ້ນພິມສະເໝືອນ ແລະຕົວຊີ້ສະເໝືອນ."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "ປິດ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "ການຕັ້ງຄ່າ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "ຢືນຢັນລະຫັດຜ່ານ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "ເຊື່ອມຕໍ່ຈາກອຸປະກອນອື່ນ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "ເຊື່ອມຕໍ່ເຄື່ອງນີ້ກັບ Wi-Fi ຫຼື Ethernet ແລ້ວເປີດຄືນໃໝ່"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "ສຳເນົາ"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "ໄຟລ໌ຂໍ້ມູນຢືນຢັນຂາດຊື່ຜູ້ໃຊ້ ຫຼືລະຫັດຜ່ານ"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "ໜ້າຈໍ"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "ບໍລິການໜ້າຈໍ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "ການວິນິດໄສ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "ທຸກຕົວເລືອກຢູ່ນີ້ປ່ຽນການຕັ້ງຄ່າຈິງ ຫຼືບໍລິການທີ່ຕິດຕັ້ງ."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "ທຸກຢ່າງທີ່ໜ້າຈໍນີ້ຕ້ອງການ; ບໍ່ໄດ້ຕິດຕັ້ງ: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "ເຊີບເວີ GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "ດີມອນຂອງ GNOME ເດັສທັອບທາງໄກເອງຮັບຟັງຢູ່ທຸກເຄືອຂ່າຍ; ຕິດຕັ້ງ wayland-vnc-grd ເພື່ອຄວບຄຸມສິ່ງນີ້"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "ການຖ່າຍທອດໜ້າຈໍ GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "ທົ່ວໄປ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "ໃນ RealVNC Viewer, ເພີ່ມການເຊື່ອມຕໍ່ໄປຫາທີ່ຢູ່ໃດໜຶ່ງເຫຼົ່ານີ້. ພວກມັນໃຊ້ໄດ້ຕາບໃດທີ່ການເຂົ້າເຖິງຈາກເຄືອຂ່າຍທ້ອງຖິ່ນເປີດຢູ່ ສຳລັບອຸປະກອນໃດກໍໄດ້ໃນເຄືອຂ່າຍດຽວກັນ. ຢ່າສົ່ງຕໍ່ພອດຈາກອິນເຕີເນັດ."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "ຕິດຕັ້ງແພັກເກັດ wayland-vnc ເພື່ອໄດ້ຫົວໜ່ວຍຜູ້ໃຊ້ systemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "ພົບ KWin ແລະສ່ວນຕິດຕໍ່ພອດທັລຈັບພາບ/ປ້ອນຂໍ້ມູນ."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin ຕ້ອງການອິນເຕີເຟດປະຕູທັງສອງ: ScreenCast ແລະ RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "ປຸ່ມລັດແປ້ນພິມ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "ປຸ່ມລັດແປ້ນພິມ"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "ພາສາ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "ອະນຸຍາດໃຫ້ອຸປະກອນໃນ Wi-Fi ຫຼື LAN ດຽວກັນເຊື່ອມຕໍ່. ປິດ: ສະເພາະຄອມພິວເຕີເຄື່ອງນີ້."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "ໃບອະນຸຍາດ"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "ການເຂົ້າເຖິງຈາກເຄືອຂ່າຍທ້ອງຖິ່ນ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "ປິດການເຂົ້າເຖິງຈາກເຄືອຂ່າຍທ້ອງຖິ່ນແລ້ວ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "ເປີດການເຂົ້າເຖິງຈາກເຄືອຂ່າຍທ້ອງຖິ່ນແລ້ວ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "ເມນູຫຼັກ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "ເຮັດໃຫ້ໜ້າຈໍ Wayland ນີ້ເຂົ້າເຖິງໄດ້ຈາກ RealVNC Viewer ໃນໂທລະສັບ ຫຼືຄອມພິວເຕີເຄື່ອງອື່ນຂອງທ່ານ. ມັນຈະຮັບຟັງສະເພາະໃນຄອມພິວເຕີເຄື່ອງນີ້ ຈົນກວ່າທ່ານຈະເປີດ ການເຂົ້າເຖິງຈາກເຄືອຂ່າຍທ້ອງຖິ່ນ."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "ພົບບໍລິການຈັບພາບ ແລະປ້ອນຂໍ້ມູນທາງໄກຂອງ Mutter; ຕ້ອງການການສ້າງສ່ວນຕົວ."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "ບໍ່"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "ບໍ່ພົບຜົນ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "ບໍ່ພົບທີ່ຢູ່ເຄືອຂ່າຍທ້ອງຖິ່ນ"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "ບໍ່ມີແບັກເອັນທີ່ຮອງຮັບ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "ບໍ່ມີການແປທີ່ຕິດຕັ້ງ, ດັ່ງນັ້ນໜ້າຕ່າງຍັງເປັນພາສາອັງກິດ."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "ບໍ່ມີ"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "ບໍ່ມີອັນໃດປະກາດ"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "ບໍ່ມີອັນໃດໃຊ້ໄດ້"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "ບໍ່ມີອັນໃດຖືກກວດ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "ບໍ່ພົບອັນໃດ"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "ບໍ່ໄດ້ປະກາດ"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "ບໍ່ໄດ້ກວດ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "ບໍ່ໄດ້ຕິດຕັ້ງ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "ບໍ່ໄດ້ຈັດກຽມ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "ບໍ່ໄດ້ຕັ້ງ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "ເປີດເມນູຫຼັກ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "ທີ່ຢູ່ສາທາລະນະ - ເຂົ້າເຖິງໄດ້ນອກເຄືອຂ່າຍທ້ອງຖິ່ນ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "ລະຫັດຜ່ານ"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "ລະຫັດຜ່ານຕ້ອງເປັນ 6–64 ຕົວອັກສອນ ASCII"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "ລະຫັດຜ່ານບໍ່ກົງກັນ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "ພອດ"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "ພອດຕ້ອງເປັນພອດ TCP ທີ່ບໍ່ມີສິດພິເສດ"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "ພອດທັລ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "ເວັບໄຊທ໌ໂຄງການ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "ອອກ"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "ພ້ອມຕິດຕັ້ງ"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer ເປັນລູກຂ່າຍ ບໍ່ຈຳເປັນສຳລັບການໃຫ້ບໍລິການ"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "ເຫດຜົນ"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "ເປົ້າໝາຍການປ່ອຍ"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "ພອດທັລ RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "ລາຍງານບັນຫາ"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "ບໍ່ພົບຄວາມສາມາດຈັບພາບ ແລະປ້ອນຂໍ້ມູນທີ່ຕ້ອງການ."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "ກຳລັງແລ່ນຢູ່"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "ບັນທຶກ"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ພອດທັລ ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "ຄົ້ນຫາ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "ຄົ້ນຫາໃນການວິນິດໄສ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "ຄົ້ນຫາພາສາ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "ໃຫ້ບໍລິການໂດຍ GNOME Remote Desktop VNC (ພອດ 5900); ການເປີດເຜີຍເປັນໄປຕາມການຕັ້ງຄ່າ GNOME > ການແບ່ງປັນ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "ການຕັ້ງຄ່າເຊີບເວີ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "ບໍລິການ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "ເຊດຊັນ"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "ປະເພດເຊດຊັນ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "ຕັ້ງລະຫັດຜ່ານ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "ຕັ້ງລະຫັດຜ່ານຜູ້ເບິ່ງ"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "ຕັ້ງລະຫັດຜ່ານຜູ້ເບິ່ງກ່ອນ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "ເລີ່ມເມື່ອເຂົ້າສູ່ລະບົບ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "ສະຖານະ"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "ບັນທຶກແລ້ວ (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "ກຳນົດເປົ້າໝາຍແລ້ວ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "ໜ້າຕ່າງການຕັ້ງຄ່າຕ້ອງການ GTK4 ແລະ libadwaita (ຕິດຕັ້ງ python3-gi, gir1.2-gtk-4.0 ແລະ gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "ໜ້າຕ່າງການຕັ້ງຄ່າຕ້ອງການ libadwaita %(needed)s ຫຼືໃໝ່ກວ່າ; ລະບົບນີ້ມີ %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "ໜ້າຕ່າງໃຊ້ພາສາໜ້າຈໍຂອງທ່ານ ເວັ້ນແຕ່ທ່ານເລືອກພາສາອື່ນ."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "ເດັສທັອບນີ້ໃຫ້ບໍລິການ VNC ຜ່ານ GNOME Remote Desktop ເຊິ່ງຮັບລະຫັດຜ່ານໄດ້ບໍ່ເກີນ 8 ຕົວອັກສອນ"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "ແບັກເອັນຂອງເດັສທັອບນີ້ຮັບຟັງສະເພາະຢູ່ຄອມພິວເຕີເຄື່ອງນີ້ສະເໝີ"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "ເຊີບເວີ TigerVNC ສຳລັບ KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "ລອງຄົ້ນຫາອື່ນ."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "ພິມສິ່ງເຫຼົ່ານີ້ໃນ RealVNC Viewer ໃນອຸປະກອນອື່ນ. ໃຊ້ຕາເພື່ອສະແດງລະຫັດຜ່ານປັດຈຸບັນ. ບັນທຶກດ້ວຍໂໝດ 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "ຊື່ຜູ້ໃຊ້"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "ຊື່ຜູ້ໃຊ້ຕ້ອງເປັນ ASCII ທີ່ພິມໄດ້"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "ຄຳຕັດສິນ"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "ຂໍ້ມູນຢືນຢັນຜູ້ເບິ່ງ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "ບັນທຶກລະຫັດຜ່ານຜູ້ເບິ່ງແລ້ວ"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "ເຊີບເວີ WayVNC ສຳລັບຕົວປະກອບ wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "ໂປຣໂຕຄອນ Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "ໜ້າຈໍນີ້ປະກາດຫຍັງ, ແລະມັນໝາຍເຖິງຫຍັງສຳລັບການເຂົ້າເຖິງທາງໄກ."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "ແມ່ນ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "ທຸກເຄືອຂ່າຍທີ່ຄອມພິວເຕີເຄື່ອງນີ້ເຊື່ອມຕໍ່ຢູ່"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "ສະເພາະເຄືອຂ່າຍທ້ອງຖິ່ນ"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "ຊື່ mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "ໂໝດ %s (ເປີດເກີນໄປ)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "ໂໝດ 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "ເຄື່ອງນີ້ເທົ່ານັ້ນ"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "ຫົວໜ່ວຍບໍ່ໄດ້ຕິດຕັ້ງ"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "ບໍ່ຮູ້"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "ໃຊ້ເພື່ອກວດສອບໂປຣໂຕຄອນ Wayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "ໃຊ້ເພື່ອກວດສອບປະຕູຜ່ານ D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "ຄຸນວຸດທິ"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 ເຮັດໃຫ້ເຊີບເວີເຂົ້າເຖິງໄດ້ຈາກອຸປະກອນໃນເຄືອຂ່າຍທ້ອງຖິ່ນຂອງທ່ານ; ບໍລິການຍັງບລັອກອິນເຕີເນັດ. 127.0.0.1 ຈຳກັດມັນໄວ້ກັບເຄື່ອງນີ້. ພອດ 1024 ແລະຕ່ຳກວ່າຖືກປະຕິເສດ."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "ເຄືອຂ່າຍທ້ອງຖິ່ນເທົ່ານັ້ນ; ອິນເຕີເນັດຖືກບລັອກໂດຍຫົວໜ່ວຍ"

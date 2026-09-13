@@ -1,0 +1,552 @@
+# Oʻzbekcha translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Oʻzbekcha\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), autentifikatsiya %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d ta yozib olish/kiritish interfeysi"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d ta ish stoli"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s YOʻQ, bu ish stoliga esa u kerak"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: faqat shu kompyuter. 0.0.0.0: shu kompyuter ulangan barcha tarmoqlar, boshqa hech qanday to‘siqsiz. 1024 va undan past portlar rad etiladi."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Tugʻma Wayland seansi talab qilinadi; X11 ga qaytish taqiqlangan."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Wayland VNC haqida"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Manzil"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Eʼlon qilingan"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Hammasi mavjud"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Qoʻllash"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Avtomatik (ish stoliga mos)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Orqa qism"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Orqa qism nomzodi"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Bu ish stolidagi orqa qism"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Binar fayllar"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Tinglash manzili va porti"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Manzil va port qoʻllandi"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Bekor qilish"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Imkoniyatlar bahosi"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Yozib olish, virtual klaviatura va virtual koʻrsatkich protokollari aniqlandi."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Yopish"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Konfiguratsiya"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Parolni tasdiqlang"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Boshqa qurilmadan ulanish"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Bu mashinani Wi-Fi yoki Ethernet ga ulang, soʻng qayta oching"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Nusxalash"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Hisob maʼlumotlari faylida foydalanuvchi nomi yoki parol yoʻq"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Ish stoli"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Ish stoli xizmatlari"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Diagnostika"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Bu yerdagi har bir parametr haqiqiy konfiguratsiyani yoki oʻrnatilgan xizmatni oʻzgartiradi."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Bu ish stoliga kerak boʻlgan hamma narsa; oʻrnatilmagan: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME Remote Desktop serveri"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "GNOME Masofaviy ish stolining o‘z demoni barcha tarmoqlarda tinglaydi; buni boshqarish uchun wayland-vnc-grd o‘rnating"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME ekran translyatsiyasi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Umumiy"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "RealVNC Viewer da shu manzillardan biriga ulanish qo‘shing. Mahalliy tarmoqdan kirish yoqilgan paytda ular shu tarmoqdagi istalgan qurilma uchun ishlaydi. Portni Internetdan yo‘naltirmang."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "systemd foydalanuvchi birligini olish uchun wayland-vnc paketini oʻrnating"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "KWin va yozib olish/kiritish portal interfeyslari aniqlandi."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin ikkala portal interfeysini ham talab qiladi: ScreenCast va RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Klaviatura yorliqlari"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Klaviatura yorliqlari"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Til"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Shu Wi-Fi yoki LAN dagi qurilmalarga ulanishga ruxsat berish. O‘chiq: faqat shu kompyuter."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Litsenziya"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Mahalliy tarmoqdan kirish"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Mahalliy tarmoqdan kirish o‘chirildi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Mahalliy tarmoqdan kirish yoqildi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Asosiy menyu"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Bu Wayland ish stolini telefoningizdagi yoki boshqa kompyuterdagi RealVNC Viewer orqali ochiq qiladi. Siz Mahalliy tarmoqdan kirishni yoqmaguningizcha u faqat shu kompyuterda tinglaydi."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Mutter yozib olish va masofaviy kiritish xizmatlari aniqlandi; xususiy yigʻma talab qilinadi."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Yoʻq"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Natijalar topilmadi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Mahalliy tarmoq manzili topilmadi"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Qoʻllab-quvvatlanadigan orqa qism yoʻq"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Tarjimalar oʻrnatilmagan, shuning uchun oyna inglizcha qoladi."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Hech biri"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Hech biri eʼlon qilinmagan"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Hech biri mavjud emas"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Hech biri tekshirilmagan"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Hech biri aniqlanmagan"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Eʼlon qilinmagan"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Tekshirilmagan"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Oʻrnatilmagan"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Tayyorlanmagan"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Sozlanmagan"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Asosiy menyuni ochish"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "OMMAVIY MANZIL - mahalliy tarmoqdan tashqarida ham ochiq"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Parol"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Parol 6–64 ta ASCII belgidan iborat boʻlishi kerak"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Parollar mos kelmadi"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Port"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Port imtiyozsiz TCP porti boʻlishi kerak"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Portallar"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Loyiha veb-sayti"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Chiqish"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Oʻrnatishga tayyor"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, mijoz; xizmat ko'rsatish uchun kerak emas"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Sabab"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Chiqarish maqsadlari"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop portali"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Muammo haqida xabar berish"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Talab qilingan yozib olish VA kiritish imkoniyatlari aniqlanmadi."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Hozir ishlamoqda"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Saqlash"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast portali"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Qidirish"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Diagnostikadan qidirish"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Tillarni qidirish"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "GNOME Remote Desktop VNC orqali xizmat koʻrsatiladi (port 5900); ochiqlik GNOME Sozlamalari > Ulashish ga amal qiladi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Server konfiguratsiyasi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Xizmat"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Seans"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Seans turi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Parol oʻrnatish"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Koʻruvchi parolini oʻrnatish"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Avval koʻruvchi parolini oʻrnating"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Kirishda ishga tushirish"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Holat"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Saqlangan (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Moʻljallangan"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Sozlamalar oynasiga GTK4 va libadwaita kerak (python3-gi, gir1.2-gtk-4.0 va gir1.2-adw-1 ni oʻrnating)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Sozlamalar oynasiga libadwaita %(needed)s yoki undan yangisi kerak; bu tizimda %(found)s bor"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Boshqasini tanlamasangiz, oyna ish stolingiz tiliga amal qiladi."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Bu ish stoli VNC ni ko'pi bilan 8 belgili parollarni qabul qiladigan GNOME Remote Desktop orqali taqdim etadi"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Bu ish stolining orqa tizimi har doim faqat shu kompyuterda tinglaydi"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC serveri, KDE Plasma uchun"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Boshqa qidiruvni sinab koʻring."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Bularni boshqa qurilmadagi RealVNC Viewer ga kiriting. Joriy parolni koʻrsatish uchun koʻzdan foydalaning. 600 rejimi bilan saqlangan."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Foydalanuvchi nomi"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Foydalanuvchi nomi chop etiladigan ASCII boʻlishi kerak"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Baho"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Koʻruvchi hisob maʼlumotlari"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Koʻruvchi paroli saqlandi"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC serveri, wlroots kompozitorlari uchun"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Wayland protokollari"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Bu ish stoli nimani eʼlon qiladi va bu masofaviy kirish uchun nimani anglatadi."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Ha"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "shu kompyuter ulangan barcha tarmoqlar"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "faqat mahalliy tarmoq"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS nomi"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "%s rejimi (haddan tashqari ochiq)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "600 rejimi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "faqat shu mashina"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "birlik oʻrnatilmagan"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "noma'lum"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "Wayland protokollarini tekshirish uchun ishlatiladi"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "portallarni D-Bus orqali tekshirish uchun ishlatiladi"
+
+#~ msgid "Qualification"
+#~ msgstr "Malaka"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 serverni mahalliy tarmogʻingizdagi qurilmalar uchun ochiq qiladi; xizmat internetni baribir bloklaydi. 127.0.0.1 uni shu mashina bilan cheklaydi. 1024 va undan past portlar rad etiladi."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "faqat mahalliy tarmoq; internet birlik tomonidan bloklangan"

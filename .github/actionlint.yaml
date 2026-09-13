@@ -1,0 +1,6 @@
+---
+# ubuntu-26.04 is a current GitHub-hosted runner; actionlint's bundled label list
+# lags behind, so declare it here to silence the stale-label warning.
+self-hosted-runner:
+  labels:
+    - ubuntu-26.04

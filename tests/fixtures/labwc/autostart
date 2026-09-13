@@ -1,0 +1,2 @@
+# labwc exports DISPLAY for lazy XWayland; the native scene must never see it.
+env -u DISPLAY /usr/bin/python3 /fixture/scene.py &

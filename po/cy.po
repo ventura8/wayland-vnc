@@ -1,0 +1,552 @@
+# Cymraeg translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Cymraeg\n"
+"Language: cy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), dilysu %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d rhyngwyneb cipio/mewnbwn"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d bwrdd gwaith"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "Mae %s AR GOLL ac mae angen y bwrdd gwaith hwn arno"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: y cyfrifiadur hwn yn unig. 0.0.0.0: pob rhwydwaith y mae'r cyfrifiadur hwn wedi'i gysylltu ag ef, heb unrhyw amddiffyniad arall. Gwrthodir porthladdoedd 1024 ac is."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Mae angen sesiwn Wayland frodorol; gwaherddir cwympo'n ôl i X11."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Ynghylch Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Cyfeiriad"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Hysbysebwyd"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Pob un yn bresennol"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Gweithredu"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Awtomatig (cyd-fynd â'r bwrdd gwaith)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Cefn"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Ymgeisydd cefn"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Cefn ar y bwrdd gwaith hwn"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Ffeiliau deuaidd"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Cyfeiriad a phorthladd rhwymo"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Cyfeiriad a phorthladd wedi'u gweithredu"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Diddymu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Dyfarniad gallu"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Canfuwyd protocolau cipio, bysellfwrdd rhithwir a phwyntydd rhithwir."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Cau"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Ffurfweddiad"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Cadarnhau'r cyfrinair"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Cysylltu o ddyfais arall"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Cysylltwch y peiriant hwn â Wi-Fi neu Ethernet, yna ailagorwch"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Copïo"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Mae'r ffeil tystlythyrau heb enw defnyddiwr neu gyfrinair"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Bwrdd gwaith"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Gwasanaethau bwrdd gwaith"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Diagnosteg"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Mae pob opsiwn yma'n newid ffurfweddiad go iawn neu'r gwasanaeth sydd wedi'i osod."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Popeth sydd ei angen ar y bwrdd gwaith hwn; heb ei osod: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Gweinydd GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Mae daemon Bwrdd Gwaith Pell GNOME ei hun yn gwrando ar bob rhwydwaith; gosodwch wayland-vnc-grd i reoli hyn"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "Sgrindarllediad GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Cyffredinol"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "Yn RealVNC Viewer, ychwanegwch gysylltiad ag un o'r cyfeiriadau hyn. Maen nhw'n gweithio tra bo mynediad o'r rhwydwaith lleol ymlaen, i unrhyw ddyfais ar yr un rhwydwaith. Peidiwch ag anfon y porthladd ymlaen o'r Rhyngrwyd."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Gosodwch y pecyn wayland-vnc i gael yr uned defnyddiwr systemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "Canfuwyd KWin a rhyngwynebau porth cipio/mewnbwn."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "Mae KWin angen y ddau ryngwyneb porth: ScreenCast a RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Llwybrau byr bysellfwrdd"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Llwybrau byr bysellfwrdd"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Iaith"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Gadael i ddyfeisiau ar yr un Wi-Fi neu LAN gysylltu. I ffwrdd: y cyfrifiadur hwn yn unig."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Trwydded"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Mynediad o'r rhwydwaith lleol"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Mynediad o'r rhwydwaith lleol wedi'i ddiffodd"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Mynediad o'r rhwydwaith lleol wedi'i droi ymlaen"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Prif ddewislen"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Yn gwneud y bwrdd gwaith Wayland hwn yn hygyrch o RealVNC Viewer ar eich ffôn neu gyfrifiadur arall. Mae'n gwrando ar y cyfrifiadur hwn yn unig nes i chi droi Mynediad o'r rhwydwaith lleol ymlaen."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Canfuwyd gwasanaethau cipio a mewnbwn pell Mutter; mae angen adeiladwaith preifat."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Na"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Ni chanfuwyd canlyniadau"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Ni chanfuwyd cyfeiriad rhwydwaith lleol"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Dim cefn a gefnogir"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Nid oes cyfieithiadau wedi'u gosod, felly mae'r ffenestr yn aros yn Saesneg."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Dim"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Dim wedi'i hysbysebu"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Dim ar gael"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Dim wedi'i wirio"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Dim wedi'i ganfod"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Heb ei hysbysebu"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Heb ei wirio"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Heb ei osod"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Heb ei ddarparu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Heb ei bennu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Agor y brif ddewislen"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "CYFEIRIAD CYHOEDDUS - yn hygyrch y tu hwnt i'r rhwydwaith lleol"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Cyfrinair"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Rhaid i'r cyfrinair fod yn 6–64 nod ASCII"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Nid oedd y cyfrineiriau'n cyfateb"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Porthladd"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Rhaid i'r porthladd fod yn borthladd TCP heb freintiau"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Pyrth"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Gwefan y prosiect"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Gadael"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Yn barod i'w osod"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, cleient; nid oes ei angen i weini"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Rheswm"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Targedau rhyddhau"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Porth RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Adrodd am broblem"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Ni chanfuwyd y galluoedd cipio A mewnbwn gofynnol."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Yn rhedeg nawr"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Cadw"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Porth ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Chwilio"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Chwilio'r ddiagnosteg"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Chwilio ieithoedd"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Gweinir gan GNOME Remote Desktop VNC (porthladd 5900); mae'r amlygiad yn dilyn Gosodiadau GNOME > Rhannu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Ffurfweddiad y gweinydd"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Gwasanaeth"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Sesiwn"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Math o sesiwn"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Gosod cyfrinair"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Gosod cyfrinair y gwyliwr"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Gosodwch gyfrinair gwyliwr yn gyntaf"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Cychwyn wrth fewngofnodi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Statws"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Wedi'i storio (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Wedi'i dargedu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Mae angen GTK4 a libadwaita ar y ffenestr gosodiadau (gosodwch python3-gi, gir1.2-gtk-4.0 a gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Mae angen libadwaita %(needed)s neu fwy newydd ar y ffenestr gosodiadau; mae gan y system hon %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Mae'r ffenestr yn dilyn iaith eich bwrdd gwaith oni bai eich bod yn dewis un arall."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Mae'r bwrdd gwaith hwn yn gweini VNC drwy GNOME Remote Desktop, sy'n derbyn cyfrineiriau o 8 nod ar y mwyaf"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Mae cefn y bwrdd gwaith hwn bob amser yn gwrando ar y cyfrifiadur hwn yn unig"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Gweinydd TigerVNC, ar gyfer KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Rhowch gynnig ar chwiliad gwahanol."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Teipiwch y rhain yn RealVNC Viewer ar y ddyfais arall. Defnyddiwch y llygad i ddatgelu'r cyfrinair presennol. Wedi'i storio â modd 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Enw defnyddiwr"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Rhaid i'r enw defnyddiwr fod yn ASCII y gellir ei argraffu"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Dyfarniad"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Tystlythyrau'r gwyliwr"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Cyfrinair y gwyliwr wedi'i gadw"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Gweinydd WayVNC, ar gyfer cyfansoddwyr wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Protocolau Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Beth mae'r bwrdd gwaith hwn yn ei hysbysebu, a beth mae'n ei olygu i fynediad o bell."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Ie"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "pob rhwydwaith y mae'r cyfrifiadur hwn wedi'i gysylltu ag ef"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "y rhwydwaith lleol yn unig"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Enw mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "modd %s (yn rhy agored)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "modd 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "y peiriant hwn yn unig"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "nid yw'r uned wedi'i gosod"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "anhysbys"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "defnyddir i archwilio protocolau Wayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "defnyddir i archwilio pyrth drwy D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Cymhwyster"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "Mae 0.0.0.0 yn gwneud y gweinydd yn hygyrch o ddyfeisiau ar eich rhwydwaith lleol; mae'r gwasanaeth yn dal i rwystro'r rhyngrwyd. Mae 127.0.0.1 yn ei gyfyngu i'r peiriant hwn. Gwrthodir porthladdoedd 1024 ac is."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "rhwydwaith lleol yn unig; rhwystrir y rhyngrwyd gan yr uned"

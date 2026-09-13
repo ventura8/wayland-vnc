@@ -1,0 +1,6 @@
+#!/bin/sh
+# labwc 0.9 refuses to start without an Xwayland executable, so the fixture image
+# replaces the distribution binary with this stub. Lazy XWayland activation then
+# fails closed: no X server can ever run inside the fixture.
+echo "wayland-vnc fixture: XWayland is disabled; only native Wayland clients run here" >&2
+exit 78

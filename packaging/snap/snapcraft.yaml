@@ -1,0 +1,55 @@
+---
+name: wayland-vnc
+adopt-info: wayland-vnc
+summary: Wayland VNC server and diagnostics for RealVNC viewers
+description: |
+  wayland-vnc installs a WayVNC user service, provisioning helpers, and a
+  read-only capability diagnostic. It binds 127.0.0.1:5900, this machine only,
+  until Local Network Access is turned on in the settings app; the server then
+  binds every interface and is reachable from every network this machine is on (a
+  user service cannot fence that, so do not forward the port from the internet).
+  A random viewer password is generated on first start, so the server is never
+  unauthenticated. It never modifies a live remote-desktop session.
+confinement: classic
+base: core26
+grade: stable
+
+parts:
+  wayland-vnc:
+    plugin: nil
+    source: ../..
+    override-build: |
+      set -eu
+      version="$(tr -d '[:space:]' < "$CRAFT_PART_SRC/VERSION")"
+      craftctl set version="$version"
+      WAYLAND_VNC_REPO_ROOT="$CRAFT_PART_SRC" \
+        "$CRAFT_PART_SRC/packaging/stage-payload.sh" "$CRAFT_PART_INSTALL" /usr
+      install -D -m 755 "$CRAFT_PART_SRC/packaging/snap/serve-daemon.sh" \
+        "$CRAFT_PART_INSTALL/usr/bin/wayland-vnc-serve-daemon"
+
+apps:
+  wayland-vnc:
+    command: usr/bin/wayland-vnc
+  setup:
+    command: usr/bin/wayland-vnc-setup
+  # snapd does not read the staged systemd user unit, so without this app a snap
+  # install would leave no service at all -- the one thing installing is supposed to
+  # give you. The server belongs to the logged-in graphical session, so it is a user
+  # daemon, not a system one. serve generates a random credential on first start and
+  # fails closed on anything but a native Wayland session; on-failure restarts cover a
+  # session that is not ready yet. snapd has no ConditionEnvironment and no start
+  # limit, so the wrapper is what stops an unsupported session from restarting for
+  # ever: it waits briefly for WAYLAND_DISPLAY, then exits 0 (not a failure) when the
+  # session will never be a Wayland one, and only real errors leave a failing exit for
+  # restart-condition to act on.
+  # User daemons need a snapd that supports daemon-scope; on an older snapd they stay
+  # inert until `snap set system experimental.user-daemons=true`. Unverified here: a
+  # real `snap install` needs snapd and systemd as PID 1, which the smoke container
+  # has not got, so it checks the metadata and the payload instead.
+  serve:
+    command: usr/bin/wayland-vnc-serve-daemon
+    daemon: simple
+    daemon-scope: user
+    install-mode: enable
+    restart-condition: on-failure
+    restart-delay: 30s

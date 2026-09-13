@@ -1,0 +1,16 @@
+# Hadolint policy for this repository, stated once here rather than as inline
+# `# hadolint ignore=` comments, which this project does not allow.
+#
+# DL3008 (pin versions in apt-get install) is not applied. These Dockerfiles build
+# desktop fixtures -- Sway, labwc, Wayfire, Hyprland, Plasma, GNOME, the viewer
+# harness and the Android lab -- from a base image that is already pinned by digest,
+# and they install packages from the distribution archive. Archive versions are
+# replaced whenever the distribution publishes an update, so pinning each apt package
+# would make every fixture image fail to build within days of being written, without
+# making the build any more reproducible than the digest-pinned base already does.
+#
+# Reproducibility that actually matters here is enforced where it is achievable: the
+# base images are digest-pinned above, and the private LibVNCServer and GNOME Remote
+# Desktop sources are checksum-verified through sources.json.
+ignored:
+  - DL3008

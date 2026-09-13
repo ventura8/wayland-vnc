@@ -1,0 +1,144 @@
+Subject: Validate packed MemFd layout before mapping and copying
+Base: GNOME Remote Desktop 50.2, after 0002
+License: GPL-2.0-or-later (upstream-derived)
+Status: candidate; helper tested separately, integrated qualification pending
+
+--- a/src/grd-vnc-pipewire-stream.c
++++ b/src/grd-vnc-pipewire-stream.c
+@@ -29,6 +29,8 @@
+ #include <spa/param/format-utils.h>
+ #include <spa/pod/dynamic.h>
+ #include <sys/mman.h>
++#include <sys/stat.h>
++#include <limits.h>
+ 
+ #include "grd-context.h"
+ #include "grd-drm-utils.h"
+@@ -36,6 +38,7 @@
+ #include "grd-pipewire-utils.h"
+ #include "grd-utils.h"
+ #include "grd-vnc-cursor.h"
++#include "grd-vnc-buffer-layout.h"
+ 
+ #define MAX_FORMAT_PARAMS 2
+ #define PARAMS_BUFFER_SIZE 1024
+@@ -796,12 +799,12 @@
+ {
+   int y;
+ 
+-  frame->data = g_malloc (height * dst_stride);
++  frame->data = g_malloc0_n ((size_t) height, (size_t) dst_stride);
+   for (y = 0; y < height; y++)
+     {
+-      memcpy (((uint8_t *) frame->data) + y * dst_stride,
+-              ((uint8_t *) src_data) + y * src_stride,
+-              width * bpp);
++      memcpy (((uint8_t *) frame->data) + (size_t) y * dst_stride,
++              ((uint8_t *) src_data) + (size_t) y * src_stride,
++              (size_t) width * bpp);
+     }
+ }
+ 
+@@ -845,7 +848,20 @@
+   int width;
+   int height;
+ 
+-  g_assert (buffer->datas[0].chunk->size > 0);
++  frame = grd_vnc_frame_new (stream, on_frame_ready, pw_buffer);
++  callback = frame->callback;
++  user_data = frame->callback_user_data;
++
++  if (buffer->n_datas == 0 || !buffer->datas[0].chunk ||
++      buffer->datas[0].chunk->size == 0 ||
++      stream->spa_format.size.width == 0 ||
++      stream->spa_format.size.width > INT_MAX / 4 ||
++      stream->spa_format.size.height == 0 ||
++      stream->spa_format.size.height > INT_MAX)
++    {
++      callback (stream, g_steal_pointer (&frame), FALSE, user_data);
++      return;
++    }
+ 
+   height = stream->spa_format.size.height;
+   width = stream->spa_format.size.width;
+@@ -854,18 +870,29 @@
+   grd_get_spa_format_details (stream->spa_format.format,
+                               &drm_format, &bpp);
+ 
+-  frame = grd_vnc_frame_new (stream, on_frame_ready, pw_buffer);
+-  callback = frame->callback;
+-  user_data = frame->callback_user_data;
+-
+   if (buffer->datas[0].type == SPA_DATA_MemFd)
+     {
+       size_t size;
+       uint8_t *map;
+       int src_stride;
+       uint8_t *src_data;
++      size_t pixel_offset;
++      struct stat fd_stat;
+ 
+-      size = buffer->datas[0].maxsize + buffer->datas[0].mapoffset;
++      if (!wvnc_buffer_layout (width, height, bpp,
++                               buffer->datas[0].chunk->stride,
++                               buffer->datas[0].maxsize,
++                               buffer->datas[0].mapoffset,
++                               buffer->datas[0].chunk->offset,
++                               buffer->datas[0].chunk->size,
++                               &size, &pixel_offset) ||
++          fstat (buffer->datas[0].fd, &fd_stat) < 0 ||
++          fd_stat.st_size < 0 || (uint64_t) fd_stat.st_size < size)
++        {
++          g_warning ("Rejecting invalid VNC MemFd layout");
++          callback (stream, g_steal_pointer (&frame), FALSE, user_data);
++          return;
++        }
+       map = mmap (NULL, size, PROT_READ, MAP_PRIVATE, buffer->datas[0].fd, 0);
+       if (map == MAP_FAILED)
+         {
+@@ -874,7 +901,7 @@
+           return;
+         }
+ 
+-      src_data = SPA_MEMBER (map, buffer->datas[0].mapoffset, uint8_t);
++      src_data = SPA_MEMBER (map, pixel_offset, uint8_t);
+       src_stride = buffer->datas[0].chunk->stride;
+       copy_frame_data (frame, src_data,
+                        width, height,
+--- /dev/null
++++ b/src/grd-vnc-buffer-layout.h
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++#ifndef WAYLAND_VNC_BUFFER_LAYOUT_H
++#define WAYLAND_VNC_BUFFER_LAYOUT_H
++#include <stdbool.h>
++#include <stddef.h>
++#include <stdint.h>
++
++/* Reject wrapped chunks and negative stride; only packed positive-stride frames.
++ * mapoffset locates the spa_data region; chunk_offset is relative to that region.
++ * Validate the backing fd length separately before mmap/copy. */
++static inline bool
++wvnc_buffer_layout(uint32_t width, uint32_t height, uint32_t bpp,
++                   int32_t stride, uint32_t maxsize, uint32_t mapoffset,
++                   uint32_t chunk_offset, uint32_t chunk_size,
++                   size_t *mapping_size, size_t *pixel_offset)
++{
++    size_t row_bytes, span;
++    if (!width || !height || !bpp || stride <= 0 || width > SIZE_MAX / bpp)
++        return false;
++    row_bytes = (size_t) width * bpp;
++    if (row_bytes > (size_t) stride ||
++        (size_t) (height - 1) > (SIZE_MAX - row_bytes) / (size_t) stride)
++        return false;
++    span = (size_t) (height - 1) * (size_t) stride + row_bytes;
++    if (chunk_offset > maxsize || chunk_size > maxsize - chunk_offset ||
++        span > chunk_size)
++        return false;
++    *mapping_size = (size_t) mapoffset + maxsize;
++    if (*mapping_size < maxsize)
++        return false;
++    *pixel_offset = (size_t) mapoffset + chunk_offset;
++    return true;
++}
++#endif

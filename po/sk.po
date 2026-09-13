@@ -1,0 +1,552 @@
+# Slovenčina translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Slovenčina\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), overenie %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d rozhraní na záznam/vstup"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d plôch"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s CHÝBA a táto plocha ho potrebuje"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: iba tento počítač. 0.0.0.0: každá sieť, ku ktorej je tento počítač pripojený, bez ďalšej ochrany. Porty 1024 a nižšie sú odmietnuté."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Vyžaduje sa natívna relácia Wayland; návrat k X11 je zakázaný."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "O aplikácii Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Adresa"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Ohlásené"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Všetko prítomné"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Použiť"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Automaticky (podľa plochy)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Backend"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Kandidát na backend"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Backend na tejto ploche"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Binárne súbory"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Adresa a port na počúvanie"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Adresa a port boli použité"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Verdikt o schopnostiach"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Zistené protokoly na záznam, virtuálnu klávesnicu a virtuálny ukazovateľ."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Zavrieť"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Nastavenie"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Potvrdiť heslo"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Pripojiť z iného zariadenia"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Pripojte tento počítač k Wi-Fi alebo Ethernetu a potom znova otvorte"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Kopírovať"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "V súbore s prihlasovacími údajmi chýba používateľské meno alebo heslo"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Plocha"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Služby plochy"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Diagnostika"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Každá voľba tu mení skutočné nastavenie alebo nainštalovanú službu."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Všetko, čo táto plocha potrebuje; nenainštalované: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Server GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Vlastný démon GNOME Vzdialená plocha počúva v každej sieti; nainštalujte wayland-vnc-grd, aby ste to mohli riadiť"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "Zdieľanie obrazovky GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Všeobecné"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "V RealVNC Viewer pridajte pripojenie k jednej z týchto adries. Fungujú, kým je prístup z miestnej siete zapnutý, pre každé zariadenie v rovnakej sieti. Nepresmerúvajte port z internetu."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Nainštalujte balík wayland-vnc, aby ste získali používateľskú jednotku systemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "Zistený KWin a portálové rozhrania na záznam/vstup."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin vyžaduje obe portálové rozhrania: ScreenCast aj RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Klávesové skratky"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Klávesové skratky"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Jazyk"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Povoliť pripojenie zariadeniam v rovnakej Wi-Fi alebo LAN. Vypnuté: iba tento počítač."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Licencia"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Prístup z miestnej siete"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Prístup z miestnej siete vypnutý"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Prístup z miestnej siete zapnutý"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Hlavná ponuka"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Sprístupní túto plochu Wayland z RealVNC Viewer na vašom telefóne alebo inom počítači. Kým nezapnete Prístup z miestnej siete, počúva iba na tomto počítači."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Zistené služby Mutter na záznam a vzdialený vstup; vyžaduje sa súkromné zostavenie."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Nie"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Nenašli sa žiadne výsledky"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Nenašla sa žiadna adresa miestnej siete"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Žiadny podporovaný backend"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Nie sú nainštalované žiadne preklady, okno teda zostáva v angličtine."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Žiadny"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Žiadny ohlásený"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Žiadny k dispozícii"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Žiadny skontrolovaný"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Žiadny zistený"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Neohlásené"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Neskontrolované"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Nenainštalované"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Nepripravené"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Nenastavené"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Otvoriť hlavnú ponuku"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "VEREJNÁ ADRESA - dosiahnuteľná mimo miestnej siete"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Heslo"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Heslo musí mať 6 až 64 znakov ASCII"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Heslá sa nezhodujú"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Port"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Port musí byť neprivilegovaný port TCP"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Portály"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Webová stránka projektu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Ukončiť"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Pripravené na inštaláciu"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, klient; na poskytovanie nie je potrebný"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Dôvod"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Ciele vydania"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Portál RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Nahlásiť problém"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Požadované schopnosti záznamu A vstupu neboli zistené."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Práve beží"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Uložiť"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Portál ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Hľadať"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Hľadať v diagnostike"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Hľadať jazyky"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Obsluhované cez GNOME Remote Desktop VNC (port 5900); vystavenie sa riadi Nastaveniami GNOME > Zdieľanie"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Nastavenie servera"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Služba"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Relácia"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Typ relácie"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Nastaviť heslo"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Nastaviť heslo prehliadača"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Najskôr nastavte heslo prehliadača"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Spustiť pri prihlásení"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Stav"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Uložené (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Cielené"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Okno nastavení potrebuje GTK4 a libadwaita (nainštalujte python3-gi, gir1.2-gtk-4.0 a gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Okno nastavení potrebuje libadwaita %(needed)s alebo novšiu; tento systém má %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Okno sa riadi jazykom vašej plochy, pokiaľ nezvolíte iný."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Táto plocha poskytuje VNC cez GNOME Remote Desktop, ktorý prijíma heslá s najviac 8 znakmi"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Backend tohto prostredia vždy počúva iba na tomto počítači"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Server TigerVNC, pre KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Skúste iné hľadanie."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Zadajte tieto údaje v RealVNC Viewer na druhom zariadení. Pomocou oka zobrazíte aktuálne heslo. Uložené s režimom 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Používateľské meno"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Používateľské meno musí byť tlačiteľné ASCII"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Verdikt"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Prihlasovacie údaje prehliadača"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Heslo prehliadača uložené"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Server WayVNC, pre kompozítory wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Protokoly Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Čo táto plocha ohlasuje a čo to znamená pre vzdialený prístup."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Áno"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "každá sieť, ku ktorej je tento počítač pripojený"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "iba miestna sieť"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Názov mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "režim %s (príliš otvorený)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "režim 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "iba tento počítač"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "jednotka nie je nainštalovaná"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "neznáme"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "slúži na zisťovanie protokolov Wayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "slúži na zisťovanie portálov cez D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Kvalifikácia"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 sprístupní server zariadeniam vo vašej miestnej sieti; služba naďalej blokuje internet. 127.0.0.1 ho obmedzí na tento počítač. Porty 1024 a nižšie sú odmietnuté."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "iba miestna sieť; internet blokuje jednotka"

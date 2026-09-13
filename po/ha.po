@@ -1,0 +1,552 @@
+# Hausa translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Hausa\n"
+"Language: ha\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), tantancewa %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "Hanyoyin daukar hoto/shigarwa %d"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "Tebura %d"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s BA YA NAN kuma wannan tebur yana bukatarsa"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: wannan kwamfuta kawai. 0.0.0.0: kowace hanyar sadarwa da wannan kwamfuta ta haɗu da ita, ba tare da wata shinge ba. Ana ƙin tashoshi 1024 da ƙasa."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Ana bukatar zaman Wayland na asali; an haramta komawa zuwa X11."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Game da Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Adireshi"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "An sanar"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Duk suna nan"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Aiwatar"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Ta atomatik (bi tebur)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Injin baya"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Dan takarar injin baya"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Injin baya a wannan tebur"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Fayilolin aiwatarwa"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Adireshi da tashar saurara"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "An aiwatar da adireshi da tasha"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Soke"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Hukuncin iyawa"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "An gano ka'idojin daukar hoto, madannai na kama-da-wane da alamar linzami ta kama-da-wane."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Rufe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Saiti"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Tabbatar da kalmar sirri"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Hada daga wata na'ura"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Hada wannan na'ura da Wi-Fi ko Ethernet, sannan ka sake budewa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Kwafa"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Fayil din shaidar ba shi da sunan mai amfani ko kalmar sirri"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Tebur"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Hidimomin tebur"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Bincike"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Kowane zabi anan yana canza ainihin saiti ko hidimar da aka girka."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Duk abin da wannan tebur ke bukata; ba a girka ba: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Uwar garken GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Daemon na GNOME Tebur na Nesa da kansa yana saurara a kowace hanyar sadarwa; shigar da wayland-vnc-grd don sarrafa wannan"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "Daukar allon GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Gabaɗaya"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "A cikin RealVNC Viewer, ƙara haɗi zuwa ɗaya daga cikin waɗannan adiresoshin. Suna aiki muddin an kunna shiga daga hanyar sadarwa ta gida, ga kowace na'ura a hanyar sadarwa ɗaya. Kada a tura tashar daga Intanet."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Girka kunshin wayland-vnc domin samun sashin mai amfani na systemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "An gano KWin da hanyoyin kofar shiga na daukar hoto/shigarwa."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin yana buƙatar duka madogaran ƙofa biyu: ScreenCast da RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Gajerun Hanyoyin Madannai"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Gajerun hanyoyin madannai"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Harshe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Bari na'urori a Wi-Fi ko LAN ɗaya su haɗu. A kashe: wannan kwamfuta kawai."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Lasisi"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Shiga daga hanyar sadarwa ta gida"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "An kashe shiga daga hanyar sadarwa ta gida"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "An kunna shiga daga hanyar sadarwa ta gida"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Babban Menu"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Yana sa a iya isa ga wannan teburin Wayland daga RealVNC Viewer a wayarka ko wata na'ura. Yana saurare a wannan na'ura kadai har sai ka kunna Shiga daga hanyar sadarwa ta gida."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "An gano hidimomin daukar hoto da shigarwa ta nesa na Mutter; ana bukatar gini na musamman."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "A'a"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Ba a sami sakamako ba"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Ba a sami adireshin hanyar sadarwa ta gida ba"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Babu injin baya da ake tallafawa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Ba a girka wani fassara ba, don haka taga na ci gaba da Turanci."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Babu"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Ba a sanar da kowanne ba"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Babu wanda ake samu"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Ba a duba kowanne ba"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Ba a gano kowanne ba"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Ba a sanar ba"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Ba a duba ba"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Ba a girka ba"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Ba a shirya ba"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Ba a saita ba"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Buɗe babban menu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "ADIRESHIN JAMA'A - ana iya isa gare shi bayan hanyar sadarwa ta gida"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Kalmar sirri"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Kalmar sirri dole ta kasance haruffa ASCII 6 zuwa 64"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Kalmomin sirri ba su yi daidai ba"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Tasha"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Tasha dole ta kasance tashar TCP mara gata"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Kofofin shiga"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Gidan yanar gizon aikin"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Fita"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "A shirye don girkawa"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, abokin ciniki; ba a buƙata don hidima ba"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Dalili"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Manufofin fitarwa"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Kofar shiga ta RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Bayar da rahoton matsala"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Ba a gano iyawar daukar hoto DA shigarwa da ake bukata ba."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Yana gudana yanzu"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Ajiye"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Kofar shiga ta ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Nema"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Nema a cikin bincike"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Nemi harsuna"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Ana bayarwa ta GNOME Remote Desktop VNC (tasha 5900); budewa na bin Saitunan GNOME > Rabawa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Saitin sabar"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Hidima"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Zama"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Nau'in zama"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Saita Kalmar Sirri"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Saita kalmar sirri ta mai kallo"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Da farko saita kalmar sirri ta mai kallo"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Fara lokacin shiga"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Matsayi"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "An ajiye (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "An nufa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Tagar saituna tana bukatar GTK4 da libadwaita (girka python3-gi, gir1.2-gtk-4.0 da gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Tagar saituna tana bukatar libadwaita %(needed)s ko sabo; wannan tsarin yana da %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Taga na bin harshen teburin ku sai dai idan kun zabi wani."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Wannan tebur yana hidimar VNC ta GNOME Remote Desktop, wanda ke karɓar kalmomin sirri na haruffa 8 a mafi yawa"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Bayan gida na wannan tebur koyaushe yana saurara a wannan kwamfuta kawai"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Uwar garken TigerVNC, don KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Gwada wani nema daban."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Rubuta wadannan a cikin RealVNC Viewer a kan dayan na'urar. Yi amfani da alamar ido don nuna kalmar sirri ta yanzu. An ajiye da yanayin 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Sunan mai amfani"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Sunan mai amfani dole ya kasance ASCII mai bugawa"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Hukunci"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Shaidar mai kallo"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "An ajiye kalmar sirri ta mai kallo"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Uwar garken WayVNC, don masu haɗa wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Ka'idojin Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Abin da wannan tebur ke sanarwa, da ma'anarsa ga shiga daga nesa."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Eh"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "kowace hanyar sadarwa da wannan kwamfuta ta haɗu da ita"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "hanyar sadarwa ta gida kawai"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Sunan mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "yanayi %s (a bude sosai)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "yanayi 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "wannan na'ura kadai"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "ba a girka sashin ba"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "ba a sani ba"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "ana amfani da shi don bincika ƙa'idodin Wayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "ana amfani da shi don bincika ƙofofi ta D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Cancanta"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 yana sa na'urar sabar ta isa ga na'urori a cikin hanyar sadarwar ku ta gida; hidimar na ci gaba da toshe Intanet. 127.0.0.1 yana iyakance ta ga wannan na'ura kadai. Ana ki tashoshi 1024 da kasa."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "hanyar sadarwa ta gida kadai; sashin ya toshe Intanet"

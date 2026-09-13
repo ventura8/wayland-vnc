@@ -1,0 +1,552 @@
+# Magyar translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Magyar\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), hitelesítés %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d rögzítési/beviteli felület"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d asztal"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "A(z) %s HIÁNYZIK, és ennek az asztalnak szüksége van rá"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: csak ez a számítógép. 0.0.0.0: minden hálózat, amelyhez ez a számítógép csatlakozik, más védelem nélkül. Az 1024-es és az alatti portok el vannak utasítva."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Natív Wayland munkamenet szükséges; az X11-re való visszaesés tilos."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "A Wayland VNC névjegye"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Cím"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Meghirdetve"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Mind megvan"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Alkalmaz"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Automatikus (az asztal szerint)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Háttérprogram"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Háttérprogram-jelölt"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Háttérprogram ezen az asztalon"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Binárisok"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Figyelési cím és port"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Cím és port alkalmazva"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Mégse"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Képességek megítélése"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Rögzítési, virtuális billentyűzet- és virtuális mutatóprotokollok észlelve."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Bezárás"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Beállítások"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Jelszó megerősítése"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Kapcsolódás másik eszközről"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Csatlakoztassa ezt a gépet Wi-Fi-hez vagy Ethernethez, majd nyissa meg újra"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Másolás"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "A hitelesítő fájlból hiányzik a felhasználónév vagy a jelszó"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Asztal"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Asztali szolgáltatások"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Diagnosztika"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Itt minden beállítás valódi konfigurációt vagy a telepített szolgáltatást módosítja."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Minden, amire ennek az asztalnak szüksége van; nincs telepítve: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME Remote Desktop kiszolgáló"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "A GNOME Távoli asztal saját démona minden hálózaton figyel; telepítse a wayland-vnc-grd csomagot, hogy ezt szabályozhassa"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME képernyőközvetítés"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Általános"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "A RealVNC Viewerben adjon hozzá kapcsolatot ezen címek egyikéhez. Addig működnek, amíg a helyi hálózati hozzáférés be van kapcsolva, az azonos hálózaton lévő bármely eszköz számára. Ne továbbítsa a portot az internetről."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Telepítse a wayland-vnc csomagot a systemd felhasználói egység eléréséhez"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "KWin és rögzítési/beviteli portálfelületek észlelve."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "A KWin mindkét portálfelületet igényli: ScreenCast és RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Gyorsbillentyűk"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Gyorsbillentyűk"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Nyelv"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Az azonos Wi-Fi- vagy LAN-hálózaton lévő eszközök csatlakozhatnak. Kikapcsolva: csak ez a számítógép."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Licenc"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Helyi hálózati hozzáférés"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Helyi hálózati hozzáférés kikapcsolva"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Helyi hálózati hozzáférés bekapcsolva"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Főmenü"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Elérhetővé teszi ezt a Wayland asztalt a telefonján vagy egy másik számítógépen futó RealVNC Viewerből. Amíg be nem kapcsolja a Helyi hálózati hozzáférést, csak ezen a számítógépen figyel."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Mutter rögzítési és távoli beviteli szolgáltatások észlelve; privát összeállítás szükséges."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Nem"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Nincs találat"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Nem található helyi hálózati cím"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Nincs támogatott háttérprogram"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Nincsenek telepített fordítások, ezért az ablak angol marad."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Nincs"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Egyik sincs meghirdetve"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Egyik sem érhető el"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Egyik sincs ellenőrizve"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Egyik sincs észlelve"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Nincs meghirdetve"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Nincs ellenőrizve"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Nincs telepítve"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Nincs előkészítve"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Nincs beállítva"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Főmenü megnyitása"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "NYILVÁNOS CÍM - a helyi hálózaton kívülről is elérhető"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Jelszó"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "A jelszónak 6–64 ASCII karakternek kell lennie"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "A jelszavak nem egyeznek"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Port"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "A portnak nem privilegizált TCP-portnak kell lennie"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Portálok"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "A projekt webhelye"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Kilépés"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Telepítésre kész"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, egy kliens; a kiszolgáláshoz nem kell"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Ok"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Kiadási célok"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop portál"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Hiba bejelentése"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "A szükséges rögzítési ÉS beviteli képességek nem észlelhetők."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Most fut"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Mentés"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast portál"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Keresés"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Keresés a diagnosztikában"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Nyelvek keresése"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "A GNOME Remote Desktop VNC szolgáltatja (5900-as port); az elérhetőség a GNOME Beállítások > Megosztás szerint alakul"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Kiszolgáló beállításai"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Szolgáltatás"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Munkamenet"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Munkamenet típusa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Jelszó beállítása"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Megjelenítő jelszavának beállítása"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Először állítson be megjelenítő-jelszót"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Indítás bejelentkezéskor"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Állapot"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Tárolva (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Célzott"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "A beállítások ablakhoz GTK4 és libadwaita szükséges (telepítse a python3-gi, gir1.2-gtk-4.0 és gir1.2-adw-1 csomagokat)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "A beállítások ablakhoz libadwaita %(needed)s vagy újabb szükséges; ezen a rendszeren %(found)s van"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Az ablak az asztal nyelvét követi, hacsak nem választ másikat."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Ez az asztal a GNOME Remote Desktopon át szolgálja ki a VNC-t, amely legfeljebb 8 karakteres jelszavakat fogad el"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Ennek az asztalnak a háttérrendszere mindig csak ezen a számítógépen figyel"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC-kiszolgáló, KDE Plasmához"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Próbáljon másik keresést."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Írja be ezeket a RealVNC Viewerbe a másik eszközön. A szem ikonnal megjelenítheti a jelenlegi jelszót. 600-as móddal tárolva."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Felhasználónév"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "A felhasználónévnek nyomtatható ASCII-nak kell lennie"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Ítélet"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Megjelenítő hitelesítő adatai"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Megjelenítő jelszava mentve"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC-kiszolgáló, wlroots kompozitorokhoz"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Wayland protokollok"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Mit hirdet meg ez az asztal, és mit jelent ez a távoli elérésre nézve."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Igen"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "minden hálózat, amelyhez ez a számítógép csatlakozik"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "csak helyi hálózat"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS-név"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "%s mód (túl nyitott)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "600-as mód"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "csak ez a gép"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "az egység nincs telepítve"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "ismeretlen"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "a Wayland-protokollok vizsgálatához"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "a portálok D-Buson át történő vizsgálatához"
+
+#~ msgid "Qualification"
+#~ msgstr "Minősítés"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "A 0.0.0.0 elérhetővé teszi a kiszolgálót a helyi hálózat eszközei számára; a szolgáltatás továbbra is blokkolja az internetet. A 127.0.0.1 erre a gépre korlátozza. Az 1024 vagy annál kisebb portok elutasításra kerülnek."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "csak helyi hálózat; az internetet az egység blokkolja"

@@ -1,0 +1,552 @@
+# Kreyòl ayisyen translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Kreyòl ayisyen\n"
+"Language: ht\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), otantifikasyon %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d entèfas kaptire/antre"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d biwo"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s MANKE epi biwo sa a bezwen li"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: òdinatè sa a sèlman. 0.0.0.0: tout rezo òdinatè sa a konekte sou yo, san okenn lòt pwoteksyon. Pò 1024 ak pi ba yo refize."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Yon sesyon Wayland natif nesesè; retounen sou X11 entèdi."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Konsènan Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Adrès"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Anonse"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Tout la"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Aplike"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Otomatik (suiv biwo a)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Backend"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Kandida backend"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Backend sou biwo sa a"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Fichye binè"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Adrès ak pò pou koute"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Adrès ak pò aplike"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Anile"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Vèdik kapasite"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Yo detekte pwotokòl kaptire, klavye vityèl ak pwentè vityèl."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Fèmen"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Konfigirasyon"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Konfime modpas la"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Konekte depi yon lòt aparèy"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Konekte machin sa a ak Wi-Fi oswa Ethernet, epi reouvri"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Kopye"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Fichye idantifyan an manke yon non itilizatè oswa yon modpas"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Biwo"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Sèvis biwo"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Dyagnostik"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Chak opsyon isit la chanje konfigirasyon reyèl la oswa sèvis ki enstale a."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Tout sa biwo sa a bezwen; pa enstale: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Sèvè GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Pwòp demon GNOME Biwo a distans lan ap koute sou tout rezo; enstale wayland-vnc-grd pou kontwole sa"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "Difizyon ekran GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Jeneral"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "Nan RealVNC Viewer, ajoute yon koneksyon ak youn nan adrès sa yo. Yo mache toutotan aksè soti nan rezo lokal la limen, pou nenpòt aparèy sou menm rezo a. Pa voye pò a soti nan Entènèt."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Enstale pakè wayland-vnc pou jwenn inite itilizatè systemd la"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "Yo detekte KWin ak entèfas pòtay kaptire/antre."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin bezwen tou de entèfas pòtay yo: ScreenCast ak RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Rakousi klavye"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Rakousi klavye"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Lang"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Kite aparèy sou menm Wi-Fi oswa LAN an konekte. Etenn: òdinatè sa a sèlman."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Lisans"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Aksè soti nan rezo lokal"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Aksè soti nan rezo lokal la etenn"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Aksè soti nan rezo lokal la limen"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Meni prensipal"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Fè biwo Wayland sa a aksesib depi RealVNC Viewer sou telefòn ou oswa yon lòt òdinatè. Li koute sèlman sou òdinatè sa a jiskaske ou limen Aksè soti nan rezo lokal."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Yo detekte sèvis kaptire ak antre a distans Mutter; yon konstriksyon prive nesesè."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Non"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Pa jwenn okenn rezilta"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Pa jwenn okenn adrès rezo lokal"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Pa gen backend ki sipòte"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Pa gen tradiksyon enstale, kidonk fenèt la rete an anglè."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Okenn"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Okenn pa anonse"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Okenn pa disponib"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Okenn pa verifye"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Okenn pa detekte"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Pa anonse"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Pa verifye"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Pa enstale"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Pa prepare"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Pa defini"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Ouvri meni prensipal la"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "ADRÈS PIBLIK - aksesib pi lwen pase rezo lokal la"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Modpas"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Modpas la dwe gen 6–64 karaktè ASCII"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Modpas yo pa koresponn"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Pò"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Pò a dwe yon pò TCP san privilèj"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Pòtay"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Sit entènèt pwojè a"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Kite"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Pare pou enstale"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, yon kliyan; pa nesesè pou sèvi"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Rezon"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Sib piblikasyon"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Pòtay RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Rapòte yon pwoblèm"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Yo pa detekte kapasite kaptire AK antre ki nesesè yo."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Ap mache kounye a"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Sove"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Pòtay ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Chèche"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Chèche nan dyagnostik"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Chèche lang"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Sèvi pa GNOME Remote Desktop VNC (pò 5900); ekspozisyon an suiv Paramèt GNOME > Pataje"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Konfigirasyon sèvè"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Sèvis"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Sesyon"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Tip sesyon"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Defini modpas"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Defini modpas vizyonè a"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Defini yon modpas vizyonè anvan"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Kòmanse lè w konekte"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Estati"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Sove (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Vize"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Fenèt paramèt la bezwen GTK4 ak libadwaita (enstale python3-gi, gir1.2-gtk-4.0 ak gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Fenèt paramèt la bezwen libadwaita %(needed)s oswa pi nouvo; sistèm sa a gen %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Fenèt la suiv lang biwo ou a sof si ou chwazi yon lòt."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Biwo sa a bay VNC atravè GNOME Remote Desktop, ki aksepte modpas ki gen 8 karaktè oplis"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Motè biwo sa a toujou koute sou òdinatè sa a sèlman"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Sèvè TigerVNC, pou KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Eseye yon lòt rechèch."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Tape sa yo nan RealVNC Viewer sou lòt aparèy la. Sèvi ak je a pou montre modpas aktyèl la. Sove ak mòd 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Non itilizatè"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Non itilizatè a dwe ASCII ki ka enprime"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Vèdik"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Idantifyan vizyonè"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Modpas vizyonè a sove"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Sèvè WayVNC, pou konpozitè wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Pwotokòl Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Sa biwo sa a anonse, ak sa sa vle di pou aksè a distans."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Wi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "tout rezo òdinatè sa a konekte sou yo"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "rezo lokal sèlman"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Non mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "mòd %s (twò ouvè)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "mòd 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "machin sa a sèlman"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "inite a pa enstale"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "enkoni"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "itilize pou sonde pwotokòl Wayland yo"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "itilize pou sonde pòtay yo atravè D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Kalifikasyon"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 fè sèvè a aksesib pou aparèy ki sou rezo lokal ou a; sèvis la toujou bloke entènèt la. 127.0.0.1 limite li a machin sa a. Pò 1024 ak pi ba yo refize."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "rezo lokal sèlman; entènèt la bloke pa inite a"

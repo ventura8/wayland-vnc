@@ -1,0 +1,552 @@
+# Ελληνικά translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Ελληνικά\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), έλεγχος ταυτότητας %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d διεπαφές καταγραφής/εισόδου"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d επιφάνειες εργασίας"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "Το %s ΛΕΙΠΕΙ και αυτή η επιφάνεια εργασίας το χρειάζεται"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: μόνο αυτός ο υπολογιστής. 0.0.0.0: κάθε δίκτυο στο οποίο είναι συνδεδεμένος αυτός ο υπολογιστής, χωρίς άλλη προστασία. Οι θύρες 1024 και κάτω απορρίπτονται."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Απαιτείται εγγενής συνεδρία Wayland· η υποχώρηση σε X11 απαγορεύεται."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Σχετικά με το Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Διεύθυνση"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Ανακοινώνεται"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Όλα παρόντα"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Εφαρμογή"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Αυτόματα (όπως η επιφάνεια εργασίας)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Υποσύστημα"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Υποψήφιο υποσύστημα"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Υποσύστημα σε αυτή την επιφάνεια εργασίας"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Εκτελέσιμα"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Διεύθυνση και θύρα ακρόασης"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Η διεύθυνση και η θύρα εφαρμόστηκαν"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Άκυρο"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Ετυμηγορία δυνατοτήτων"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Εντοπίστηκαν τα πρωτόκολλα καταγραφής, εικονικού πληκτρολογίου και εικονικού δείκτη."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Κλείσιμο"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Διαμόρφωση"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Επιβεβαίωση κωδικού"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Σύνδεση από άλλη συσκευή"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Συνδέστε αυτό το μηχάνημα σε Wi-Fi ή Ethernet και ανοίξτε ξανά"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Αντιγραφή"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Από το αρχείο διαπιστευτηρίων λείπει όνομα χρήστη ή κωδικός"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Επιφάνεια εργασίας"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Υπηρεσίες επιφάνειας εργασίας"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Διαγνωστικά"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Κάθε επιλογή εδώ αλλάζει πραγματική διαμόρφωση ή την εγκατεστημένη υπηρεσία."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Ό,τι χρειάζεται αυτή η επιφάνεια εργασίας· δεν είναι εγκατεστημένα: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Διακομιστής GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Ο δικός του δαίμονας του GNOME Απομακρυσμένης επιφάνειας εργασίας ακούει σε κάθε δίκτυο· εγκαταστήστε το wayland-vnc-grd για να το ελέγξετε"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "Καταγραφή οθόνης GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Γενικά"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "Στο RealVNC Viewer προσθέστε μια σύνδεση σε μία από αυτές τις διευθύνσεις. Λειτουργούν όσο η πρόσβαση από το τοπικό δίκτυο είναι ενεργή, για κάθε συσκευή στο ίδιο δίκτυο. Μην προωθείτε τη θύρα από το Διαδίκτυο."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Εγκαταστήστε το πακέτο wayland-vnc για να αποκτήσετε τη μονάδα χρήστη systemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "Εντοπίστηκαν το KWin και οι διεπαφές πύλης καταγραφής/εισόδου."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "Το KWin απαιτεί και τις δύο διεπαφές πυλών: ScreenCast και RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Συντομεύσεις πληκτρολογίου"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Συντομεύσεις πληκτρολογίου"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Γλώσσα"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Να επιτρέπεται η σύνδεση συσκευών στο ίδιο Wi-Fi ή LAN. Ανενεργό: μόνο αυτός ο υπολογιστής."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Άδεια χρήσης"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Πρόσβαση από το τοπικό δίκτυο"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Η πρόσβαση από το τοπικό δίκτυο απενεργοποιήθηκε"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Η πρόσβαση από το τοπικό δίκτυο ενεργοποιήθηκε"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Κύριο μενού"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Καθιστά αυτή την επιφάνεια εργασίας Wayland προσβάσιμη από το RealVNC Viewer στο τηλέφωνό σας ή σε άλλον υπολογιστή. Ακούει μόνο σε αυτόν τον υπολογιστή μέχρι να ενεργοποιήσετε την «Πρόσβαση από το τοπικό δίκτυο»."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Εντοπίστηκαν οι υπηρεσίες καταγραφής και απομακρυσμένης εισόδου του Mutter· απαιτείται ιδιωτική έκδοση."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Όχι"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Δεν βρέθηκαν αποτελέσματα"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Δεν βρέθηκε διεύθυνση τοπικού δικτύου"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Κανένα υποστηριζόμενο υποσύστημα"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Δεν υπάρχουν εγκατεστημένες μεταφράσεις, οπότε το παράθυρο παραμένει στα αγγλικά."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Κανένα"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Κανένα δεν ανακοινώνεται"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Κανένα διαθέσιμο"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Κανένα δεν ελέγχθηκε"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Κανένα δεν εντοπίστηκε"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Δεν ανακοινώνεται"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Δεν ελέγχθηκε"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Δεν είναι εγκατεστημένο"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Δεν έχει προετοιμαστεί"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Δεν έχει οριστεί"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Άνοιγμα κύριου μενού"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "ΔΗΜΟΣΙΑ ΔΙΕΥΘΥΝΣΗ - προσβάσιμη πέρα από το τοπικό δίκτυο"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Κωδικός πρόσβασης"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Ο κωδικός πρέπει να έχει 6-64 χαρακτήρες ASCII"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Οι κωδικοί δεν ταιριάζουν"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Θύρα"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Η θύρα πρέπει να είναι μη προνομιούχα θύρα TCP"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Πύλες"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Ιστότοπος του έργου"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Έξοδος"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Έτοιμο για εγκατάσταση"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, πελάτης· δεν χρειάζεται για την εξυπηρέτηση"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Αιτία"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Στόχοι έκδοσης"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Πύλη RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Αναφορά προβλήματος"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Δεν εντοπίστηκαν οι απαιτούμενες δυνατότητες καταγραφής ΚΑΙ εισόδου."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Εκτελείται τώρα"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Πύλη ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Αναζήτηση"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Αναζήτηση στα διαγνωστικά"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Αναζήτηση γλωσσών"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Εξυπηρετείται από το GNOME Remote Desktop VNC (θύρα 5900)· η έκθεση ακολουθεί Ρυθμίσεις GNOME > Κοινή χρήση"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Διαμόρφωση διακομιστή"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Υπηρεσία"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Συνεδρία"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Τύπος συνεδρίας"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Ορισμός κωδικού"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Ορισμός κωδικού προβολέα"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Ορίστε πρώτα κωδικό προβολέα"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Εκκίνηση κατά τη σύνδεση"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Αποθηκευμένο (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Στοχευμένο"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Το παράθυρο ρυθμίσεων χρειάζεται GTK4 και libadwaita (εγκαταστήστε python3-gi, gir1.2-gtk-4.0 και gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Το παράθυρο ρυθμίσεων χρειάζεται libadwaita %(needed)s ή νεότερη· αυτό το σύστημα έχει %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Το παράθυρο ακολουθεί τη γλώσσα της επιφάνειας εργασίας, εκτός αν επιλέξετε άλλη."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Αυτή η επιφάνεια εργασίας εξυπηρετεί VNC μέσω GNOME Remote Desktop, που δέχεται κωδικούς το πολύ 8 χαρακτήρων"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Το σύστημα υποστήριξης αυτής της επιφάνειας εργασίας ακούει πάντα μόνο σε αυτόν τον υπολογιστή"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Διακομιστής TigerVNC, για το KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Δοκιμάστε μια διαφορετική αναζήτηση."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Πληκτρολογήστε τα στο RealVNC Viewer στην άλλη συσκευή. Χρησιμοποιήστε το μάτι για να αποκαλύψετε τον τρέχοντα κωδικό. Αποθηκευμένο με λειτουργία 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Όνομα χρήστη"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Το όνομα χρήστη πρέπει να είναι εκτυπώσιμο ASCII"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Ετυμηγορία"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Διαπιστευτήρια προβολέα"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Ο κωδικός προβολέα αποθηκεύτηκε"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Διακομιστής WayVNC, για συνθέτες wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Πρωτόκολλα Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Τι ανακοινώνει αυτή η επιφάνεια εργασίας και τι σημαίνει για την απομακρυσμένη πρόσβαση."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Ναι"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "κάθε δίκτυο στο οποίο είναι συνδεδεμένος αυτός ο υπολογιστής"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "μόνο τοπικό δίκτυο"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Όνομα mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "λειτουργία %s (πολύ ανοιχτή)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "λειτουργία 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "μόνο αυτό το μηχάνημα"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "η μονάδα δεν είναι εγκατεστημένη"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "άγνωστο"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "χρησιμοποιείται για τον έλεγχο των πρωτοκόλλων Wayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "χρησιμοποιείται για τον έλεγχο των πυλών μέσω D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Πιστοποίηση"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "Το 0.0.0.0 κάνει τον διακομιστή προσβάσιμο από συσκευές του τοπικού σας δικτύου· η υπηρεσία εξακολουθεί να αποκλείει το διαδίκτυο. Το 127.0.0.1 τον περιορίζει σε αυτό το μηχάνημα. Θύρες έως και 1024 απορρίπτονται."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "μόνο τοπικό δίκτυο· το διαδίκτυο αποκλείεται από τη μονάδα"

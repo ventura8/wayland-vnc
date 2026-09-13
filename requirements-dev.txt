@@ -1,0 +1,15 @@
+# Pinned development/CI toolchain. Kept in a requirements file (not inline in the
+# workflow) so Dependabot's pip ecosystem can actually see and bump these pins.
+ruff==0.16.8
+pylint==4.0.8
+yamllint==1.38.0
+pytest==9.1.1
+coverage==7.16.1
+Pillow==12.3.0
+jsonschema==4.26.0
+# jsonschema's date-time format check is a no-op without this; the release gate
+# relies on it for the evidence's recorded_at.
+rfc3339-validator==0.1.4
+pymarkdownlnt==0.9.40
+# The KVM guest templates are cloud-init YAML; the tests render and parse them.
+PyYAML==6.0.3

@@ -1,0 +1,552 @@
+# 简体中文 translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: 简体中文\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s)，认证 %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d 个采集/输入接口"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d 个桌面"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "缺少 %s，而此桌面需要它"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1：仅限本机。0.0.0.0：本机所连接的每一个网络，没有其他任何防护。1024 及以下的端口会被拒绝。"
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "需要原生 Wayland 会话；禁止回退到 X11。"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "关于 Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "地址"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "已公布"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "全部存在"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "应用"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "自动（跟随桌面）"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "后端"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "候选后端"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "此桌面的后端"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "可执行文件"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "绑定地址和端口"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "绑定地址和端口已应用"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "取消"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "能力判定"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "已检测到采集、虚拟键盘和虚拟指针协议。"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "关闭"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "配置"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "确认密码"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "从其他设备连接"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "请将本机连接到 Wi-Fi 或以太网，然后重新打开"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "复制"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "凭据文件缺少用户名或密码"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "桌面"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "桌面服务"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "诊断"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "这里的每个选项都会更改真实配置或已安装的服务。"
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "此桌面所需的一切；未安装："
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME 远程桌面服务器"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "GNOME 远程桌面自身的守护进程在所有网络上监听；安装 wayland-vnc-grd 以控制此行为"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME 屏幕录制"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "常规"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "在 RealVNC Viewer 中添加到其中一个地址的连接。开启本地网络访问期间，同一网络中的任何设备都可使用。请勿从互联网转发该端口。"
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "请安装 wayland-vnc 软件包以获得 systemd 用户单元"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "已检测到 KWin 以及采集/输入门户接口。"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin 需要 ScreenCast 和 RemoteDesktop 两个门户接口。"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "键盘快捷键"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "键盘快捷键"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "语言"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "允许同一 Wi-Fi 或局域网中的设备连接。关闭：仅限本机。"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "许可证"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "本地网络访问"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "已关闭本地网络访问"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "已开启本地网络访问"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "主菜单"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "让您手机或另一台计算机上的 RealVNC Viewer 可以访问此 Wayland 桌面。在您开启“本地网络访问”之前，它仅在本机上监听。"
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "已检测到 Mutter 采集与远程输入服务；需要专用构建。"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "否"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "未找到结果"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "未找到本地网络地址"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "没有受支持的后端"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "未安装任何翻译，因此窗口保持英文。"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "无"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "未公布任何接口"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "没有可用的"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "未检查任何项"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "未检测到任何项"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "未公布"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "未检查"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "未安装"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "未配置"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "未设置"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "打开主菜单"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "公网地址 - 可从本地网络之外访问"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "密码"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "密码必须为 6 到 64 个 ASCII 字符"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "两次输入的密码不一致"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "端口"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "端口必须是非特权 TCP 端口"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "门户"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "项目网站"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "退出"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "可以安装"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer，一个客户端；提供服务时不需要"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "原因"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "发布目标"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop 门户"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "报告问题"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "未检测到所需的采集与输入能力。"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "正在运行"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "保存"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast 门户"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "搜索"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "搜索诊断信息"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "搜索语言"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "由 GNOME Remote Desktop VNC 提供服务（端口 5900）；开放范围遵循 GNOME 设置 > 共享"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "服务器配置"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "服务"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "会话"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "会话类型"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "设置密码"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "设置查看器密码"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "请先设置查看器密码"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "登录时启动"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "状态"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "已保存（%s）"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "已列入目标"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "设置窗口需要 GTK4 和 libadwaita（请安装 python3-gi、gir1.2-gtk-4.0 和 gir1.2-adw-1）"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "设置窗口需要 libadwaita %(needed)s 或更高版本；本系统为 %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "除非您另行选择，否则窗口将跟随桌面的语言。"
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "此桌面通过 GNOME 远程桌面提供 VNC，它只接受最多 8 个字符的密码"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "此桌面的后端始终只在本机上监听"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC 服务器，用于 KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "请尝试其他搜索词。"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "在另一台设备的 RealVNC Viewer 中输入这些内容。点击眼睛图标可显示当前密码。以 600 权限保存。"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "用户名"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "用户名必须是可打印的 ASCII 字符"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "判定"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "查看器凭据"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "查看器密码已保存"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC 服务器，用于 wlroots 合成器"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Wayland 协议"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "此桌面公布了什么，以及这对远程访问意味着什么。"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "是"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "本机所连接的每一个网络"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "仅限本地网络"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS 名称"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "权限 %s（过于开放）"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "权限 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "仅限本机"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "单元未安装"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "未知"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "用于探测 Wayland 协议"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "用于通过 D-Bus 探测门户"
+
+#~ msgid "Qualification"
+#~ msgstr "认证状态"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 让本地网络中的设备可以访问服务器；该服务仍会阻止互联网访问。127.0.0.1 则将其限制在本机。小于或等于 1024 的端口会被拒绝。"
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "仅本地网络；互联网已被该单元阻止"

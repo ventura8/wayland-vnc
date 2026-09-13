@@ -1,0 +1,52 @@
+.git
+.venv
+vendor
+artifacts
+**/__pycache__
+.coverage*
+# Build outputs, reports and caches: the same set debian/source/options keeps out of
+# the source package. None of them is an input to any image built from this tree.
+reports
+build
+coverage.json
+.pytest_cache
+.ruff_cache
+packaging/appimage/AppDir
+packaging/appimage/appimagetool
+packaging/flatpak/builddir
+packaging/flatpak/repo
+packaging/snap/parts
+packaging/snap/stage
+packaging/snap/prime
+*.apk
+*.vnc
+*.avd
+# Local secret material must never reach a build context: docker/Dockerfile.checks
+# copies the whole tree, so anything matching here would otherwise be baked into an
+# image layer. None of these are tracked; these rules keep a developer's working
+# copy out of the context too.
+.env
+.env.*
+*.env
+!*.env.example
+secrets/
+credentials/
+.secrets/
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.kdbx
+id_rsa*
+id_ecdsa*
+id_ed25519*
+*.gpg
+*.asc
+.netrc
+.npmrc
+.pypirc

@@ -1,0 +1,552 @@
+# Bahasa Indonesia translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Bahasa Indonesia\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), autentikasi %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d antarmuka tangkap/masukan"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d desktop"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s TIDAK ADA dan desktop ini memerlukannya"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: hanya komputer ini. 0.0.0.0: semua jaringan yang terhubung dengan komputer ini, tanpa pembatas lain. Port 1024 ke bawah ditolak."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Diperlukan sesi Wayland asli; mundur ke X11 dilarang."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Tentang Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Alamat"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Diumumkan"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Semua tersedia"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Terapkan"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Otomatis (mengikuti desktop)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Backend"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Kandidat backend"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Backend di desktop ini"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Berkas biner"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Alamat dan porta pengikatan"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Alamat dan porta diterapkan"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Batal"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Putusan kemampuan"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Protokol tangkap, papan ketik virtual, dan penunjuk virtual terdeteksi."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Tutup"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Konfigurasi"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Konfirmasi kata sandi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Sambungkan dari perangkat lain"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Sambungkan mesin ini ke Wi-Fi atau Ethernet, lalu buka kembali"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Salin"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Berkas kredensial tidak memiliki nama pengguna atau kata sandi"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Layanan desktop"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Diagnostik"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Setiap opsi di sini mengubah konfigurasi nyata atau layanan yang terpasang."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Semua yang diperlukan desktop ini; belum terpasang: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Server GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Daemon milik GNOME Desktop Jarak Jauh mendengarkan di semua jaringan; pasang wayland-vnc-grd untuk mengendalikannya"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "Screencast GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Umum"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "Di RealVNC Viewer, tambahkan koneksi ke salah satu alamat ini. Alamat ini berfungsi selama akses jaringan lokal aktif, untuk perangkat apa pun di jaringan yang sama. Jangan teruskan port dari Internet."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Pasang paket wayland-vnc untuk mendapatkan unit pengguna systemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "KWin dan antarmuka portal tangkap/masukan terdeteksi."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin memerlukan kedua antarmuka portal: ScreenCast dan RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Pintasan Papan Ketik"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Pintasan papan ketik"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Bahasa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Izinkan perangkat di Wi-Fi atau LAN yang sama terhubung. Nonaktif: hanya komputer ini."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Lisensi"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Akses Jaringan Lokal"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Akses jaringan lokal dinonaktifkan"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Akses jaringan lokal diaktifkan"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Menu Utama"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Membuat desktop Wayland ini dapat dijangkau dari RealVNC Viewer di ponsel atau komputer lain. Ia hanya mendengarkan di komputer ini sampai Anda menyalakan Akses Jaringan Lokal."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Layanan tangkap dan masukan jarak jauh Mutter terdeteksi; diperlukan build privat."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Tidak"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Tidak ada hasil"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Tidak ditemukan alamat jaringan lokal"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Tidak ada backend yang didukung"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Tidak ada terjemahan yang terpasang, jadi jendela tetap berbahasa Inggris."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Tidak ada"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Tidak ada yang diumumkan"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Tidak ada yang tersedia"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Tidak ada yang diperiksa"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Tidak ada yang terdeteksi"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Tidak diumumkan"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Tidak diperiksa"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Belum terpasang"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Belum disiapkan"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Belum disetel"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Buka menu utama"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "ALAMAT PUBLIK - dapat dijangkau di luar jaringan lokal"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Kata sandi"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Kata sandi harus terdiri dari 6-64 karakter ASCII"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Kata sandi tidak cocok"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Porta"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Porta harus berupa porta TCP non-istimewa"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Portal"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Situs web proyek"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Keluar"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Siap dipasang"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, sebuah klien; tidak diperlukan untuk melayani"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Alasan"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Target rilis"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Portal RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Laporkan masalah"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Kemampuan tangkap DAN masukan yang diperlukan tidak terdeteksi."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Sedang berjalan"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Simpan"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Portal ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Cari"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Cari diagnostik"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Cari bahasa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Dilayani oleh GNOME Remote Desktop VNC (porta 5900); keterbukaan mengikuti Pengaturan GNOME > Berbagi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Konfigurasi server"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Layanan"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Sesi"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Jenis sesi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Setel Kata Sandi"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Setel kata sandi penampil"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Setel dulu kata sandi penampil"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Mulai saat masuk"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Status"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Tersimpan (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Ditargetkan"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Jendela pengaturan memerlukan GTK4 dan libadwaita (pasang python3-gi, gir1.2-gtk-4.0 dan gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Jendela pengaturan memerlukan libadwaita %(needed)s atau lebih baru; sistem ini memiliki %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Jendela mengikuti bahasa desktop Anda kecuali Anda memilih yang lain."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Desktop ini melayani VNC lewat GNOME Remote Desktop, yang menerima kata sandi paling banyak 8 karakter"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Backend desktop ini selalu hanya mendengarkan di komputer ini"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Server TigerVNC, untuk KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Coba pencarian lain."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Ketik ini di RealVNC Viewer pada perangkat lain. Gunakan ikon mata untuk menampilkan kata sandi saat ini. Disimpan dengan mode 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Nama pengguna"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Nama pengguna harus berupa ASCII yang dapat dicetak"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Putusan"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Kredensial penampil"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Kata sandi penampil disimpan"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Server WayVNC, untuk kompositor wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Protokol Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Apa yang diumumkan desktop ini, dan artinya bagi akses jarak jauh."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Ya"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "semua jaringan yang terhubung dengan komputer ini"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "hanya jaringan lokal"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Nama mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "mode %s (terlalu terbuka)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "mode 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "hanya mesin ini"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "unit belum terpasang"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "tidak diketahui"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "dipakai untuk memeriksa protokol Wayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "dipakai untuk memeriksa portal lewat D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Kualifikasi"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 membuat server dapat dijangkau perangkat di jaringan lokal Anda; layanan tetap memblokir internet. 127.0.0.1 membatasinya pada mesin ini. Porta 1024 ke bawah ditolak."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "hanya jaringan lokal; internet diblokir oleh unit"

@@ -1,0 +1,95 @@
+Subject: Drop queued VNC connections whose peer has already hung up
+Base: GNOME Remote Desktop 50.2
+License: GPL-2.0-or-later (upstream-derived)
+Status: local candidate; not upstream-submitted or release-qualified
+
+The VNC server allows one session; further connections wait in the throttler's
+per-peer queue. The queue is pruned only with g_io_stream_is_closed(), which is
+true only for connections closed on our side, so a client that gave up while
+waiting (a viewer's timeout, a phone retrying) stays queued. When the live session
+ends, that dead connection is "accepted", a session is created on a socket whose
+peer is gone, and every real client behind it is delayed until that session dies.
+Seen as a phone looping on reconnect and then "not connecting at all". Poll the
+socket for the peer's hang-up (POLLRDHUP catches a FIN even with unread bytes
+queued behind it), then peek: 0 bytes is the FIN, a real error a reset; close and
+drop such entries before dispatching.
+
+--- a/src/grd-throttler.c
++++ b/src/grd-throttler.c
+@@ -19,8 +19,17 @@
+ 
+ #include "config.h"
+ 
++#include <errno.h>
++#include <poll.h>
++#include <sys/socket.h>
+ #include "grd-throttler.h"
+ 
++/* glibc exposes POLLRDHUP only under _GNU_SOURCE, which this build does not set;
++ * the kernel's value is 0x2000 on every Linux architecture. */
++#ifndef POLLRDHUP
++#define POLLRDHUP 0x2000
++#endif
++
+ #include "grd-context.h"
+ #include "grd-settings.h"
+ #include "grd-utils.h"
+@@ -224,6 +233,46 @@
+   .dispatch = source_dispatch,
+ };
+ 
++/*
++ * A queued connection whose peer has already hung up is not closed on our side,
++ * so g_io_stream_is_closed() never says so. Left in the queue it is "accepted"
++ * later as a dead session, and with a single VNC session allowed it then blocks
++ * every real client behind it. Ask the socket instead. First the kernel's own
++ * hang-up flags: POLLRDHUP is the peer's FIN even while bytes it sent before
++ * leaving are still unread (a peek alone would see those bytes and call the
++ * connection alive), POLLHUP/POLLERR a reset. Then the peek: 0 bytes is the FIN
++ * with nothing queued, an error other than "nothing yet" is a reset.
++ */
++static gboolean
++connection_peer_gone (GSocketConnection *connection)
++{
++  GSocket *socket;
++  struct pollfd pfd;
++  char byte;
++  ssize_t n;
++
++  if (g_io_stream_is_closed (G_IO_STREAM (connection)))
++    return TRUE;
++
++  socket = g_socket_connection_get_socket (connection);
++  if (!socket)
++    return TRUE;
++
++  pfd.fd = g_socket_get_fd (socket);
++  pfd.events = POLLIN | POLLRDHUP;
++  pfd.revents = 0;
++  if (poll (&pfd, 1, 0) == 1 && (pfd.revents & (POLLRDHUP | POLLHUP | POLLERR)))
++    return TRUE;
++
++  n = recv (g_socket_get_fd (socket), &byte, 1, MSG_PEEK | MSG_DONTWAIT);
++  if (n == 0)
++    return TRUE;
++  if (n < 0 && errno != EAGAIN && errno != EWOULDBLOCK && errno != EINTR)
++    return TRUE;
++
++  return FALSE;
++}
++
+ static void
+ prune_closed_connections (GQueue *queue)
+ {
+@@ -235,8 +284,10 @@
+       GSocketConnection *connection = G_SOCKET_CONNECTION (l->data);
+       GList *l_next = l->next;
+ 
+-      if (g_io_stream_is_closed (G_IO_STREAM (connection)))
++      if (connection_peer_gone (connection))
+         {
++          g_debug ("[Throttler] Dropping a queued connection whose peer went away");
++          g_io_stream_close (G_IO_STREAM (connection), NULL, NULL);
+           g_queue_delete_link (queue, l);
+           g_object_unref (connection);
+         }

@@ -1,0 +1,38 @@
+[Unit]
+Description=wayland-vnc Wayland VNC server (WayVNC)
+Documentation=https://github.com/ventura8/wayland-vnc
+After=graphical-session.target
+PartOf=graphical-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
+# A compositor that cannot serve WayVNC (no wlr virtual-pointer/screencopy, as on
+# GNOME) makes every start fail. Give up after a few attempts instead of restarting
+# forever and filling the journal; `wayland-vnc doctor` explains what is missing.
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+# On a GNOME host `serve` configures gnome-remote-desktop and returns, because
+# that daemon owns the socket and its own lifetime; the service has still done
+# its job, so it stays active rather than reporting inactive.
+RemainAfterExit=yes
+ExecStart=/usr/bin/wayland-vnc serve
+Restart=on-failure
+RestartSec=2s
+NoNewPrivileges=yes
+# Deliberately no mount sandbox (ProtectSystem, ProtectHome, ReadWritePaths,
+# PrivateTmp) and no IPAddressAllow. In a user manager each of the mount directives
+# puts the service into an unprivileged user namespace where, on Ubuntu, AppArmor's
+# unprivileged_userns profile (kernel.apparmor_restrict_unprivileged_userns=1)
+# forbids reading other processes' fd tables -- while the promised read-only mounts
+# are not applied at all (/ stays rw, $HOME stays writable). On GNOME, serve must
+# attribute port 5900 to this session's gnome-remote-desktop through /proc/<pid>/fd;
+# inside that namespace it never could, failed after its wait, and was restarted
+# every 75 seconds for ever. IPAddressAllow is likewise applied only by a privileged
+# manager ("unit configures an IP firewall, but not running as root"). So the
+# server binds 127.0.0.1 -- this machine only -- unless local network access is
+# turned on in the settings app, and then it is reachable from every network this
+# machine is on.
+
+[Install]
+WantedBy=graphical-session.target
