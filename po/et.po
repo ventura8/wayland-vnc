@@ -1,0 +1,552 @@
+# Eesti translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Eesti\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), autentimine %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d hõive-/sisendliidest"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d töölauda"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s PUUDUB ja see töölaud vajab seda"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: ainult see arvuti. 0.0.0.0: kõik võrgud, millega see arvuti on ühendatud, ilma muu kaitseta. Pordid 1024 ja madalamad lükatakse tagasi."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Nõutav on natiivne Wayland-seanss; X11-le tagasilangemine on keelatud."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Wayland VNC teave"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Aadress"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Teavitatud"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Kõik olemas"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Rakenda"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Automaatne (töölaua järgi)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Taustsüsteem"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Taustsüsteemi kandidaat"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Taustsüsteem sellel töölaual"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Binaarfailid"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Kuulamisaadress ja -port"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Aadress ja port rakendatud"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Loobu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Võimekuse hinnang"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Tuvastati hõive, virtuaalse klaviatuuri ja virtuaalse kursori protokollid."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Sulge"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Seadistus"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Kinnita parool"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Ühenda teisest seadmest"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Ühendage see masin Wi-Fi või Etherneti külge ja avage uuesti"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Kopeeri"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Mandaadifailist puudub kasutajanimi või parool"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Töölaud"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Töölaua teenused"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Diagnostika"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Iga valik siin muudab tegelikku seadistust või paigaldatud teenust."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Kõik, mida see töölaud vajab; paigaldamata: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME Remote Desktopi server"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "GNOME Kaugtöölaua oma deemon kuulab kõigis võrkudes; selle juhtimiseks paigalda wayland-vnc-grd"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME ekraaniedastus"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Üldine"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "Lisa RealVNC Vieweris ühendus ühele neist aadressidest. Need töötavad seni, kuni kohtvõrgu juurdepääs on sisse lülitatud, iga sama võrgu seadme jaoks. Ära suuna porti Internetist edasi."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Paigaldage pakett wayland-vnc, et saada systemd kasutajaüksus"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "Tuvastati KWin ning hõive-/sisendportaali liidesed."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin vajab mõlemat portaaliliidest: ScreenCast ja RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Kiirklahvid"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Kiirklahvid"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Keel"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Luba sama Wi-Fi või kohtvõrgu seadmetel ühenduda. Väljas: ainult see arvuti."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Litsents"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Juurdepääs kohtvõrgust"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Juurdepääs kohtvõrgust on välja lülitatud"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Juurdepääs kohtvõrgust on sisse lülitatud"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Peamenüü"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Teeb selle Wayland-töölaua kättesaadavaks RealVNC Viewerist teie telefonis või teises arvutis. Kuni te ei lülita sisse valikut „Juurdepääs kohtvõrgust“, kuulab see ainult selles arvutis."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Tuvastati Mutteri hõive- ja kaugsisendi teenused; nõutav on privaatne versioon."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Ei"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Tulemusi ei leitud"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Kohtvõrgu aadressi ei leitud"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Toetatud taustsüsteemi pole"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Tõlkeid pole paigaldatud, seega jääb aken ingliskeelseks."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Puudub"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Midagi pole teavitatud"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Midagi pole saadaval"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Midagi pole kontrollitud"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Midagi ei tuvastatud"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Teavitamata"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Kontrollimata"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Paigaldamata"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Ettevalmistamata"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Määramata"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Ava peamenüü"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "AVALIK AADRESS - kättesaadav väljaspool kohtvõrku"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Parool"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Parool peab olema 6–64 ASCII märki"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Paroolid ei ühti"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Port"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Port peab olema privilegeerimata TCP-port"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Portaalid"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Projekti veebisait"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Välju"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Paigaldamiseks valmis"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, klient; serveerimiseks pole vaja"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Põhjus"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Väljalaske sihtmärgid"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop portaal"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Teata probleemist"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Nõutavaid hõive- JA sisendvõimekusi ei tuvastatud."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Töötab praegu"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Salvesta"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast portaal"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Otsi"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Otsi diagnostikast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Otsi keeli"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Teenindab GNOME Remote Desktop VNC (port 5900); nähtavus järgib GNOME sätteid > Jagamine"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Serveri seadistus"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Teenus"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Seanss"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Seansi tüüp"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Määra parool"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Määra vaaturi parool"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Määrake kõigepealt vaaturi parool"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Käivita sisselogimisel"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Olek"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Salvestatud (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Sihitud"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Sätete aken vajab GTK4 ja libadwaitat (paigaldage python3-gi, gir1.2-gtk-4.0 ja gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Sätete aken vajab libadwaita versiooni %(needed)s või uuemat; sellel süsteemil on %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Aken järgib teie töölaua keelt, kui te ei vali teist."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "See töölaud serveerib VNC-d GNOME Remote Desktopi kaudu, mis lubab kuni 8-märgilisi paroole"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Selle töölaua taustsüsteem kuulab alati ainult selles arvutis"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC-server, KDE Plasma jaoks"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Proovige teistsugust otsingut."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Sisestage need teises seadmes RealVNC Viewerisse. Praeguse parooli näitamiseks kasutage silma. Salvestatud režiimiga 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Kasutajanimi"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Kasutajanimi peab olema prinditav ASCII"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Hinnang"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Vaaturi mandaat"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Vaaturi parool salvestatud"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC-server, wlroots-komposiitoritele"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Waylandi protokollid"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Mida see töölaud teavitab ja mida see kaugjuurdepääsu jaoks tähendab."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Jah"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "kõik võrgud, millega see arvuti on ühendatud"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "ainult kohtvõrk"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS-nimi"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "režiim %s (liiga avatud)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "režiim 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "ainult see masin"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "üksus pole paigaldatud"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "teadmata"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "kasutatakse Waylandi protokollide uurimiseks"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "kasutatakse portaalide uurimiseks D-Busi kaudu"
+
+#~ msgid "Qualification"
+#~ msgstr "Kvalifikatsioon"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 teeb serveri kättesaadavaks teie kohtvõrgu seadmetele; teenus blokeerib endiselt interneti. 127.0.0.1 piirab selle selle masinaga. Pordid 1024 ja madalamad lükatakse tagasi."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "ainult kohtvõrk; interneti blokeerib üksus"

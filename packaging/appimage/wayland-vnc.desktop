@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=wayland-vnc
+Comment=Wayland VNC server and diagnostics for RealVNC viewers
+Exec=AppRun
+Icon=wayland-vnc
+Categories=Utility;Network;
+# A desktop launch runs AppRun with no arguments, which opens the settings
+# window; `wayland-vnc` is not on a host PATH when the app ships as an AppImage,
+# and a GUI launch must not ask the desktop for a terminal.
+Terminal=false

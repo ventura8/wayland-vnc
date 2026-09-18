@@ -1,0 +1,552 @@
+# Հայերեն translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Հայերեն\n"
+"Language: hy\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), նույնականացում %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d նկարահանման/մուտքագրման միջերես"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d աշխատասեղան"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s ԲԱՑԱԿԱՅՈՒՄ Է, իսկ այս աշխատասեղանն այն կարիք ունի"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1․ միայն այս համակարգիչը։ 0.0.0.0․ բոլոր ցանցերը, որոնց միացված է այս համակարգիչը, առանց որևէ այլ պաշտպանության։ 1024 և ցածր պորտերը մերժվում են։"
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Պահանջվում է բնիկ Wayland նիստ. X11-ին վերադառնալն արգելված է։"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Wayland VNC-ի մասին"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Հասցե"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Հայտարարված"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Բոլորն առկա են"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Կիրառել"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Ավտոմատ (ըստ աշխատասեղանի)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Հետնամաս"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Հետնամասի թեկնածու"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Հետնամասն այս աշխատասեղանին"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Երկուական ֆայլեր"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Լսելու հասցե և պորտ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Հասցեն և պորտը կիրառված են"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Չեղարկել"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Հնարավորությունների գնահատական"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Հայտնաբերվել են նկարահանման, վիրտուալ ստեղնաշարի և վիրտուալ ցուցիչի արձանագրություններ։"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Փակել"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Կազմաձևում"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Հաստատել գաղտնաբառը"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Միանալ այլ սարքից"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Միացրեք այս մեքենան Wi-Fi-ին կամ Ethernet-ին, ապա նորից բացեք"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Պատճենել"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Հավատարմագրերի ֆայլում բացակայում է օգտանունը կամ գաղտնաբառը"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Աշխատասեղան"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Աշխատասեղանի ծառայություններ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Ախտորոշում"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Այստեղ ամեն տարբերակ փոխում է իրական կազմաձևումը կամ տեղադրված ծառայությունը։"
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Այն ամենը, ինչ պետք է այս աշխատասեղանին. տեղադրված չէ. "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME Remote Desktop սերվեր"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "GNOME Հեռավոր աշխատասեղանի սեփական դեմոնը լսում է բոլոր ցանցերում. սա կառավարելու համար տեղադրեք wayland-vnc-grd"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME էկրանի հեռարձակում"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Ընդհանուր"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "RealVNC Viewer-ում ավելացրեք միացում այս հասցեներից մեկին։ Դրանք աշխատում են, քանի դեռ տեղային ցանցից մուտքը միացված է, նույն ցանցի ցանկացած սարքի համար։ Մի փոխանցեք պորտը համացանցից։"
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Տեղադրեք wayland-vnc փաթեթը՝ systemd օգտատիրոջ միավորը ստանալու համար"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "Հայտնաբերվել են KWin-ը և նկարահանման/մուտքագրման պորտալի միջերեսները։"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin-ը պահանջում է երկու պորտալ միջերեսներն էլ՝ ScreenCast և RemoteDesktop:"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Ստեղնաշարի դյուրանցումներ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Ստեղնաշարի դյուրանցումներ"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Լեզու"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Թույլատրել նույն Wi-Fi-ի կամ LAN-ի սարքերին միանալ։ Անջատված․ միայն այս համակարգիչը։"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Արտոնագիր"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Մուտք տեղային ցանցից"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Տեղային ցանցից մուտքն անջատվեց"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Տեղային ցանցից մուտքը միացվեց"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Գլխավոր ընտրացանկ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Այս Wayland աշխատասեղանը հասանելի է դարձնում ձեր հեռախոսի կամ այլ համակարգչի RealVNC Viewer-ից։ Քանի դեռ չեք միացրել «Մուտք տեղային ցանցից»-ը, այն լսում է միայն այս համակարգչում։"
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Հայտնաբերվել են Mutter-ի նկարահանման և հեռավոր մուտքագրման ծառայությունները. պահանջվում է մասնավոր կառուցում։"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Ոչ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Արդյունքներ չեն գտնվել"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Տեղային ցանցի հասցե չի գտնվել"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Աջակցվող հետնամաս չկա"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Թարգմանություններ տեղադրված չեն, ուստի պատուհանը մնում է անգլերեն։"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Ոչինչ"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Ոչինչ հայտարարված չէ"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Ոչինչ հասանելի չէ"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Ոչինչ ստուգված չէ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Ոչինչ չի հայտնաբերվել"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Հայտարարված չէ"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Ստուգված չէ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Տեղադրված չէ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Պատրաստված չէ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Սահմանված չէ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Բացել գլխավոր ընտրացանկը"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "ՀԱՆՐԱՅԻՆ ՀԱՍՑԵ - հասանելի է տեղային ցանցից դուրս"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Գաղտնաբառ"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Գաղտնաբառը պետք է լինի 6–64 ASCII նիշ"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Գաղտնաբառերը չեն համընկնում"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Պորտ"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Պորտը պետք է լինի ոչ արտոնյալ TCP պորտ"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Պորտալներ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Նախագծի կայքը"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Ելք"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Պատրաստ է տեղադրման"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer՝ հաճախորդ, սպասարկելու համար պետք չէ"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Պատճառ"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Թողարկման թիրախներ"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop պորտալ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Հաղորդել խնդրի մասին"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Պահանջվող նկարահանման ԵՎ մուտքագրման հնարավորությունները չեն հայտնաբերվել։"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Հիմա աշխատում է"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Պահպանել"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast պորտալ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Որոնել"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Որոնել ախտորոշման մեջ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Որոնել լեզուներ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Սպասարկվում է GNOME Remote Desktop VNC-ով (պորտ 5900). հասանելիությունը հետևում է GNOME կարգավորումներ > Համօգտագործում"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Սերվերի կազմաձևում"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Ծառայություն"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Նիստ"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Նիստի տեսակ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Սահմանել գաղտնաբառ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Սահմանել դիտողի գաղտնաբառը"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Նախ սահմանեք դիտողի գաղտնաբառ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Գործարկել մուտքի ժամանակ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Կարգավիճակ"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Պահպանված (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Թիրախավորված"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Կարգավորումների պատուհանին անհրաժեշտ են GTK4 և libadwaita (տեղադրեք python3-gi, gir1.2-gtk-4.0 և gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Կարգավորումների պատուհանին անհրաժեշտ է libadwaita %(needed)s կամ ավելի նոր. այս համակարգն ունի %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Պատուհանը հետևում է ձեր աշխատասեղանի լեզվին, եթե այլ լեզու չընտրեք։"
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Այս աշխատասեղանը VNC է սպասարկում GNOME Remote Desktop-ի միջոցով, որն ընդունում է առավելագույնը 8 նիշանոց գաղտնաբառեր"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Այս աշխատասեղանի հետնամասը միշտ լսում է միայն այս համակարգչում"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC սերվեր՝ KDE Plasma-ի համար"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Փորձեք այլ որոնում։"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Մուտքագրեք սրանք RealVNC Viewer-ում մյուս սարքի վրա։ Օգտագործեք աչքը՝ ընթացիկ գաղտնաբառը ցուցադրելու համար։ Պահպանված է 600 ռեժիմով։"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Օգտանուն"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Օգտանունը պետք է լինի տպելի ASCII"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Գնահատական"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Դիտողի հավատարմագրեր"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Դիտողի գաղտնաբառը պահպանված է"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC սերվեր՝ wlroots կոմպոզիտորների համար"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Wayland արձանագրություններ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Ինչ է հայտարարում այս աշխատասեղանը, և ինչ է դա նշանակում հեռավար մուտքի համար։"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Այո"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "բոլոր ցանցերը, որոնց միացված է այս համակարգիչը"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "միայն տեղային ցանցը"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS անուն"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "%s ռեժիմ (չափազանց բաց)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "600 ռեժիմ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "միայն այս մեքենան"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "միավորը տեղադրված չէ"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "անհայտ"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "օգտագործվում է Wayland արձանագրությունները ստուգելու համար"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "օգտագործվում է պորտալները D-Bus-ով ստուգելու համար"
+
+#~ msgid "Qualification"
+#~ msgstr "Որակավորում"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0-ն սերվերը հասանելի է դարձնում ձեր տեղային ցանցի սարքերին. ծառայությունը շարունակում է արգելափակել ինտերնետը։ 127.0.0.1-ը սահմանափակում է այն այս մեքենայով։ 1024 և ցածր պորտերը մերժվում են։"
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "միայն տեղային ցանց. ինտերնետն արգելափակված է միավորով"

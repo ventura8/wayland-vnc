@@ -1,0 +1,19 @@
+# Viewer harness: an isolated headless Sway session that hosts the actual RealVNC
+# Viewer (an X11 client, mounted read-only from the host at run time, never copied into
+# the image) and exposes WayVNC virtual input on a unix socket so a runner can type,
+# click, scroll and drag through the real viewer. XWayland exists here only for the
+# proprietary viewer binary; no VNC server under test ever runs in this container.
+FROM ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    sway xwayland wayvnc dbus-daemon python3 libx11-6 libxext6 libxcb1 libxau6 libxdmcp6 \
+    libgl1-mesa-dri fonts-dejavu-core ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && usermod --login fixture --home /home/fixture --move-home ubuntu \
+    && groupmod --new-name fixture ubuntu \
+    && install -d -m 700 -o fixture -g fixture /tmp/wayland-vnc-runtime /home/fixture/.vnc
+COPY tests/harness /harness
+USER fixture
+ENV XDG_RUNTIME_DIR=/tmp/wayland-vnc-runtime HOME=/home/fixture \
+    XDG_SESSION_TYPE=wayland WLR_BACKENDS=headless WLR_RENDERER=pixman \
+    WLR_LIBINPUT_NO_DEVICES=1 WLR_HEADLESS_OUTPUTS=1
+ENTRYPOINT ["dbus-run-session", "--", "python3", "/harness/harness.py"]

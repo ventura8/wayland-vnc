@@ -1,0 +1,552 @@
+# संस्कृतम् translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: संस्कृतम्\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), प्रमाणीकरणम् %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d ग्रहण/निवेश-अन्तरापृष्ठानि"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d डेस्कटॉप्"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s नास्ति, अस्य डेस्कटॉप्-स्य तस्य आवश्यकता अस्ति"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: केवलम् अयं सङ्गणकः। 0.0.0.0: यैः जालैः अयं सङ्गणकः संयुक्तः, तानि सर्वाणि, अन्यस्य कस्यापि आवरणस्य विना। 1024 तदधः च द्वाराणि निराक्रियन्ते।"
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "स्वाभाविकं Wayland सत्रम् आवश्यकम्; X11 प्रति प्रत्यागमनं निषिद्धम्।"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Wayland VNC विषये"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "सङ्केतः"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "घोषितम्"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "सर्वं विद्यते"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "प्रयोजयतु"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "स्वयमेव (डेस्कटॉप्-अनुसारम्)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "पृष्ठान्तः"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "पृष्ठान्त-अभ्यर्थी"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "अस्मिन् डेस्कटॉप्-मध्ये पृष्ठान्तः"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "द्विआधारिकाः"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "बन्धन-सङ्केतः द्वारं च"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "सङ्केतः द्वारं च प्रयोजितम्"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "निरस्यतु"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "क्षमता-निर्णयः"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "ग्रहण-, आभासी-कुञ्जीफलक-, आभासी-सूचक-प्रोटोकॉल् उपलब्धाः।"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "पिदधातु"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "विन्यासः"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "गुप्तशब्दं पुष्टिं करोतु"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "अन्यस्मात् यन्त्रात् संयोजयतु"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "इदं यन्त्रं Wi-Fi अथवा Ethernet इत्यनेन संयोज्य पुनः उद्घाटयतु"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "प्रतिलिपिं करोतु"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "प्रमाणपत्र-सञ्चिकायां प्रयोक्तृनाम गुप्तशब्दः वा नास्ति"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "डेस्कटॉप्"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "डेस्कटॉप्-सेवाः"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "निदानम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "अत्र प्रत्येकं विकल्पः वास्तविकं विन्यासं स्थापितां सेवां वा परिवर्तयति।"
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "अस्य डेस्कटॉप्-स्य आवश्यकं सर्वम्; न स्थापितम्: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME Remote Desktop सर्वरः"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "GNOME दूरस्थ-पटलस्य स्वकीयः डेमन् सर्वेषु जालेषु शृणोति; एतस्य नियन्त्रणाय wayland-vnc-grd स्थापयतु"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME पटलप्रसारणम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "सामान्यम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "RealVNC Viewer इत्यत्र एतेषु सङ्केतेषु एकं प्रति संयोगं योजयतु। यावत् स्थानीय-जालात् प्रवेशः चालितः, तावत् तस्मिन्नेव जाले यस्य कस्यापि यन्त्रस्य कृते एते कार्यं कुर्वन्ति। द्वारम् अन्तर्जालात् मा अग्रे प्रेषयतु।"
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "systemd प्रयोक्तृ-एककं प्राप्तुं wayland-vnc सङ्कुलं स्थापयतु"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "KWin ग्रहण/निवेश-द्वार-अन्तरापृष्ठानि च उपलब्धानि।"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin द्वयोः द्वारान्तरापृष्ठयोः आवश्यकता अस्ति: ScreenCast तथा RemoteDesktop।"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "कुञ्जीफलक-लघुमार्गाः"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "कुञ्जीफलक-लघुमार्गाः"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "भाषा"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "तस्मिन्नेव Wi-Fi अथवा LAN जाले यन्त्राणि संयोक्तुम् अनुमन्यताम्। निष्क्रियम्: केवलम् अयं सङ्गणकः।"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "अनुज्ञापत्रम्"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "स्थानीय-जालात् प्रवेशः"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "स्थानीय-जालात् प्रवेशः निष्क्रियः कृतः"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "स्थानीय-जालात् प्रवेशः सक्रियः कृतः"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "मुख्यसूची"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "इदं Wayland डेस्कटॉप् भवतः दूरवाण्यां अन्यगणके वा RealVNC Viewer इत्यस्मात् प्राप्यं करोति। यावत् भवान् स्थानीय-जालात् प्रवेशं न सक्रियं करोति, तावत् एतत् केवलम् अस्मिन् गणके एव शृणोति।"
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Mutter ग्रहण- दूरनिवेश-सेवाः उपलब्धाः; निजनिर्माणम् आवश्यकम्।"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "न"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "किमपि फलं न प्राप्तम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "स्थानीयजाल-सङ्केतः न प्राप्तः"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "समर्थितः पृष्ठान्तः नास्ति"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "अनुवादाः न स्थापिताः, अतः गवाक्षः आङ्ग्लभाषायां तिष्ठति।"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "किमपि नास्ति"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "किमपि न घोषितम्"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "किमपि न उपलब्धम्"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "किमपि न परीक्षितम्"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "किमपि न प्राप्तम्"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "न घोषितम्"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "न परीक्षितम्"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "न स्थापितम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "न सज्जीकृतम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "न निर्धारितम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "मुख्यसूचीम् उद्घाटयतु"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "सार्वजनिकः सङ्केतः - स्थानीयजालात् बहिः अपि प्राप्यः"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "गुप्तशब्दः"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "गुप्तशब्दः 6–64 ASCII वर्णाः भवेयुः"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "गुप्तशब्दौ न मिलतः"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "द्वारम्"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "द्वारम् अविशेषाधिकृतं TCP द्वारं भवेत्"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "द्वाराणि"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "प्रकल्पस्य जालपुटम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "निर्गच्छतु"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "स्थापनाय सज्जम्"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, ग्राहकः; सेवायै न आवश्यकः"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "कारणम्"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "विमोचन-लक्ष्याणि"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop द्वारम्"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "समस्यां निवेदयतु"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "आवश्यकाः ग्रहण- निवेश-क्षमताः न प्राप्ताः।"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "अधुना चलति"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "रक्षतु"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast द्वारम्"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "अन्विष्यतु"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "निदाने अन्विष्यतु"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "भाषाः अन्विष्यतु"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "GNOME Remote Desktop VNC (द्वारम् 5900) इत्यनेन सेवितम्; प्रदर्शनं GNOME विन्यासः > साझाकरणम् अनुसरति"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "सर्वर-विन्यासः"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "सेवा"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "सत्रम्"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "सत्रप्रकारः"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "गुप्तशब्दं निर्धारयतु"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "दर्शक-गुप्तशब्दं निर्धारयतु"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "प्रथमं दर्शक-गुप्तशब्दं निर्धारयतु"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "प्रवेशे आरभताम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "स्थितिः"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "सङ्गृहीतम् (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "लक्षितम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "विन्यास-गवाक्षस्य GTK4 libadwaita च आवश्यकम् (python3-gi, gir1.2-gtk-4.0, gir1.2-adw-1 स्थापयतु)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "विन्यास-गवाक्षस्य libadwaita %(needed)s नवतरं वा आवश्यकम्; अस्मिन् तन्त्रे %(found)s अस्ति"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "भवान् अन्यां न चिनोति चेत् गवाक्षः भवतः डेस्कटॉप्-भाषाम् अनुसरति।"
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "इदं डेस्कटॉप् GNOME Remote Desktop द्वारा VNC सेवां ददाति, यत् अधिकतमं 8 वर्णानां गुप्तशब्दान् स्वीकरोति"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "अस्य पटलस्य पृष्ठभागः सदा केवलम् अस्मिन् सङ्गणके एव शृणोति"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC सर्वरः, KDE Plasma कृते"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "अन्यम् अन्वेषणं प्रयतताम्।"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "एतानि अन्ययन्त्रे RealVNC Viewer मध्ये टङ्कयतु। वर्तमान-गुप्तशब्दं दर्शयितुं नेत्रं प्रयुङ्क्ताम्। 600 इति प्रकारेण सङ्गृहीतम्।"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "प्रयोक्तृनाम"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "प्रयोक्तृनाम मुद्रणीयं ASCII भवेत्"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "निर्णयः"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "दर्शक-प्रमाणपत्राणि"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "दर्शक-गुप्तशब्दः रक्षितः"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC सर्वरः, wlroots संयोजकानां कृते"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Wayland प्रोटोकॉल्"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "इदं डेस्कटॉप् किं घोषयति, दूरप्रवेशाय तस्य कः अर्थः।"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "आम्"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "यैः जालैः अयं सङ्गणकः संयुक्तः, तानि सर्वाणि"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "केवलं स्थानीयं जालम्"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS नाम"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "प्रकारः %s (अतिविवृतः)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "प्रकारः 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "केवलम् इदं यन्त्रम्"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "एककं न स्थापितम्"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "अज्ञातम्"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "Wayland प्रोटोकॉल् परीक्षितुं प्रयुज्यते"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "D-Bus द्वारा द्वाराणि परीक्षितुं प्रयुज्यते"
+
+#~ msgid "Qualification"
+#~ msgstr "अर्हता"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 इति भवतः स्थानीयजालस्य यन्त्रेभ्यः सर्वरं प्राप्यं करोति; सेवा अद्यापि अन्तर्जालं निरुणद्धि। 127.0.0.1 इति तत् अस्मिन् यन्त्रे एव सीमितं करोति। 1024 तदधः च द्वाराणि निराक्रियन्ते।"
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "केवलं स्थानीयजालम्; एककेन अन्तर्जालं निरुद्धम्"

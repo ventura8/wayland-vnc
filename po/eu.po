@@ -1,0 +1,552 @@
+# Euskara translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Euskara\n"
+"Language: eu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), autentifikazioa %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d kaptura/sarrera interfaze"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d mahaigain"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s FALTA da eta mahaigain honek behar du"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: ordenagailu hau bakarrik. 0.0.0.0: ordenagailu hau konektatuta dagoen sare guztiak, beste inolako hesirik gabe. 1024 edo beheragoko atakak baztertzen dira."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Wayland saio natiboa behar da; X11ra itzultzea debekatuta dago."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Wayland VNC-ri buruz"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Helbidea"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Iragarrita"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Denak daude"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Aplikatu"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Automatikoa (mahaigainaren arabera)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Motorra"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Motor hautagaia"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Motorra mahaigain honetan"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Bitarrak"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Entzuteko helbidea eta ataka"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Helbidea eta ataka aplikatuta"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Utzi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Gaitasunen epaia"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Kaptura, teklatu birtual eta erakusle birtualeko protokoloak detektatu dira."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Itxi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Konfigurazioa"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Berretsi pasahitza"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Konektatu beste gailu batetik"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Konektatu makina hau Wi-Fi edo Ethernet sarera, eta ireki berriro"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Kopiatu"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Kredentzialen fitxategiari erabiltzaile-izena edo pasahitza falta zaio"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Mahaigaina"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Mahaigaineko zerbitzuak"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Diagnostikoa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Hemengo aukera bakoitzak benetako konfigurazioa edo instalatutako zerbitzua aldatzen du."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Mahaigain honek behar duen guztia; instalatu gabe: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME Remote Desktop zerbitzaria"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "GNOMEren Urruneko mahaigainaren daemon propioak sare guztietan entzuten du; instalatu wayland-vnc-grd hori kontrolatzeko"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME pantaila-igorpena"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Orokorra"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "RealVNC Viewer-en, gehitu konexio bat helbide hauetako batera. Sare lokaleko sarbidea aktibatuta dagoen bitartean funtzionatzen dute, sare bereko edozein gailurentzat. Ez birbidali ataka Internetetik."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Instalatu wayland-vnc paketea systemd erabiltzaile-unitatea lortzeko"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "KWin eta kaptura/sarrera atariko interfazeak detektatu dira."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin-ek bi atari-interfazeak behar ditu: ScreenCast eta RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Laster-teklak"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Laster-teklak"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Hizkuntza"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Utzi Wi-Fi edo LAN bereko gailuei konektatzen. Desaktibatuta: ordenagailu hau bakarrik."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Lizentzia"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Sare lokaleko sarbidea"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Sare lokaleko sarbidea desaktibatu da"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Sare lokaleko sarbidea aktibatu da"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Menu nagusia"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Wayland mahaigain hau zure telefonoko edo beste ordenagailu bateko RealVNC Viewer-etik eskuragarri egiten du. Ordenagailu honetan bakarrik entzuten du, Sare lokaleko sarbidea aktibatu arte."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Mutter-en kaptura eta urruneko sarrera zerbitzuak detektatu dira; eraikuntza pribatua behar da."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Ez"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Ez da emaitzarik aurkitu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Ez da sare lokaleko helbiderik aurkitu"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Ez dago motor onarturik"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Ez dago itzulpenik instalatuta, beraz leihoa ingelesez geratzen da."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Bat ere ez"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Ez da bat ere iragarri"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Ez dago bat ere eskuragarri"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Ez da bat ere egiaztatu"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Ez da bat ere detektatu"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Iragarri gabe"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Egiaztatu gabe"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Instalatu gabe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Prestatu gabe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Ezarri gabe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Ireki menu nagusia"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "HELBIDE PUBLIKOA - sare lokaletik kanpo iritsi daiteke"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Pasahitza"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Pasahitzak 6-64 ASCII karaktere izan behar ditu"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Pasahitzak ez datoz bat"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Ataka"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Atakak pribilegiorik gabeko TCP ataka izan behar du"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Atariak"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Proiektuaren webgunea"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Irten"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Instalatzeko prest"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, bezero bat; ez da behar zerbitzatzeko"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Arrazoia"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Argitalpen-helburuak"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop ataria"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Eman arazo baten berri"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Beharrezko kaptura ETA sarrera gaitasunak ez dira detektatu."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Orain exekutatzen"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Gorde"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast ataria"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Bilatu"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Bilatu diagnostikoan"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Bilatu hizkuntzak"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "GNOME Remote Desktop VNC-k zerbitzatzen du (5900 ataka); esposizioak GNOME Ezarpenak > Partekatzea jarraitzen du"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Zerbitzariaren konfigurazioa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Zerbitzua"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Saioa"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Saio mota"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Ezarri pasahitza"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Ezarri ikustailearen pasahitza"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Ezarri lehenik ikustailearen pasahitza"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Abiarazi saioa hastean"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Egoera"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Gordeta (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Helburu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Ezarpenen leihoak GTK4 eta libadwaita behar ditu (instalatu python3-gi, gir1.2-gtk-4.0 eta gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Ezarpenen leihoak libadwaita %(needed)s edo berriagoa behar du; sistema honek %(found)s du"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Leihoak zure mahaigainaren hizkuntza jarraitzen du, beste bat aukeratu ezean."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Mahaigain honek VNC GNOME Remote Desktop bidez zerbitzatzen du, eta gehienez 8 karaktereko pasahitzak onartzen ditu"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Mahaigain honen motorrak beti ordenagailu honetan bakarrik entzuten du"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC zerbitzaria, KDE Plasmarentzat"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Saiatu beste bilaketa batekin."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Idatzi hauek beste gailuko RealVNC Viewer-en. Erabili begia uneko pasahitza erakusteko. 600 moduarekin gordeta."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Erabiltzaile-izena"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Erabiltzaile-izenak ASCII inprimagarria izan behar du"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Epaia"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Ikustailearen kredentzialak"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Ikustailearen pasahitza gorde da"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC zerbitzaria, wlroots konposatzaileentzat"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Wayland protokoloak"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Mahaigain honek zer iragartzen duen, eta zer esan nahi duen urruneko sarbiderako."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Bai"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "ordenagailu hau konektatuta dagoen sare guztiak"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "sare lokala bakarrik"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS izena"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "%s modua (irekiegia)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "600 modua"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "makina hau bakarrik"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "unitatea ez dago instalatuta"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "ezezaguna"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "Wayland protokoloak aztertzeko erabilia"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "atariak D-Bus bidez aztertzeko erabilia"
+
+#~ msgid "Qualification"
+#~ msgstr "Kualifikazioa"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 helbideak zerbitzaria zure sare lokaleko gailuentzat eskuragarri egiten du; zerbitzuak Internet blokeatzen jarraitzen du. 127.0.0.1 helbideak makina honetara mugatzen du. 1024 edo beheragoko atakak baztertzen dira."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "sare lokala bakarrik; unitateak Internet blokeatzen du"

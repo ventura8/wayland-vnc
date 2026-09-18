@@ -1,0 +1,552 @@
+# မြန်မာ translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: မြန်မာ\n"
+"Language: my\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s)၊ အထောက်အထားစိစစ်မှု %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "ဖမ်းယူ/ထည့်သွင်း အင်တာဖေ့စ် %d ခု"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "ဒက်စ်တော့ %d ခု"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s မရှိပါ၊ ဤဒက်စ်တော့တွင် ၎င်းလိုအပ်သည်"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: ဤကွန်ပျူတာသာ။ 0.0.0.0: ဤကွန်ပျူတာ ချိတ်ဆက်ထားသော ကွန်ရက်အားလုံး၊ အခြားကာကွယ်မှုမရှိ။ ပေါ့တ် 1024 နှင့်အောက်ကို ငြင်းပယ်သည်။"
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "မူရင်း Wayland ဆက်ရှင် လိုအပ်သည်။ X11 သို့ ပြန်ခြင်းကို တားမြစ်ထားသည်။"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Wayland VNC အကြောင်း"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "လိပ်စာ"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "ကြေညာပြီး"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "အားလုံးရှိသည်"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "အသုံးချရန်"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "အလိုအလျောက် (ဒက်စ်တော့အတိုင်း)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "နောက်ကွယ်စနစ်"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "နောက်ကွယ်စနစ် အဆိုပြုချက်"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "ဤဒက်စ်တော့ရှိ နောက်ကွယ်စနစ်"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "ဘိုင်နရီဖိုင်များ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "နားထောင်မည့် လိပ်စာနှင့် ပို့တ်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "လိပ်စာနှင့် ပို့တ် အသုံးချပြီး"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "ပယ်ဖျက်ရန်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "စွမ်းရည် ဆုံးဖြတ်ချက်"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "ဖမ်းယူမှု၊ virtual ကီးဘုတ်နှင့် virtual ညွှန်ကိရိယာ ပရိုတိုကောများ တွေ့ရှိသည်။"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "ပိတ်ရန်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "ဖွဲ့စည်းမှု"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "စကားဝှက် အတည်ပြုပါ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "အခြားစက်မှ ချိတ်ဆက်ရန်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "ဤစက်ကို Wi-Fi သို့မဟုတ် Ethernet နှင့် ချိတ်ဆက်ပြီး ပြန်ဖွင့်ပါ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "ကူးယူရန်"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "အထောက်အထားဖိုင်တွင် အသုံးပြုသူအမည် သို့မဟုတ် စကားဝှက် မရှိပါ"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "ဒက်စ်တော့"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "ဒက်စ်တော့ ဝန်ဆောင်မှုများ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "ရောဂါရှာဖွေမှု"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "ဤနေရာရှိ ရွေးချယ်စရာတိုင်းသည် အမှန်တကယ် ဖွဲ့စည်းမှု သို့မဟုတ် ထည့်သွင်းထားသော ဝန်ဆောင်မှုကို ပြောင်းလဲသည်။"
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "ဤဒက်စ်တော့ လိုအပ်သမျှ။ မထည့်သွင်းရသေး: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "GNOME Remote Desktop ဆာဗာ"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "GNOME အဝေးမှ ဒက်စ်တော့၏ ကိုယ်ပိုင် daemon သည် ကွန်ရက်တိုင်းတွင် နားထောင်သည်; ၎င်းကို ထိန်းချုပ်ရန် wayland-vnc-grd ကို တပ်ဆင်ပါ"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME မျက်နှာပြင် ထုတ်လွှင့်မှု"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "အထွေထွေ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "RealVNC Viewer တွင် ဤလိပ်စာများထဲမှ တစ်ခုသို့ ချိတ်ဆက်မှု ထည့်ပါ။ ဒေသတွင်းကွန်ရက်မှ ဝင်ရောက်ခွင့် ဖွင့်ထားစဉ် တူညီသောကွန်ရက်ရှိ မည်သည့်စက်အတွက်မဆို အလုပ်လုပ်သည်။ ပေါ့တ်ကို အင်တာနက်မှ ထပ်ဆင့်မပို့ပါနှင့်။"
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "systemd အသုံးပြုသူယူနစ် ရရှိရန် wayland-vnc ပက်ကေ့ဂျ်ကို ထည့်သွင်းပါ"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "KWin နှင့် ဖမ်းယူ/ထည့်သွင်း ပေါ်တယ် အင်တာဖေ့စ်များ တွေ့ရှိသည်။"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin သည် ScreenCast နှင့် RemoteDesktop ပေါ်တယ်အင်တာဖေ့စ် နှစ်ခုလုံး လိုအပ်သည်။"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "ကီးဘုတ် ဖြတ်လမ်းများ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "ကီးဘုတ် ဖြတ်လမ်းများ"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "ဘာသာစကား"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "တူညီသော Wi-Fi သို့မဟုတ် LAN ရှိ စက်များကို ချိတ်ဆက်ခွင့်ပြုပါ။ ပိတ်: ဤကွန်ပျူတာသာ။"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "လိုင်စင်"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "ဒေသတွင်းကွန်ရက်မှ ဝင်ရောက်ခွင့်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "ဒေသတွင်းကွန်ရက်မှ ဝင်ရောက်ခွင့်ကို ပိတ်လိုက်သည်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "ဒေသတွင်းကွန်ရက်မှ ဝင်ရောက်ခွင့်ကို ဖွင့်လိုက်သည်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "ပင်မ မီနူး"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "ဤ Wayland ဒက်စ်တော့ကို သင့်ဖုန်း သို့မဟုတ် အခြားကွန်ပျူတာရှိ RealVNC Viewer မှ ရောက်ရှိနိုင်စေသည်။ ဒေသတွင်းကွန်ရက်မှ ဝင်ရောက်ခွင့်ကို သင်မဖွင့်မချင်း ဤကွန်ပျူတာပေါ်တွင်သာ နားထောင်သည်။"
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Mutter ဖမ်းယူမှုနှင့် အဝေးမှ ထည့်သွင်းမှု ဝန်ဆောင်မှုများ တွေ့ရှိသည်။ သီးသန့် တည်ဆောက်မှု လိုအပ်သည်။"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "မဟုတ်ပါ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "ရလဒ် မတွေ့ပါ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "ဒေသတွင်းကွန်ရက် လိပ်စာ မတွေ့ပါ"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "ပံ့ပိုးထားသော နောက်ကွယ်စနစ် မရှိပါ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "ဘာသာပြန် မထည့်သွင်းထားသဖြင့် ဝင်းဒိုးသည် အင်္ဂလိပ်ဘာသာဖြင့် ရှိနေမည်။"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "မရှိ"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "ကြေညာထားသည် မရှိ"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "ရရှိနိုင်သည် မရှိ"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "စစ်ဆေးထားသည် မရှိ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "တွေ့ရှိသည် မရှိ"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "မကြေညာထားပါ"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "မစစ်ဆေးထားပါ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "မထည့်သွင်းထားပါ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "မပြင်ဆင်ထားပါ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "မသတ်မှတ်ထားပါ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "ပင်မ မီနူး ဖွင့်ရန်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "အများသုံး လိပ်စာ - ဒေသတွင်းကွန်ရက်အပြင်မှ ရောက်ရှိနိုင်သည်"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "စကားဝှက်"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "စကားဝှက်သည် ASCII စာလုံး 6–64 လုံး ဖြစ်ရမည်"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "စကားဝှက်များ မကိုက်ညီပါ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "ပို့တ်"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "ပို့တ်သည် အခွင့်ထူးမရှိသော TCP ပို့တ် ဖြစ်ရမည်"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "ပေါ်တယ်များ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "ပရောဂျက် ဝဘ်ဆိုက်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "ထွက်ရန်"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "ထည့်သွင်းရန် အသင့်"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer၊ ကလိုင်းယင့်တစ်ခု၊ ဝန်ဆောင်မှုပေးရန် မလိုအပ်ပါ"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "အကြောင်းရင်း"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "ထုတ်ဝေမှု ပစ်မှတ်များ"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "RemoteDesktop ပေါ်တယ်"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "ပြဿနာ တိုင်ကြားရန်"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "လိုအပ်သော ဖမ်းယူမှုနှင့် ထည့်သွင်းမှု စွမ်းရည်များ မတွေ့ရှိပါ။"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "ယခု လည်ပတ်နေသည်"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "သိမ်းရန်"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "ScreenCast ပေါ်တယ်"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "ရှာဖွေရန်"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "ရောဂါရှာဖွေမှုတွင် ရှာရန်"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "ဘာသာစကားများ ရှာရန်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "GNOME Remote Desktop VNC (ပို့တ် 5900) မှ ဝန်ဆောင်သည်။ ဖော်ပြမှုသည် GNOME ဆက်တင်များ > မျှဝေခြင်း အတိုင်း ဖြစ်သည်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "ဆာဗာ ဖွဲ့စည်းမှု"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "ဝန်ဆောင်မှု"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "ဆက်ရှင်"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "ဆက်ရှင် အမျိုးအစား"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "စကားဝှက် သတ်မှတ်ရန်"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "ကြည့်ရှုသူ စကားဝှက် သတ်မှတ်ရန်"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "ကြည့်ရှုသူ စကားဝှက်ကို ဦးစွာ သတ်မှတ်ပါ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "ဝင်ရောက်ချိန်တွင် စတင်ရန်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "အခြေအနေ"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "သိမ်းဆည်းပြီး (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "ပစ်မှတ်ထားပြီး"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "ဆက်တင် ဝင်းဒိုးတွင် GTK4 နှင့် libadwaita လိုအပ်သည် (python3-gi၊ gir1.2-gtk-4.0 နှင့် gir1.2-adw-1 ထည့်သွင်းပါ)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "ဆက်တင် ဝင်းဒိုးတွင် libadwaita %(needed)s သို့မဟုတ် ပိုသစ်သည် လိုအပ်သည်။ ဤစနစ်တွင် %(found)s ရှိသည်"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "အခြားတစ်ခု မရွေးချယ်ပါက ဝင်းဒိုးသည် သင့်ဒက်စ်တော့၏ ဘာသာစကားအတိုင်း ဖြစ်သည်။"
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "ဤဒက်စ်တော့သည် စာလုံး ၈ လုံးထက် မပိုသော စကားဝှက်များကိုသာ လက်ခံသည့် GNOME Remote Desktop မှတစ်ဆင့် VNC ကို ဝန်ဆောင်မှုပေးသည်"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "ဤဒက်စ်တော့၏ နောက်ကွယ်စနစ်သည် ဤကွန်ပျူတာတွင်သာ အမြဲနားထောင်သည်"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "TigerVNC ဆာဗာ၊ KDE Plasma အတွက်"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "အခြား ရှာဖွေမှု စမ်းကြည့်ပါ။"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "ဤအရာများကို အခြားစက်ရှိ RealVNC Viewer တွင် ရိုက်ထည့်ပါ။ လက်ရှိ စကားဝှက်ကို ပြရန် မျက်လုံးကို အသုံးပြုပါ။ မုဒ် 600 ဖြင့် သိမ်းဆည်းထားသည်။"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "အသုံးပြုသူအမည်"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "အသုံးပြုသူအမည်သည် ပုံနှိပ်နိုင်သော ASCII ဖြစ်ရမည်"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "ဆုံးဖြတ်ချက်"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "ကြည့်ရှုသူ အထောက်အထား"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "ကြည့်ရှုသူ စကားဝှက် သိမ်းဆည်းပြီး"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "WayVNC ဆာဗာ၊ wlroots ပေါင်းစပ်စက်များအတွက်"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Wayland ပရိုတိုကောများ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "ဤဒက်စ်တော့က ဘာကြေညာသည်၊ အဝေးမှ ဝင်ရောက်မှုအတွက် ဘာအဓိပ္ပာယ်ရှိသည်။"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "ဟုတ်ကဲ့"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "ဤကွန်ပျူတာ ချိတ်ဆက်ထားသော ကွန်ရက်အားလုံး"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "ဒေသတွင်းကွန်ရက်သာ"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "mDNS အမည်"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "မုဒ် %s (ပွင့်လွန်းသည်)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "မုဒ် 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "ဤစက်သာ"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "ယူနစ် မထည့်သွင်းထားပါ"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "မသိ"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "Wayland ပရိုတိုကောများကို စစ်ဆေးရန် အသုံးပြုသည်"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "D-Bus မှတစ်ဆင့် ပေါ်တယ်များကို စစ်ဆေးရန် အသုံးပြုသည်"
+
+#~ msgid "Qualification"
+#~ msgstr "အရည်အချင်း"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 သည် ဆာဗာကို သင့်ဒေသတွင်းကွန်ရက်ရှိ စက်များမှ ရောက်ရှိနိုင်စေသည်။ ဝန်ဆောင်မှုက အင်တာနက်ကို ဆက်လက်ပိတ်ဆို့သည်။ 127.0.0.1 သည် ဤစက်တွင်သာ ကန့်သတ်သည်။ ပို့တ် 1024 နှင့် အောက်ကို ငြင်းပယ်သည်။"
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "ဒေသတွင်းကွန်ရက်သာ။ အင်တာနက်ကို ယူနစ်က ပိတ်ဆို့ထားသည်"

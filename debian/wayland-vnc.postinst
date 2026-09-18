@@ -1,0 +1,80 @@
+#!/bin/sh
+set -e
+
+# Enable the Wayland VNC user service for every user's graphical session, and
+# activate it now for users who are already logged in. The unit is a systemd --user
+# unit, so it only ever runs inside a logged-in Wayland session. It listens on this
+# computer only (127.0.0.1:5900) until Local Network Access is turned on in the
+# settings app, which opens it on every interface. It never runs as a system service
+# and never replaces an existing remote-desktop daemon.
+
+# systemd may be absent (containers, chroots) or not yet up; never fail the install.
+_systemd_is_live() {
+  command -v systemctl >/dev/null 2>&1 || return 1
+  # Prefer the printed state: degraded/starting/maintenance are live but exit non-zero.
+  case "$(systemctl is-system-running 2>/dev/null || true)" in
+  running | degraded | starting | maintenance) return 0 ;;
+  esac
+  return 1
+}
+
+# Start a --user unit from a root maintainer script by entering that user's own
+# session manager, exactly where its XDG_RUNTIME_DIR and D-Bus socket live.
+_activate_for_user() {
+  _user="$1"
+  _uid=$(id -u "$_user" 2>/dev/null) || return 1
+  _runtime="/run/user/$_uid"
+  _bus="$_runtime/bus"
+  # No runtime dir or bus means the user has no live session to start into.
+  [ -d "$_runtime" ] && [ -S "$_bus" ] || return 1
+  # No credential yet is fine: `wayland-vnc serve` generates a random mode-600 one
+  # on first run, so the service starts now and still never serves unauthenticated.
+  runuser -u "$_user" -- env \
+    XDG_RUNTIME_DIR="$_runtime" \
+    DBUS_SESSION_BUS_ADDRESS="unix:path=$_bus" \
+    systemctl --user enable --now wayland-vnc.service >/dev/null 2>&1
+}
+
+_started_for_someone=no
+if [ "$1" = "configure" ] && _systemd_is_live; then
+  systemctl --global enable wayland-vnc.service >/dev/null 2>&1 || true
+  for _uid in $(loginctl list-users --no-legend 2>/dev/null | awk '{print $1}'); do
+    _name=$(id -nu "$_uid" 2>/dev/null) || continue
+    if _activate_for_user "$_name"; then
+      _started_for_someone=yes
+    fi
+  done
+fi
+
+# Say only what actually happened: claiming a running service and a generated
+# password where neither exists sends people looking for a password that is not there.
+if [ "$1" = "configure" ]; then
+  if [ "$_started_for_someone" = yes ]; then
+    echo "wayland-vnc installed, enabled, and started for logged-in users."
+    echo "It listens on this computer only (127.0.0.1:5900). Turning on Local Network"
+    echo "Access in the Wayland VNC settings app opens it on every interface; do not"
+    echo "forward the port to the internet."
+    echo "A random viewer password was generated on first start; view or change it in"
+    echo "the Wayland VNC settings app, or with: wayland-vnc set-password"
+  else
+    echo "wayland-vnc installed and enabled for every user's graphical session."
+    echo "No logged-in Wayland session was available to start it in, so it will start"
+    echo "at the next login. It listens on this computer only (127.0.0.1:5900); turning"
+    echo "on Local Network Access in the Wayland VNC settings app opens it on every"
+    echo "interface, so do not forward the port to the internet. A random viewer password"
+    echo "is generated on the first start; view or change it in the Wayland VNC settings"
+    echo "app, or with: wayland-vnc set-password"
+  fi
+fi
+
+# Refresh the desktop and icon caches so the settings app appears in the app drawer
+# straight away. Both are optional tools; a missing one is not an error.
+if command -v update-desktop-database >/dev/null 2>&1; then
+  update-desktop-database -q /usr/share/applications || true
+fi
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+  gtk-update-icon-cache -qtf /usr/share/icons/hicolor || true
+fi
+
+#DEBHELPER#
+exit 0

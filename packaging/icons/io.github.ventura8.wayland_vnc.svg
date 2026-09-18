@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+<!-- App icon in the host desktop's own idiom. Structure, palette and shadow are taken
+     from Ubuntu's Yaru Settings icon, sampled from the installed theme
+     (/usr/share/icons/Yaru/256x256/apps/org.gnome.Settings.png): a light circular
+     badge with Yaru's horizontal tonal band (upper #d5d5d5, lighter #eaeaea below), a
+     dark inner disc (#5d5d5d, slight gradient on the curved surface), a light glyph
+     (#d8d8d8), and a soft drop shadow. The glyph is a display receiving a connection,
+     kept large and free of small parts so it still reads at 32px. -->
+  <title>Wayland VNC</title>
+  <defs>
+    <clipPath id="badge">
+      <circle cx="64" cy="63" r="54"/>
+    </clipPath>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1.5"
+                    flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <!-- Light badge carrying Yaru's tonal split: lighter below, as the light is above. -->
+    <g clip-path="url(#badge)">
+      <rect x="0" y="0" width="128" height="64" fill="#d5d5d5"/>
+      <rect x="0" y="64" width="128" height="64" fill="#eaeaea"/>
+    </g>
+    <!-- Dark inner disc in Yaru's dominant tone; flat so every rasteriser matches. -->
+    <circle cx="64" cy="63" r="42" fill="#5d5d5d"/>
+    <!-- Glyph: one bold display, light on the disc. -->
+    <rect x="38" y="45" width="52" height="36" rx="5" fill="#d8d8d8"/>
+    <!-- Arrow knocked out in the disc tone so the icon stays monochrome like Settings. -->
+    <rect x="47" y="60" width="21" height="7" rx="3.5" fill="#5d5d5d"/>
+    <path d="M64 53l14 10.5L64 74z" fill="#5d5d5d"/>
+  </g>
+</svg>

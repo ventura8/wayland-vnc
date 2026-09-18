@@ -1,0 +1,404 @@
+---
+name: Release
+
+# Trigger on version tags like v1.0.0.
+"on":
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  PPA_NAME: "ppa:ventura8/wayland-vnc"
+  # The private repository the trusted runner publishes qualification evidence to
+  # (scripts/publish-evidence.py), laid out per commit; docs/evidence-store.md.
+  EVIDENCE_REPO: "ventura8/wayland-vnc-evidence"
+  MAINTAINER_NAME: "ventura8"
+  MAINTAINER_EMAIL: "alexandrescu.sergiu@gmail.com"
+  # Bump when re-uploading the same VERSION (Launchpad rejects duplicate source
+  # versions). Reset to 1 when VERSION itself bumps.
+  PPA_UPLOAD_REVISION: "7"
+
+permissions:
+  contents: read
+
+jobs:
+  # Whether a tag is coherent has nothing to do with qualification, so it is checked
+  # first and unconditionally: this used to live in the PPA job, which is skipped when
+  # evidence is absent, so a tag disagreeing with VERSION still built and published.
+  validate-tag:
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify tag commit is an ancestor of the default branch
+        env:
+          # Passed through the environment rather than expanded into the script, so
+          # the shell parses it as data and never as part of the command.
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin \
+            "refs/heads/${DEFAULT_BRANCH}:refs/remotes/origin/${DEFAULT_BRANCH}"
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" "origin/${DEFAULT_BRANCH}"; then
+            echo "Tag commit ${GITHUB_SHA} is not an ancestor of origin/${DEFAULT_BRANCH}" >&2
+            exit 1
+          fi
+      - name: Extract and validate version
+        id: extract_version
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          FILE_VERSION="$(tr -d '[:space:]' < VERSION)"
+          if [ "$FILE_VERSION" != "$VERSION" ]; then
+            echo "Tag $VERSION does not match VERSION file $FILE_VERSION" >&2
+            exit 1
+          fi
+          if ! python3 scripts/sync-version.py --check; then
+            echo "pyproject.toml version is out of sync with VERSION" >&2
+            exit 1
+          fi
+
+  # The release gate this project documents: every required target/viewer pair must
+  # carry valid evidence for the tagged commit. Without it a tag published a stable
+  # GitHub release with no evidence at all, which is exactly the claim the
+  # qualification contract exists to prevent. Absent or invalid evidence does not
+  # fail the tag: it downgrades the GitHub release to a prerelease, and the PPA
+  # upload (which tracks every tag, by the maintainer's decision) says the same in
+  # its changelog, so artifacts are still produced but nothing claims to be qualified.
+  qualification-gate:
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+    outputs:
+      qualified: ${{ steps.gate.outputs.qualified }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install the release gate's Python dependencies
+        run: |
+          set -euo pipefail
+          python3 -m venv /tmp/gate
+          # Constrained by the pins Dependabot already tracks, so the gate's schema
+          # validator cannot drift from the one the tests and the local pipeline use.
+          # rfc3339-validator is what makes the schema's date-time format enforced.
+          /tmp/gate/bin/pip install --quiet -c requirements-dev.txt jsonschema rfc3339-validator
+      # Evidence is produced on a trusted isolated runner and is private (credentials
+      # and captures), so it is never in this checkout. The runner publishes it to
+      # the evidence store, one directory per commit; the gate fetches only this
+      # commit's directory, read-only, with a deploy key. Without the key (a fork, a
+      # fresh clone of the project) or without a directory for this commit the gate
+      # answers "no evidence" and fails closed to a prerelease rather than failing
+      # the tag. See docs/evidence-store.md.
+      - name: Fetch this commit's evidence from the store
+        id: evidence
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          repository: ${{ env.EVIDENCE_REPO }}
+          ssh-key: ${{ secrets.EVIDENCE_DEPLOY_KEY }}
+          path: evidence-store
+          sparse-checkout: ${{ github.sha }}
+          sparse-checkout-cone-mode: true
+          persist-credentials: false
+      - name: Validate qualification evidence for this commit
+        id: gate
+        env:
+          EVIDENCE_ROOT: evidence-store/${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [ ! -f "$EVIDENCE_ROOT/records.json" ]; then
+            echo "qualified=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=Not release-qualified::The evidence store holds no \
+            records for this commit (or could not be read). Publishing a prerelease; \
+            the PPA changelog says so too."
+            exit 0
+          fi
+          if PYTHONPATH=src /tmp/gate/bin/python scripts/check-release.py \
+            --records "$EVIDENCE_ROOT/records.json" \
+            --commit "$GITHUB_SHA" --evidence-root "$EVIDENCE_ROOT"; then
+            echo "qualified=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "qualified=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=Not release-qualified::The evidence for this commit \
+            does not satisfy the qualification contract. Publishing a prerelease; the \
+            PPA changelog says so too."
+          fi
+
+  upload-to-ppa:
+    runs-on: ubuntu-26.04
+    environment: ppa-release
+    needs: [validate-tag, qualification-gate]
+    # Every tag goes to the PPA, unattended (maintainer's decision, 2026-09-17). The
+    # gate's verdict is not a condition here but a line in the changelog below, so a
+    # subscriber is told exactly what the evidence supports and nothing more.
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        # Resolute-only: the product targets Ubuntu 26.04.
+        distro: [resolute]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install build dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential debhelper dpkg-dev devscripts dput gpg python3
+
+      - name: Carry the validated version into this job
+        env:
+          # Through the environment, not expanded into the script: the shell then
+          # parses it as data and never as part of the command.
+          TAG_VERSION: ${{ needs.validate-tag.outputs.version }}
+        run: echo "VERSION=$TAG_VERSION" >> "$GITHUB_ENV"
+
+      - name: Import GPG key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          GPG_KEY_FILE=$(mktemp)
+          trap 'rm -f "$GPG_KEY_FILE"' EXIT
+          printf '%s' "$GPG_PRIVATE_KEY" > "$GPG_KEY_FILE"
+          GPG_FINGERPRINT=$(gpg --batch --show-keys --with-colons "$GPG_KEY_FILE" \
+            | awk -F: '/^fpr:/ {print $10; exit}')
+          if [ -z "$GPG_FINGERPRINT" ]; then
+            echo "No fingerprint in the provided private key" >&2
+            exit 1
+          fi
+          gpg --batch --import "$GPG_KEY_FILE"
+          echo "${GPG_FINGERPRINT}:6:" | gpg --import-ownertrust
+          echo "GPG_KEY_ID=${GPG_FINGERPRINT: -16}" >> "$GITHUB_ENV"
+
+      - name: Update debian/changelog for the target release
+        env:
+          QUALIFIED: ${{ needs.qualification-gate.outputs.qualified }}
+        run: |
+          set -euo pipefail
+          PPA_VERSION="${VERSION}+1ppa${PPA_UPLOAD_REVISION}~${{ matrix.distro }}1"
+          if [ "$QUALIFIED" = "true" ]; then
+            STATUS="Release-qualified: evidence for every target/viewer pair on this commit"
+          else
+            STATUS="Not release-qualified: no qualification evidence for this commit"
+          fi
+          cat > debian/changelog <<CHANGELOG
+          wayland-vnc (${PPA_VERSION}) ${{ matrix.distro }}; urgency=medium
+
+            * Release ${VERSION}
+            * ${STATUS}
+            * See https://github.com/ventura8/wayland-vnc/releases/tag/${GITHUB_REF_NAME}
+
+           -- ${MAINTAINER_NAME} <${MAINTAINER_EMAIL}>  $(date -R)
+          CHANGELOG
+          sed -i 's/^          //' debian/changelog
+          # The grd source package below is versioned and annotated identically.
+          echo "PPA_VERSION=$PPA_VERSION" >> "$GITHUB_ENV"
+          echo "PPA_STATUS=$STATUS" >> "$GITHUB_ENV"
+
+      - name: Build and sign the source package
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GPG_PASSPHRASE:-}" ]; then
+            echo "GPG_PASSPHRASE is empty; cannot sign the source package" >&2
+            exit 1
+          fi
+          SIGN_DIR=$(mktemp -d)
+          trap 'rm -rf "$SIGN_DIR"' EXIT
+          cat > "$SIGN_DIR/sign.sh" <<'SIGN'
+          #!/bin/sh
+          printf '%s\n' "$GPG_PASSPHRASE" | \
+            gpg --batch --pinentry-mode loopback --passphrase-fd 0 "$@"
+          SIGN
+          chmod +x "$SIGN_DIR/sign.sh"
+          dpkg-checkbuilddeps || true
+          dpkg-buildpackage -S -sa -k"$GPG_KEY_ID" \
+            --sign-backend=gpg --sign-command="$SIGN_DIR/sign.sh"
+
+      # GNOME desktops need the project's patched GNOME Remote Desktop, so the PPA
+      # carries it too as its own source package (wayland-vnc-grd). Launchpad builds
+      # offline, so scripts/prepare-grd-ppa-source.sh vendors the checksum-pinned
+      # upstream tarballs into the tree; its debian/rules compiles them there.
+      - name: Assemble and sign the wayland-vnc-grd source package
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          WAYLAND_VNC_PPA_STATUS: ${{ env.PPA_STATUS }}
+        run: |
+          set -euo pipefail
+          GRD_OUT="$RUNNER_TEMP/grd-ppa"
+          mkdir -p "$GRD_OUT"
+          tree=$(scripts/prepare-grd-ppa-source.sh "$GRD_OUT" "$PPA_VERSION" "${{ matrix.distro }}" | tail -1)
+          echo "GRD_OUT=$GRD_OUT" >> "$GITHUB_ENV"
+          SIGN_DIR=$(mktemp -d)
+          trap 'rm -rf "$SIGN_DIR"' EXIT
+          cat > "$SIGN_DIR/sign.sh" <<'SIGN'
+          #!/bin/sh
+          printf '%s\n' "$GPG_PASSPHRASE" | \
+            gpg --batch --pinentry-mode loopback --passphrase-fd 0 "$@"
+          SIGN
+          chmod +x "$SIGN_DIR/sign.sh"
+          cd "$tree"
+          # -d: this only packs the source; Launchpad installs the compile-time
+          # Build-Depends (cmake, meson, the -dev libraries) itself, so they need not
+          # be present on this runner and dpkg-buildpackage must not abort over them.
+          dpkg-buildpackage -S -sa -d -k"$GPG_KEY_ID" \
+            --sign-backend=gpg --sign-command="$SIGN_DIR/sign.sh"
+
+      - name: Upload to the PPA
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          changes=(../*_source.changes)
+          if [ "${#changes[@]}" -ne 1 ]; then
+            changes=(../*.changes)
+          fi
+          if [ "${#changes[@]}" -ne 1 ]; then
+            echo "Expected exactly one ../*.changes file, found ${#changes[@]}" >&2
+            exit 1
+          fi
+          dput "$PPA_NAME" "${changes[0]}"
+
+      - name: Upload wayland-vnc-grd to the PPA
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          changes=("$GRD_OUT"/wayland-vnc-grd_*_source.changes)
+          if [ "${#changes[@]}" -ne 1 ]; then
+            echo "Expected exactly one grd source .changes, found ${#changes[@]}" >&2
+            exit 1
+          fi
+          dput "$PPA_NAME" "${changes[0]}"
+
+  build-packages:
+    name: Build ${{ matrix.pkg }} (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    needs: [validate-tag]
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        # deb, rpm and arch are architecture-independent (all / noarch / any) and are
+        # built once; the GNOME backend, the AppImage runtime, the snap and the
+        # flatpak are native code or a native bundle, so each is built on a runner of
+        # every architecture the product ships for.
+        include:
+          - {pkg: deb, arch: all, runner: ubuntu-26.04}
+          - {pkg: rpm, arch: all, runner: ubuntu-26.04}
+          - {pkg: arch, arch: all, runner: ubuntu-26.04}
+          - {pkg: grd-deb, arch: amd64, runner: ubuntu-26.04}
+          - {pkg: grd-deb, arch: arm64, runner: ubuntu-24.04-arm}
+          - {pkg: appimage, arch: amd64, runner: ubuntu-26.04}
+          - {pkg: appimage, arch: arm64, runner: ubuntu-24.04-arm}
+          - {pkg: flatpak, arch: amd64, runner: ubuntu-26.04}
+          - {pkg: flatpak, arch: arm64, runner: ubuntu-24.04-arm}
+          - {pkg: snap, arch: amd64, runner: ubuntu-26.04}
+          - {pkg: snap, arch: arm64, runner: ubuntu-24.04-arm}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install host build tools
+        run: |
+          set -euo pipefail
+          chmod +x scripts/prepare_release_package_host_deps.sh
+          ./scripts/prepare_release_package_host_deps.sh "${{ matrix.pkg }}"
+      - name: Build release package (${{ matrix.pkg }})
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          chmod +x scripts/build_release_package.sh
+          ./scripts/build_release_package.sh "${{ matrix.pkg }}"
+      - name: Upload release package artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+        with:
+          name: release-pkg-${{ matrix.pkg }}-${{ matrix.arch }}
+          path: artifacts/
+          if-no-files-found: error
+
+  github-release:
+    runs-on: ubuntu-26.04
+    needs: [validate-tag, qualification-gate, upload-to-ppa, build-packages]
+    # always(): the gate's verdict must not skip this job (it only decides the
+    # prerelease flag below); a PPA upload that failed or was cancelled still holds the
+    # release back, so a re-run of the failed jobs completes both together.
+    if: >-
+      always() && needs.validate-tag.result == 'success'
+      && needs.qualification-gate.result == 'success'
+      && needs.build-packages.result == 'success'
+      && needs.upload-to-ppa.result != 'failure'
+      && needs.upload-to-ppa.result != 'cancelled'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Download release artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        with:
+          path: downloaded
+          pattern: release-pkg-*
+          merge-multiple: true
+      - name: Assemble artifact set and checksums
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          find downloaded -type f \( -name '*.deb' -o -name '*.rpm' \
+            -o -name '*.pkg.tar.*' -o -name '*.AppImage' -o -name '*.flatpak' \
+            -o -name '*.snap' \) -exec cp -a {} artifacts/ \;
+          cd artifacts
+          shopt -s nullglob
+          files=( *.deb *.rpm *.pkg.tar.* *.AppImage *.flatpak *.snap )
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No release binaries to publish" >&2
+            exit 1
+          fi
+          sha256sum "${files[@]}" > SHA256SUMS
+          sha256sum -c SHA256SUMS
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64  # v3.0.3
+        with:
+          # The release title is the tag and nothing else ("v1.0.0"): set explicitly
+          # rather than left to the action's default, so it cannot drift.
+          name: ${{ github.ref_name }}
+          files: |
+            artifacts/SHA256SUMS
+            artifacts/*.deb
+            artifacts/*.rpm
+            artifacts/*.pkg.tar.*
+            artifacts/*.AppImage
+            artifacts/*.flatpak
+            artifacts/*.snap
+          # The crafted release description for this tag is the body; the file is
+          # docs/releases/<tag>_github_description.md, checked out above.
+          body_path: docs/releases/${{ github.ref_name }}_github_description.md
+          generate_release_notes: false
+          draft: false
+          # Only evidence makes a release stable. Without it the artifacts are still
+          # published, but as a prerelease, so nothing implies a qualified desktop.
+          prerelease: ${{ needs.qualification-gate.outputs.qualified != 'true' }}

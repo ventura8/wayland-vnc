@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=84"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wayland-vnc"
+version = "1.0.0"
+description = "Evidence-gated Wayland VNC compatibility toolkit"
+requires-python = ">=3.11"
+license = "GPL-2.0-or-later"
+dependencies = ["Pillow>=12.3,<13"]
+
+[project.scripts]
+wayland-vnc = "wayland_vnc.cli:main"
+wayland-vnc-setup = "wayland_vnc.tui:main"
+wayland-vnc-settings = "wayland_vnc.settings_app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["wayland_vnc"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+
+[tool.pylint.main]
+py-version = "3.11"
+
+# Project-wide limits, set once here rather than as per-line disables scattered through
+# the code, which this project does not allow. The values are chosen from what the
+# design actually needs, not from what happens to be present:
+#   Driver is a Protocol -- an interface declaring the 21 side effects the scenario
+#   suite performs -- and splitting an interface up to satisfy a count would obscure it.
+#   Session, Profile and Host are record types whose 8-10 fields are each a distinct
+#   piece of run state; nesting them into sub-objects purely to lower a number would
+#   make every use site longer without making anything clearer.
+[tool.pylint.design]
+max-attributes = 12
+max-public-methods = 25
+
+[tool.pylint.messages_control]
+disable = ["missing-module-docstring", "missing-function-docstring", "missing-class-docstring"]

@@ -1,0 +1,78 @@
+Subject: Process every client message that has arrived before sending an update
+Base: LibVNCServer 0.9.15
+License: GPL-2.0-or-later (upstream-derived)
+Status: local candidate; not upstream-submitted or release-qualified
+
+rfbCheckFds read one client message per iteration and rfbProcessEvents then sent
+a pending update. A viewer that changes its pixel format sends the request for
+the next update and the SetPixelFormat back to back (RealVNC Viewer for Android
+does, switching from an 8-bit probe format to 32-bit within its first half
+second); the update was encoded and sent in the old format before the change was
+read, the viewer decoded garbage and reset the connection, and only an attempt
+whose timing happened to fall between frames survived: "loops a few times, then
+connects". Drain the socket before returning to the send path, bounded by a
+per-pass message budget so a chatty client cannot hold the event loop.
+--- a/src/libvncserver/sockets.c
++++ b/src/libvncserver/sockets.c
+@@ -97,6 +97,39 @@
+ #endif
+ 
+ #include "sockets.h"
++#include <poll.h>
++
++/*
++ * Whether more client data is already waiting on the socket. A viewer that
++ * changes its pixel format sends the request for the next update and the
++ * SetPixelFormat back to back; if only one message is read per iteration the
++ * update goes out, encoded in the old format, before the change is seen, and
++ * the viewer cannot decode it. So every message that has already arrived is
++ * processed before any update is sent.
++ *
++ * Bounded by rfbMaxDrainedMessages: a client that keeps the socket readable
++ * must not hold the event loop, and any message left over is read on the next
++ * iteration, when the update it was competing with has already gone out. The
++ * budget applies to this socket drain only: payload already decoded into the
++ * WebSockets buffer still drains as upstream had it, because nothing else will
++ * wake the loop for bytes that have already left the socket.
++ */
++#define rfbMaxDrainedMessages 64
++
++static rfbBool
++rfbClientInputPending(rfbClientPtr cl)
++{
++    struct pollfd pfd;
++
++    if (cl->sock == RFB_INVALID_SOCKET)
++        return FALSE;
++    pfd.fd = cl->sock;
++    pfd.events = POLLIN;
++    pfd.revents = 0;
++    if (poll(&pfd, 1, 0) != 1)
++        return FALSE;
++    return (pfd.revents & POLLIN) != 0;
++}
+ 
+ int rfbMaxClientWait = 20000;   /* time (ms) after which we decide client has
+                                    gone away - needed to stop us hanging */
+@@ -453,12 +483,19 @@
+             {
+                 if (FD_ISSET(cl->sock, &fds))
+                 {
++                    int drained = 0;
+ #ifdef LIBVNCSERVER_WITH_WEBSOCKETS
+                     do {
+                         rfbProcessClientMessage(cl);
+-                    } while (cl->sock != RFB_INVALID_SOCKET && webSocketsHasDataInBuffer(cl));
++                    } while (cl->sock != RFB_INVALID_SOCKET &&
++                             (webSocketsHasDataInBuffer(cl) ||
++                              (++drained < rfbMaxDrainedMessages && rfbClientInputPending(cl))));
+ #else
+-                    rfbProcessClientMessage(cl);
++                    do {
++                        rfbProcessClientMessage(cl);
++                    } while (cl->sock != RFB_INVALID_SOCKET &&
++                             ++drained < rfbMaxDrainedMessages &&
++                             rfbClientInputPending(cl));
+ #endif
+                 }
+                 else

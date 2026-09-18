@@ -1,0 +1,20 @@
+# Keep the Debian-native source package small and reproducible: exclude the vendored
+# upstream trees, private evidence, VCS metadata, build outputs, and caches. The .deb
+# is built from src/, packaging/, qualification/, docs/, VERSION, README, and SECURITY.
+tar-ignore = ".git"
+tar-ignore = "vendor"
+tar-ignore = "artifacts"
+tar-ignore = "reports"
+tar-ignore = ".pytest_cache"
+tar-ignore = ".ruff_cache"
+tar-ignore = "__pycache__"
+tar-ignore = ".coverage"
+tar-ignore = ".coverage.*"
+tar-ignore = "coverage.json"
+tar-ignore = "packaging/appimage/AppDir"
+tar-ignore = "packaging/appimage/appimagetool"
+tar-ignore = "packaging/flatpak/builddir"
+tar-ignore = "packaging/flatpak/repo"
+tar-ignore = "packaging/snap/parts"
+tar-ignore = "packaging/snap/stage"
+tar-ignore = "packaging/snap/prime"

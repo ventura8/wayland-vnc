@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+# Make the private daemon take effect for users who are logged in now; everyone else
+# gets it at their next login. Entering the user's own session manager is the only
+# place a --user unit can be reloaded from a root maintainer script. Never fail the
+# install over it: a session with no bus is simply not logged in.
+if command -v systemctl >/dev/null 2>&1 && command -v loginctl >/dev/null 2>&1; then
+  for _user in $(loginctl list-users --no-legend 2>/dev/null | awk '{print $2}'); do
+    _uid=$(id -u "$_user" 2>/dev/null) || continue
+    [ -S "/run/user/$_uid/bus" ] || continue
+    su -s /bin/sh "$_user" -c "XDG_RUNTIME_DIR=/run/user/$_uid DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$_uid/bus \
+      systemctl --user daemon-reload && systemctl --user try-restart gnome-remote-desktop.service" \
+      >/dev/null 2>&1 || true
+  done
+fi
+exit 0

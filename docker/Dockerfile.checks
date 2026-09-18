@@ -1,0 +1,11 @@
+FROM ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367
+# Bootstrap image only; release publication requires a resolved digest and locked packages.
+# Package snapshot locking is a release blocker, not a lint exception for release images.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 python3-pytest python3-coverage python3-pip python3-venv \
+    python3-pil python3-jsonschema \
+    shellcheck shfmt git ca-certificates gcc libc6-dev systemd \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /project
+COPY . .
+CMD ["bash", "scripts/build-and-test.sh", "--unit"]

@@ -1,0 +1,53 @@
+Subject: Private MemFd-only and clipboard-off compatibility profile
+Base: GNOME Remote Desktop 50.2 after correctness patches
+License: GPL-2.0-or-later (upstream-derived)
+Status: empirical workaround, not a proven general upstream fix
+
+--- a/src/grd-vnc-pipewire-stream.c
++++ b/src/grd-vnc-pipewire-stream.c
+@@ -351,6 +351,10 @@
+   enum spa_video_format spa_format = SPA_VIDEO_FORMAT_BGRx;
+   gboolean need_fallback_format = FALSE;
+ 
++  /* Private compatibility profile; DMA-BUF causality is not established. */
++  if (g_strcmp0 (g_getenv ("WAYLAND_VNC_ENABLE_DMABUF"), "1") != 0)
++    egl_thread = NULL;
++
+   grd_append_pod_offset (pod_offsets, pod_builder);
+   spa_pod_builder_push_object (pod_builder, &format_frame,
+                                SPA_TYPE_OBJECT_Format,
+@@ -489,7 +493,9 @@
+   grd_session_vnc_queue_resize_framebuffer (stream->session, width, height);
+ 
+   allowed_buffer_types = 1 << SPA_DATA_MemFd;
+-  if (grd_context_get_egl_thread (context))
++  if (g_strcmp0 (g_getenv ("WAYLAND_VNC_ENABLE_DMABUF"), "1") != 0)
++    egl_thread = NULL;
++  if (egl_thread)
+     allowed_buffer_types |= 1 << SPA_DATA_DmaBuf;
+ 
+   grd_append_pod_offset (pod_offsets, &pod_builder.b);
+--- a/src/grd-session-vnc.c
++++ b/src/grd-session-vnc.c
+@@ -731,16 +731,11 @@
+                                       session_vnc->pending_framebuffer_height);
+               session_vnc->pending_framebuffer_resize = FALSE;
+ 
+-              /**
+-               * This is a workaround. libvncserver is unable to handle clipboard
+-               * changes early and either disconnects the client or crashes g-r-d
+-               * if it receives rfbSendServerCutText too early altough the
+-               * authentification process is already done.
+-               * Doing this after resizing the framebuffer, seems to work fine,
+-               * so enable the clipboard here and not when the remote desktop
+-               * session proxy is acquired.
+-               */
+-              grd_clipboard_vnc_maybe_enable_clipboard (session_vnc->clipboard_vnc);
++              /* Private compatibility profile: clipboard is opt-in for controlled
++               * A/B tests. Disabling it correlated with improved reconnects;
++               * this does not establish clipboard traffic as the root cause. */
++              if (g_strcmp0 (g_getenv ("WAYLAND_VNC_ENABLE_CLIPBOARD"), "1") == 0)
++                grd_clipboard_vnc_maybe_enable_clipboard (session_vnc->clipboard_vnc);
+             }
+         }
+     }

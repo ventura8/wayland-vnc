@@ -1,0 +1,552 @@
+# Te Reo Māori translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Te Reo Māori\n"
+"Language: mi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), whakamotuhēhē %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d atanga hopu/whakauru"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d papamahi"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "Kua NGARO a %s, ā, e hiahiatia ana e tēnei papamahi"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: tēnei rorohiko anake. 0.0.0.0: ngā whatunga katoa e hono ana tēnei rorohiko, kāore he taiapa kē atu. Ka whakakāhoretia ngā tauranga 1024 me raro iho."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Me whai wātū Wayland taketake; kua rāhuitia te hoki ki X11."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Mō Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Wāhitau"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Kua pānuitia"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Kei konei katoa"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Tautuhia"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Aunoa (whai i te papamahi)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Pūmuri"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Pūmuri tono"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Pūmuri i tēnei papamahi"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Kōnae whakahaere"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Te wāhitau me te tauranga whakarongo"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Kua tautuhia te wāhitau me te tauranga"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Whakakore"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Whakataunga āheinga"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Kua kitea ngā kawa hopu, papapātuhi mariko me te tohu mariko."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Katia"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Whirihoranga"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Whakaūngia te kupuhipa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Hono mai i tētahi atu pūrere"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Honoa tēnei mīhini ki te Wi-Fi, ki te Ethernet rānei, kātahi ka huaki anō"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Tāruatia"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Kāore he ingoa kaiwhakamahi, he kupuhipa rānei i te kōnae taunaki"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Papamahi"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Ngā ratonga papamahi"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Ngā aromatawai"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Ka huri ia kōwhiringa i konei i te whirihoranga tūturu, i te ratonga kua tāuta rānei."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Ngā mea katoa e hiahiatia ana e tēnei papamahi; kāore anō kia tāuta: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Tūmau GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Kei te whakarongo te daemon ake o GNOME Papamahi Mamao ki ngā whatunga katoa; tāutahia a wayland-vnc-grd hei whakahaere i tēnei"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "Hopu mata GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Whānui"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "I roto i RealVNC Viewer, tāpiritia he hononga ki tētahi o ēnei wāhitau. Ka mahi ērā i te wā e kā ana te urunga mai i te whatunga ā-rohe, mō tētahi pūrere i runga i te whatunga kotahi. Kaua e tuku whakamua i te tauranga mai i te Ipurangi."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Tāutahia te mōkihi wayland-vnc kia whiwhi ai i te wae kaiwhakamahi systemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "Kua kitea a KWin me ngā atanga tomokanga hopu/whakauru."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "Me whai a KWin i ngā atanga tomokanga e rua: ScreenCast me RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Ngā Pokatata Papapātuhi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Ngā pokatata papapātuhi"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Reo"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Tukua ngā pūrere i runga i te Wi-Fi, LAN rānei kotahi kia hono. Weto: tēnei rorohiko anake."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Raihanatanga"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Urunga mai i te whatunga ā-rohe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Kua weto te urunga mai i te whatunga ā-rohe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Kua kā te urunga mai i te whatunga ā-rohe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Tahua Matua"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Ka taea tēnei papamahi Wayland mai i a RealVNC Viewer i tō waea, i tētahi atu rorohiko rānei. Ka whakarongo noa i tēnei rorohiko tae noa ki tō whakakā i te Urunga mai i te whatunga ā-rohe."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Kua kitea ngā ratonga hopu me te whakauru tawhiti a Mutter; me whai hanganga motuhake."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Kāo"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Kāore he hua i kitea"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Kāore i kitea he wāhitau whatunga ā-rohe"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Kāore he pūmuri e tautokona ana"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Kāore he whakamāoritanga kua tāuta, nō reira ka noho te matapihi ki te reo Ingarihi."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Kāore"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Kāore he mea kua pānuitia"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Kāore he mea e wātea ana"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Kāore he mea kua tirohia"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Kāore he mea kua kitea"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Kāore i pānuitia"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Kāore i tirohia"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Kāore i tāuta"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Kāore i whakaritea"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Kāore i tautuhia"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Huakina te tahua matua"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "WĀHITAU TŪMATANUI - ka taea te toro atu i waho i te whatunga ā-rohe"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Kupuhipa"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Me 6-64 ngā pūāhua ASCII o te kupuhipa"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Kāore ngā kupuhipa i ōrite"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Tauranga"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Me noho te tauranga hei tauranga TCP kore-mana"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Ngā tomokanga"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Paetukutuku kaupapa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Waiho"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Kua rite ki te tāuta"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, he kiritaki; kāore e hiahiatia hei tuku"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Take"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Ngā whāinga tuku"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Tomokanga RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Pūrongo raru"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Kāore i kitea ngā āheinga hopu ME te whakauru e hiahiatia ana."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Kei te rere ināianei"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Tiakina"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Tomokanga ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Rapu"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Rapu i ngā aromatawai"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Rapu reo"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Nā GNOME Remote Desktop VNC i tuku (tauranga 5900); ka whai te whākinga i Ngā Tautuhinga GNOME > Tiri"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Whirihoranga tūmau"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Ratonga"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Wātū"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Momo wātū"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Tautuhia te Kupuhipa"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Tautuhia te kupuhipa mātakitaki"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Tautuhia he kupuhipa mātakitaki i te tuatahi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Tīmata i te takiuru"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Tūnga"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Kua tiakina (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Kua whāia"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Me whai te matapihi tautuhinga i a GTK4 me libadwaita (tāutahia python3-gi, gir1.2-gtk-4.0 me gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Me whai te matapihi tautuhinga i a libadwaita %(needed)s, hou ake rānei; kei tēnei pūnaha %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Ka whai te matapihi i te reo o tō papamahi, engari mēnā ka kōwhiria e koe tētahi atu."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Ka tuku tēnei papamahi i te VNC mā GNOME Remote Desktop, e whakaae ana ki ngā kupuhipa 8 pūāhua te nui rawa"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Ka whakarongo tonu te pūnaha tuarā o tēnei papamahi ki tēnei rorohiko anake"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Tūmau TigerVNC, mō KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Whakamātauria tētahi atu rapu."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Patohia ēnei ki RealVNC Viewer i tērā atu pūrere. Whakamahia te tohu karu kia kitea ai te kupuhipa o nāianei. Kua tiakina ki te aratau 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Ingoa kaiwhakamahi"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Me noho te ingoa kaiwhakamahi hei ASCII ka taea te tā"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Whakataunga"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Taunaki mātakitaki"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Kua tiakina te kupuhipa mātakitaki"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Tūmau WayVNC, mō ngā kaiwhakahiato wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Ngā kawa Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Ngā mea e pānuitia ana e tēnei papamahi, me tōna tikanga mō te urunga tawhiti."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Āe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "ngā whatunga katoa e hono ana tēnei rorohiko"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "te whatunga ā-rohe anake"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Ingoa mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "aratau %s (tuwhera rawa)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "aratau 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "tēnei mīhini anake"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "kāore te wae i tāuta"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "tē mōhiotia"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "hei tirotiro i ngā tikanga Wayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "hei tirotiro i ngā tomokanga mā D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Whakaūnga"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "Mā te 0.0.0.0 ka taea te tūmau e ngā pūrere kei runga i tō whatunga ā-rohe; ka mau tonu te ārai a te ratonga i te ipurangi. Mā te 127.0.0.1 ka herea ki tēnei mīhini anake. Ka whakakāhoretia ngā tauranga 1024 me raro iho."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "te whatunga ā-rohe anake; kua ārai te wae i te ipurangi"

@@ -1,0 +1,31 @@
+Subject: Guard disconnected clients and preserve single-axis cursor motion
+Base: GNOME Remote Desktop 50.2
+License: GPL-2.0-or-later (upstream-derived)
+Status: local candidate; not upstream-submitted or release-qualified
+
+--- a/src/grd-session-vnc.c
++++ b/src/grd-session-vnc.c
+@@ -197,7 +197,11 @@
+                              int            x,
+                              int            y)
+ {
+-  if (session_vnc->rfb_screen->cursorX == x ||
++  /* Cursor metadata can arrive after clientGone cleared rfb_client. */
++  if (!session_vnc->rfb_client)
++    return;
++
++  if (session_vnc->rfb_screen->cursorX == x &&
+       session_vnc->rfb_screen->cursorY == y)
+     return;
+ 
+@@ -715,6 +719,10 @@
+         {
+           rfbProcessEvents (session_vnc->rfb_screen, 0);
+ 
++          /* Processing input may synchronously disconnect the client. */
++          if (!session_vnc->rfb_client)
++            return G_SOURCE_REMOVE;
++
+           if (session_vnc->pending_framebuffer_resize &&
+               session_vnc->rfb_client->preferredEncoding != -1)
+             {

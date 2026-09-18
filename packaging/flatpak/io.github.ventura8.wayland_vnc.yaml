@@ -1,0 +1,36 @@
+---
+app-id: io.github.ventura8.wayland_vnc
+# The GNOME runtime, not the bare freedesktop one: the settings window is GTK4 +
+# libadwaita (1.5 or newer), which org.freedesktop.Platform does not ship at all.
+# GNOME 50 is the release the product targets (Ubuntu 26.04 ships GNOME 50, GTK 4.22,
+# libadwaita 1.9).
+runtime: org.gnome.Platform
+runtime-version: "50"
+sdk: org.gnome.Sdk
+# A desktop launch opens the settings window; the CLI stays reachable with
+# `flatpak run --command=wayland-vnc io.github.ventura8.wayland_vnc doctor`.
+command: wayland-vnc-settings
+finish-args:
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  - --share=network
+# Scope, stated so nobody assumes otherwise: this Flatpak ships the settings window,
+# the TUI and the CLI (doctor/status/provisioning). It does NOT ship a VNC backend.
+# `wayland-vnc serve` execs wayvnc from PATH, and the sandbox has none, so serving
+# from inside the Flatpak does not work; wlroots users who want the server should
+# install the deb, rpm or Arch package, which depends on wayvnc and installs the
+# systemd user service. Bundling wayvnc here would need a checksum-pinned source
+# module plus a real flatpak-builder/flatpak run cycle to verify it, which this
+# repository's smoke cannot do (no GNOME runtime, no bubblewrap user namespaces).
+modules:
+  - name: wayland-vnc
+    buildsystem: simple
+    build-commands:
+      # One command on purpose: flatpak-builder runs each build-command in its own
+      # `flatpak build` sandbox, so a staging dir from a separate command would be gone
+      # by the next one; staging and the copy into /app must share a sandbox.
+      - WAYLAND_VNC_REPO_ROOT="$PWD" packaging/stage-payload.sh /app-stage /app && cp -a /app-stage/app/. /app/
+    sources:
+      - type: dir
+        path: ../..

@@ -1,0 +1,36 @@
+Subject: Private compatibility profile: advertised ZRLE or Raw
+Base: LibVNCServer 0.9.15
+License: GPL-2.0-or-later (upstream-derived)
+Status: private build only; changes encoding policy, not proposed as global default
+
+--- a/src/libvncserver/rfbserver.c
++++ b/src/libvncserver/rfbserver.c
+@@ -2314,7 +2314,9 @@
+             lastPreferredEncoding = cl->preferredEncoding;
+ 
+         /* Reset all flags to defaults (allows us to switch between PointerPos and Server Drawn Cursors) */
+-        cl->preferredEncoding=-1;
++        /* wayland-vnc private compatibility build: Raw is always legal.
++         * Reset on EACH SetEncodings so withdrawn ZRLE is never reused. */
++        cl->preferredEncoding=rfbEncodingRaw;
+         cl->useCopyRect              = FALSE;
+         cl->useNewFBSize             = FALSE;
+         cl->useExtDesktopSize        = FALSE;
+@@ -2367,8 +2369,10 @@
+ #ifdef LIBVNCSERVER_HAVE_LIBPNG
+ 	    case rfbEncodingTightPng:
+ #endif
+-            /* The first supported encoding is the 'preferred' encoding */
+-                if (cl->preferredEncoding == -1)
++            /* Prefer lossless ZRLE only when this message advertises it.
++             * All other encodings retain the protocol-required Raw fallback.
++             * tests/native/test-encoding.c pins this: a Tight-only client gets Raw. */
++                if (enc == rfbEncodingZRLE)
+                     cl->preferredEncoding = enc;
+ 
+ 
+@@ -4174,4 +4177,3 @@
+     }
+ }
+ 
+-

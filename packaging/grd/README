@@ -1,0 +1,6 @@
+wayland-vnc-grd runs the project's patched GNOME Remote Desktop in place of the
+distribution daemon, through a systemd user drop-in. It takes effect for a user's
+session after `systemctl --user daemon-reload && systemctl --user restart
+gnome-remote-desktop.service`, which the package does for logged-in users at
+install and removal, or at the next login. Sources, patches and the build
+recipe: https://github.com/ventura8/wayland-vnc (patches/, docker/Dockerfile.gnome).

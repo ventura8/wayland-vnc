@@ -1,0 +1,35 @@
+#!/bin/sh
+set -e
+
+# On remove, stop the service everywhere it is running and disable it, not just for
+# future logins. Removing the package must not leave a VNC server running.
+
+_systemd_is_live() {
+  command -v systemctl >/dev/null 2>&1 || return 1
+  case "$(systemctl is-system-running 2>/dev/null || true)" in
+  running | degraded | starting | maintenance) return 0 ;;
+  esac
+  return 1
+}
+
+# Stop and disable the --user unit inside each logged-in user's own manager.
+_deactivate_for_user() {
+  _uid=$(id -u "$1" 2>/dev/null) || return 1
+  _runtime="/run/user/$_uid"
+  [ -S "$_runtime/bus" ] || return 1
+  runuser -u "$1" -- env \
+    XDG_RUNTIME_DIR="$_runtime" \
+    DBUS_SESSION_BUS_ADDRESS="unix:path=$_runtime/bus" \
+    systemctl --user disable --now wayland-vnc.service >/dev/null 2>&1
+}
+
+if [ "$1" = "remove" ] && _systemd_is_live; then
+  for _uid in $(loginctl list-users --no-legend 2>/dev/null | awk '{print $1}'); do
+    _name=$(id -nu "$_uid" 2>/dev/null) || continue
+    _deactivate_for_user "$_name" || true
+  done
+  systemctl --global disable wayland-vnc.service >/dev/null 2>&1 || true
+fi
+
+#DEBHELPER#
+exit 0

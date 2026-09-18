@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+# The drop-in is gone; put the distribution daemon back for logged-in users.
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+  if command -v systemctl >/dev/null 2>&1 && command -v loginctl >/dev/null 2>&1; then
+    for _user in $(loginctl list-users --no-legend 2>/dev/null | awk '{print $2}'); do
+      _uid=$(id -u "$_user" 2>/dev/null) || continue
+      [ -S "/run/user/$_uid/bus" ] || continue
+      su -s /bin/sh "$_user" -c "XDG_RUNTIME_DIR=/run/user/$_uid DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$_uid/bus \
+        systemctl --user daemon-reload && systemctl --user try-restart gnome-remote-desktop.service" \
+        >/dev/null 2>&1 || true
+    done
+  fi
+fi
+exit 0

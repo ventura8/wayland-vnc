@@ -1,0 +1,552 @@
+# Tiếng Việt translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: Tiếng Việt\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), xác thực %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d giao diện thu/nhập"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d màn hình nền"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "Thiếu %s và màn hình nền này cần nó"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: chỉ máy tính này. 0.0.0.0: mọi mạng mà máy tính này đang kết nối, không có hàng rào nào khác. Các cổng từ 1024 trở xuống bị từ chối."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Cần một phiên Wayland gốc; không được quay lui về X11."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Giới thiệu Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Địa chỉ"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Đã công bố"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Có đủ tất cả"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Áp dụng"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Tự động (theo màn hình nền)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Backend"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Backend ứng viên"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Backend trên màn hình nền này"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Tệp nhị phân"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Địa chỉ và cổng lắng nghe"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Đã áp dụng địa chỉ và cổng"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Hủy"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Kết luận về khả năng"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Đã phát hiện các giao thức thu hình, bàn phím ảo và con trỏ ảo."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Đóng"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Cấu hình"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Xác nhận mật khẩu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Kết nối từ thiết bị khác"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Hãy kết nối máy này với Wi-Fi hoặc Ethernet rồi mở lại"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Sao chép"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Tệp thông tin đăng nhập thiếu tên người dùng hoặc mật khẩu"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Màn hình nền"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Dịch vụ màn hình nền"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Chẩn đoán"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Mỗi tùy chọn ở đây đều thay đổi cấu hình thật hoặc dịch vụ đã cài."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Mọi thứ màn hình nền này cần; chưa cài: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Máy chủ GNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Trình nền riêng của GNOME Màn hình từ xa lắng nghe trên mọi mạng; hãy cài đặt wayland-vnc-grd để kiểm soát điều này"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "Truyền màn hình GNOME"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Chung"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "Trong RealVNC Viewer, thêm một kết nối tới một trong các địa chỉ này. Chúng hoạt động khi truy cập từ mạng cục bộ đang bật, cho mọi thiết bị trong cùng mạng. Đừng chuyển tiếp cổng từ Internet."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Hãy cài gói wayland-vnc để có unit người dùng systemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "Đã phát hiện KWin và các giao diện portal thu hình/nhập liệu."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin cần cả hai giao diện portal: ScreenCast và RemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Phím tắt"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Phím tắt"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Cho phép các thiết bị trong cùng Wi-Fi hoặc LAN kết nối. Tắt: chỉ máy tính này."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Giấy phép"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Truy cập từ mạng cục bộ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Đã tắt truy cập từ mạng cục bộ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Đã bật truy cập từ mạng cục bộ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Menu chính"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Giúp truy cập màn hình nền Wayland này từ RealVNC Viewer trên điện thoại hoặc máy tính khác. Nó chỉ lắng nghe trên máy tính này cho đến khi bạn bật Truy cập từ mạng cục bộ."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Đã phát hiện dịch vụ thu hình và nhập liệu từ xa của Mutter; cần một bản dựng riêng."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Không"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Không tìm thấy kết quả"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Không tìm thấy địa chỉ mạng nội bộ"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Không có backend được hỗ trợ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Chưa cài bản dịch nào nên cửa sổ vẫn hiển thị tiếng Anh."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Không có"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Không có cái nào được công bố"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Không có cái nào khả dụng"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Không kiểm tra cái nào"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Không phát hiện cái nào"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Không được công bố"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Chưa kiểm tra"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Chưa cài đặt"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Chưa thiết lập"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Chưa đặt"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Mở menu chính"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "ĐỊA CHỈ CÔNG KHAI - có thể truy cập ngoài mạng nội bộ"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Mật khẩu"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Mật khẩu phải có từ 6 đến 64 ký tự ASCII"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Mật khẩu không khớp"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Cổng"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Cổng phải là cổng TCP không đặc quyền"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Portal"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Trang web dự án"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Thoát"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Sẵn sàng cài đặt"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, một trình khách; không cần để phục vụ"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Lý do"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Mục tiêu phát hành"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Portal RemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Báo cáo sự cố"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Không phát hiện được các khả năng thu hình VÀ nhập liệu cần thiết."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Đang chạy"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Lưu"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Portal ScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Tìm kiếm"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Tìm trong chẩn đoán"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Tìm ngôn ngữ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Được phục vụ bởi GNOME Remote Desktop VNC (cổng 5900); mức mở theo Cài đặt GNOME > Chia sẻ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Cấu hình máy chủ"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Dịch vụ"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Phiên"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Loại phiên"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Đặt mật khẩu"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Đặt mật khẩu trình xem"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Hãy đặt mật khẩu trình xem trước"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Khởi động khi đăng nhập"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Trạng thái"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Đã lưu (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Được nhắm tới"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Cửa sổ cài đặt cần GTK4 và libadwaita (hãy cài python3-gi, gir1.2-gtk-4.0 và gir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Cửa sổ cài đặt cần libadwaita %(needed)s trở lên; hệ thống này có %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Cửa sổ theo ngôn ngữ của màn hình nền, trừ khi bạn chọn ngôn ngữ khác."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Màn hình này phục vụ VNC qua GNOME Remote Desktop, vốn chỉ chấp nhận mật khẩu tối đa 8 ký tự"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Phần phụ trợ của màn hình này luôn chỉ lắng nghe trên máy tính này"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Máy chủ TigerVNC, cho KDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Hãy thử tìm kiếm khác."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Hãy nhập các giá trị này vào RealVNC Viewer trên thiết bị kia. Dùng biểu tượng con mắt để hiện mật khẩu hiện tại. Được lưu với chế độ 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Tên người dùng"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Tên người dùng phải là ASCII in được"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Kết luận"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Thông tin đăng nhập trình xem"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Đã lưu mật khẩu trình xem"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Máy chủ WayVNC, cho các compositor wlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Giao thức Wayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Màn hình nền này công bố những gì, và điều đó có ý nghĩa gì với truy cập từ xa."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Có"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "mọi mạng mà máy tính này đang kết nối"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "chỉ mạng cục bộ"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Tên mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "chế độ %s (quá mở)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "chế độ 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "chỉ máy này"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "unit chưa được cài đặt"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "không rõ"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "dùng để dò các giao thức Wayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "dùng để dò các portal qua D-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Chứng nhận"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 giúp máy chủ có thể truy cập từ các thiết bị trong mạng nội bộ của bạn; dịch vụ vẫn chặn Internet. 127.0.0.1 giới hạn nó ở máy này. Các cổng từ 1024 trở xuống bị từ chối."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "chỉ mạng nội bộ; Internet bị unit chặn"

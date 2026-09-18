@@ -1,0 +1,80 @@
+#!/usr/bin/make -f
+# wayland-vnc-grd: the project's patched GNOME Remote Desktop + LibVNCServer, built
+# from the checksum-pinned upstream tarballs vendored in this source tree
+# (scripts/prepare-grd-ppa-source.sh verifies them against sources.json when it
+# assembles the tree). Launchpad's sbuild has no network, so nothing is fetched here.
+# The recipe mirrors docker/Dockerfile.gnome's grd-build stage exactly.
+export DH_VERBOSE = 1
+SHELL := /bin/bash
+
+GRD_TAR      := vendor/gnome-remote-desktop-50.2.tar.xz
+LIBVNC_TAR   := vendor/LibVNCServer-0.9.15.tar.gz
+PREFIX       := /opt/wayland-vnc
+# The package tree, populated only at install: dh_prep wipes debian/<pkg> (and
+# debian/tmp) between build and install, so nothing may be staged there at build.
+STAGE        := $(CURDIR)/debian/wayland-vnc-grd
+# Build-time install root for the private LibVNCServer (dh_prep never touches obj-*):
+# the daemon links against it here; its runtime copy moves into $(STAGE) at install.
+BUILD_STAGE  := $(CURDIR)/obj-stage
+LIBVNC_BUILD := $(CURDIR)/obj-libvnc
+GRD_BUILD    := $(CURDIR)/obj-grd
+# A build-time copy of the private LibVNCServer's pkg-config file, rewritten to point
+# into the staged tree: the daemon compiles and links against the staged library
+# (which is where it exists at build time) while its rpath stays the runtime path.
+BUILD_PC     := $(CURDIR)/obj-pkgconfig
+
+%:
+	dh $@ --buildsystem=none
+
+override_dh_auto_configure:
+	@echo "Configured per component in the build step."
+
+override_dh_auto_build:
+	# --- LibVNCServer, patched, staged under $(PREFIX)/libvnc ---
+	rm -rf $(LIBVNC_BUILD) && mkdir -p $(LIBVNC_BUILD)
+	tar xzf $(LIBVNC_TAR) --strip-components=1 -C $(LIBVNC_BUILD)
+	cd $(LIBVNC_BUILD) && for p in $(CURDIR)/patches/libvncserver/*.patch; do \
+	  patch --batch --forward --fuzz=0 -p1 -i "$$p"; done
+	cd $(LIBVNC_BUILD) && cmake -G Ninja -S . -B out -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+	  -DBUILD_SHARED_LIBS=ON -DWITH_EXAMPLES=OFF -DWITH_TESTS=OFF -DWITH_GNUTLS=OFF \
+	  -DWITH_OPENSSL=OFF -DWITH_SDL=OFF -DWITH_GTK=OFF -DWITH_FFMPEG=OFF -DWITH_SYSTEMD=OFF \
+	  -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$(PREFIX)/libvnc
+	cd $(LIBVNC_BUILD) && cmake --build out -j $$(nproc)
+	cd $(LIBVNC_BUILD) && DESTDIR=$(BUILD_STAGE) cmake --install out
+	# grd's meson asks for both libvncserver and libvncclient; rewrite each.
+	mkdir -p $(BUILD_PC)
+	for pc in libvncserver libvncclient; do \
+	  sed 's|$(PREFIX)/libvnc|$(BUILD_STAGE)$(PREFIX)/libvnc|g' \
+	    $(BUILD_STAGE)$(PREFIX)/libvnc/lib/pkgconfig/$$pc.pc > $(BUILD_PC)/$$pc.pc; done
+	# --- GNOME Remote Desktop, patched, linking the private LibVNCServer ---
+	rm -rf $(GRD_BUILD) && mkdir -p $(GRD_BUILD)
+	tar xJf $(GRD_TAR) --strip-components=1 -C $(GRD_BUILD)
+	cd $(GRD_BUILD) && for p in $(CURDIR)/patches/gnome-remote-desktop/*.patch; do \
+	  patch --batch --forward --fuzz=0 -p1 -i "$$p"; done
+	cd $(GRD_BUILD) && PKG_CONFIG_PATH=$(BUILD_PC) meson setup out \
+	  -Dvnc=true -Drdp=false -Dman=false -Dtests=false -Dsystemd=false \
+	  --prefix=$(PREFIX)/grd -Dc_link_args=-Wl,-rpath,$(PREFIX)/libvnc/lib
+	cd $(GRD_BUILD) && meson compile -C out
+
+override_dh_auto_install:
+	cd $(GRD_BUILD) && DESTDIR=$(STAGE) meson install -C out
+	glib-compile-schemas $(STAGE)$(PREFIX)/grd/share/glib-2.0/schemas
+	# Only the shared libraries are needed at run time; the headers, cmake and
+	# pkg-config files stay in the build-time stage.
+	install -d -m 755 $(STAGE)$(PREFIX)/libvnc/lib
+	cp -a $(BUILD_STAGE)$(PREFIX)/libvnc/lib/libvnc*.so* $(STAGE)$(PREFIX)/libvnc/lib/
+	# The drop-in that runs this daemon in place of the distribution one, and the docs.
+	install -D -m 644 extra/private-daemon.conf \
+	  $(STAGE)/usr/lib/systemd/user/gnome-remote-desktop.service.d/20-wayland-vnc-private-daemon.conf
+	install -D -m 644 extra/README $(STAGE)/usr/share/doc/wayland-vnc-grd/README
+
+override_dh_shlibdeps:
+	# The daemon links the private LibVNCServer shipped by this very package under
+	# /opt; point dpkg-shlibdeps at it so it resolves locally instead of as missing.
+	dh_shlibdeps -l$(STAGE)$(PREFIX)/libvnc/lib
+
+override_dh_dwz:
+	@echo "Skipping dh_dwz."
+
+override_dh_auto_clean:
+	rm -rf $(LIBVNC_BUILD) $(GRD_BUILD) $(BUILD_PC) $(BUILD_STAGE)

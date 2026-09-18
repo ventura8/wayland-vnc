@@ -1,0 +1,552 @@
+# chiShona translation for wayland-vnc.
+# Copyright (C) 2026 wayland-vnc contributors
+# This file is distributed under the same license as the wayland-vnc package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
+"PO-Revision-Date: 2026-09-15 12:00+0000\n"
+"Last-Translator: wayland-vnc contributors\n"
+"Language-Team: chiShona\n"
+"Language: sn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "%(address)s:%(port)s (%(scope)s), auth %(auth)s"
+msgstr "%(address)s:%(port)s (%(scope)s), kuvimbiswa %(auth)s"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d capture/input interface(s)"
+msgstr "%d nzira dzekutora/dzekupinza"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%d desktops"
+msgstr "%d madhesikitopu"
+
+#: src/wayland_vnc/settings.py
+#, python-format
+msgid "%s is MISSING and this desktop needs it"
+msgstr "%s HAIPO uye dhesikitopu iyi inoida"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "127.0.0.1: this computer only. 0.0.0.0: every network this computer is on, with no other fence. Ports at or below 1024 are refused."
+msgstr "127.0.0.1: komputa ino chete. 0.0.0.0: mitandao yese iyo komputa ino yakabatana nayo, pasina rumwe ruzhowa. Mapoti 1024 nepasi anorambwa."
+
+#: src/wayland_vnc/probe.py
+msgid "A native Wayland session is required; X11 fallback is prohibited."
+msgstr "Sesheni yeWayland chaiyo inodiwa; kudzokera kuX11 hakubvumirwi."
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "About Wayland VNC"
+msgstr "Nezve Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Address"
+msgstr "Kero"
+
+#: src/wayland_vnc/settings.py
+msgid "Advertised"
+msgstr "Zvakaziviswa"
+
+#: src/wayland_vnc/settings.py
+msgid "All present"
+msgstr "Zvose zviripo"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Apply"
+msgstr "Shandisa"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Automatic (match the desktop)"
+msgstr "Zvoga (enderana nedhesikitopu)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Backend"
+msgstr "Bhekiendi"
+
+#: src/wayland_vnc/settings.py
+msgid "Backend Candidate"
+msgstr "Bhekiendi inogona kushandiswa"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Backend on This Desktop"
+msgstr "Bhekiendi padhesikitopu iyi"
+
+#: src/wayland_vnc/settings.py
+msgid "Binaries"
+msgstr "Mabhinari"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Bind Address and Port"
+msgstr "Kero nepoti yekusunga"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Bind address and port applied"
+msgstr "Kero nepoti yekusunga zvashandiswa"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Cancel"
+msgstr "Kanzura"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Capability Verdict"
+msgstr "Mutongo wekugona"
+
+#: src/wayland_vnc/probe.py
+msgid "Capture, virtual keyboard, and virtual pointer protocols detected."
+msgstr "Maprotokoro ekutora, kiibhodhi yekufungidzira nepointer yekufungidzira aonekwa."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Close"
+msgstr "Vhara"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Configuration"
+msgstr "Kugadzirisa"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Confirm Password"
+msgstr "Simbisa pasiwedhi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect from Another Device"
+msgstr "Batanidza kubva kune mumwe mudziyo"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Connect this machine to Wi-Fi or Ethernet, then reopen"
+msgstr "Batanidza muchina uyu kuWi-Fi kana Ethernet, wozovhura zvakare"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Copy"
+msgstr "Kopa"
+
+#: src/wayland_vnc/runtime.py
+msgid "Credentials file is missing a username or password"
+msgstr "Faira rezvitupa harina zita remushandisi kana pasiwedhi"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop"
+msgstr "Dhesikitopu"
+
+#: src/wayland_vnc/settings.py
+msgid "Desktop Services"
+msgstr "Masevhisi edhesikitopu"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Diagnostics"
+msgstr "Kuongorora"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Every option here changes real configuration or the installed service."
+msgstr "Sarudzo yega yega pano inochinja kugadzirisa chaiko kana sevhisi yakaiswa."
+
+#: src/wayland_vnc/settings.py
+msgid "Everything this desktop needs; not installed: "
+msgstr "Zvose zvinodiwa nedhesikitopu iyi; zvisina kuiswa: "
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop server"
+msgstr "Seva yeGNOME Remote Desktop"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Remote Desktop's own daemon listens on every network; install wayland-vnc-grd to control this"
+msgstr "Daemon yeGNOME Desktop Yekure pachayo inoteerera pamitandao yese; isa wayland-vnc-grd kuti udzore izvi"
+
+#: src/wayland_vnc/settings.py
+msgid "GNOME Screencast"
+msgstr "GNOME Screencast"
+
+#: src/wayland_vnc/settings_app.py
+msgid "General"
+msgstr "Zvakajairika"
+
+#: src/wayland_vnc/settings_app.py
+msgid "In RealVNC Viewer, add a connection to one of these. They work while local network access is on, for any device on the same network. Do not forward the port from the Internet."
+msgstr "MuRealVNC Viewer, wedzera kubatana kune imwe yekero idzi. Dzinoshanda kana kupinda kubva pamutandao wemuno kwakabatidzwa, kune chero mudziyo pamutandao mumwe chete. Usatumira poti kubva paIndaneti."
+
+#: src/wayland_vnc/settings.py
+msgid "Install the wayland-vnc package to get the systemd user unit"
+msgstr "Isa pakeji yewayland-vnc kuti uwane yuniti yemushandisi yesystemd"
+
+#: src/wayland_vnc/probe.py
+msgid "KWin and capture/input portal interfaces detected."
+msgstr "KWin nenzira dzepotari yekutora/yekupinza zvaonekwa."
+
+#: src/wayland_vnc/probe.py
+msgid "KWin requires both ScreenCast and RemoteDesktop portal interfaces."
+msgstr "KWin inoda maportal interface ese ari maviri: ScreenCast neRemoteDesktop."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard Shortcuts"
+msgstr "Nzira dzipfupi dzekiibhodhi"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Keyboard shortcuts"
+msgstr "Nzira dzipfupi dzekiibhodhi"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Language"
+msgstr "Mutauro"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Let devices on the same Wi-Fi or LAN connect. Off: this computer only."
+msgstr "Rega midziyo iri paWi-Fi kana LAN imwe chete ibatane. Yakadzimwa: komputa ino chete."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "License"
+msgstr "Rezinesi"
+
+#: src/wayland_vnc/settings.py
+msgid "Local Network Access"
+msgstr "Kupinda kubva pamutandao wemuno"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned off"
+msgstr "Kupinda kubva pamutandao wemuno kwadzimwa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Local network access turned on"
+msgstr "Kupinda kubva pamutandao wemuno kwabatidzwa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Main Menu"
+msgstr "Menyu huru"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Makes this Wayland desktop reachable from RealVNC Viewer on your phone or another computer. It listens on this computer only until you turn on Local Network Access."
+msgstr "Inoita kuti dhesikitopu iyi yeWayland isvikike kubva kuRealVNC Viewer pafoni yako kana pane imwe kombiyuta. Inoteerera pakombiyuta ino chete kusvikira wabatidza Kupinda kubva pamutandao wemuno."
+
+#: src/wayland_vnc/probe.py
+msgid "Mutter capture and remote-input services detected; private build required."
+msgstr "Kutora kweMutter nemasevhisi ekupinza kure zvaonekwa; kuvakwa kwakavanzika kunodiwa."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "No"
+msgstr "Kwete"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "No Results Found"
+msgstr "Hapana zvawanikwa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No local network address found"
+msgstr "Hapana kero yenetiweki yemuno yawanikwa"
+
+#: src/wayland_vnc/settings.py
+msgid "No supported backend"
+msgstr "Hapana bhekiendi inotsigirwa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "No translations are installed, so the window stays in English."
+msgstr "Hapana shanduro dzakaiswa, saka hwindo rinoramba riri muChirungu."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "None"
+msgstr "Hapana"
+
+#: src/wayland_vnc/settings.py
+msgid "None advertised"
+msgstr "Hapana chakaziviswa"
+
+#: src/wayland_vnc/settings.py
+msgid "None available"
+msgstr "Hapana chiripo"
+
+#: src/wayland_vnc/settings.py
+msgid "None checked"
+msgstr "Hapana chakatariswa"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "None detected"
+msgstr "Hapana chakaonekwa"
+
+#: src/wayland_vnc/settings.py
+msgid "Not advertised"
+msgstr "Hazvina kuziviswa"
+
+#: src/wayland_vnc/settings.py
+msgid "Not checked"
+msgstr "Hazvina kutariswa"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Not installed"
+msgstr "Hazvina kuiswa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not provisioned"
+msgstr "Hazvina kugadzirirwa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Not set"
+msgstr "Hazvina kuiswa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Open the main menu"
+msgstr "Vhura menyu huru"
+
+#: src/wayland_vnc/settings_app.py
+msgid "PUBLIC ADDRESS - reachable beyond the local network"
+msgstr "KERO YEVESE - inosvikika kunze kwenetiweki yemuno"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Password"
+msgstr "Pasiwedhi"
+
+#: src/wayland_vnc/runtime.py
+msgid "Password must be 6-64 ASCII characters"
+msgstr "Pasiwedhi inofanira kuva mavara eASCII 6-64"
+
+#: src/wayland_vnc/settings_dialogs.py src/wayland_vnc/runtime.py
+msgid "Passwords did not match"
+msgstr "Mapasiwedhi haana kufanana"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Port"
+msgstr "Poti"
+
+#: src/wayland_vnc/runtime.py
+msgid "Port must be an unprivileged TCP port"
+msgstr "Poti inofanira kuva poti yeTCP isina ropafadzo"
+
+#: src/wayland_vnc/settings.py
+msgid "Portals"
+msgstr "Mapotari"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Project Website"
+msgstr "Webhusaiti yechirongwa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Quit"
+msgstr "Buda"
+
+#: src/wayland_vnc/settings.py
+msgid "Ready to Install"
+msgstr "Yakagadzirira kuiswa"
+
+#: src/wayland_vnc/settings.py
+msgid "RealVNC Viewer, a client; not needed to serve"
+msgstr "RealVNC Viewer, mutengi; haidiwi kuti ushande"
+
+#: src/wayland_vnc/settings.py
+msgid "Reason"
+msgstr "Chikonzero"
+
+#: src/wayland_vnc/settings.py
+msgid "Release Targets"
+msgstr "Zvinangwa zvekuburitsa"
+
+#: src/wayland_vnc/settings.py
+msgid "RemoteDesktop Portal"
+msgstr "Potari yeRemoteDesktop"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Report an Issue"
+msgstr "Shuma dambudziko"
+
+#: src/wayland_vnc/probe.py
+msgid "Required capture AND input capabilities were not detected."
+msgstr "Kugona kwekutora NEkupinza kunodiwa hakuna kuonekwa."
+
+#: src/wayland_vnc/settings_app.py
+msgid "Running Now"
+msgstr "Iri kumhanya zvino"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Save"
+msgstr "Chengeta"
+
+#: src/wayland_vnc/settings.py
+msgid "ScreenCast Portal"
+msgstr "Potari yeScreenCast"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search"
+msgstr "Tsvaga"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search diagnostics"
+msgstr "Tsvaga kuongorora"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Search languages"
+msgstr "Tsvaga mitauro"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Served by GNOME Remote Desktop VNC (port 5900); exposure follows GNOME Settings > Sharing"
+msgstr "Inoshandiswa neGNOME Remote Desktop VNC (poti 5900); kubuda kunotevera GNOME Settings > Sharing"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Server Configuration"
+msgstr "Kugadzirisa seva"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Service"
+msgstr "Sevhisi"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Session"
+msgstr "Sesheni"
+
+#: src/wayland_vnc/settings.py
+msgid "Session Type"
+msgstr "Rudzi rwesesheni"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Set Password"
+msgstr "Isa pasiwedhi"
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_dialogs.py
+msgid "Set Viewer Password"
+msgstr "Isa pasiwedhi yemuoni"
+
+#: src/wayland_vnc/settings.py
+msgid "Set a viewer password first"
+msgstr "Tanga waisa pasiwedhi yemuoni"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Start at Login"
+msgstr "Tanga pakupinda"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Status"
+msgstr "Mamiriro"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "Stored (%s)"
+msgstr "Yakachengetwa (%s)"
+
+#: src/wayland_vnc/settings.py
+msgid "Targeted"
+msgstr "Yakanangwa"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The settings window needs GTK4 and libadwaita (install python3-gi, gir1.2-gtk-4.0 and gir1.2-adw-1)"
+msgstr "Hwindo rezvirongwa rinoda GTK4 nelibadwaita (isa python3-gi, gir1.2-gtk-4.0 negir1.2-adw-1)"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "The settings window needs libadwaita %(needed)s or newer; this system has %(found)s"
+msgstr "Hwindo rezvirongwa rinoda libadwaita %(needed)s kana itsva; sisitimu iyi ine %(found)s"
+
+#: src/wayland_vnc/settings_app.py
+msgid "The window follows your desktop's language unless you choose another."
+msgstr "Hwindo rinotevera mutauro wedhesikitopu yako kunze kwekunge wasarudza mumwe."
+
+#: src/wayland_vnc/runtime.py
+msgid "This desktop serves VNC through GNOME Remote Desktop, which accepts passwords of at most 8 characters"
+msgstr "Dhesikitopu iyi inopa VNC kuburikidza neGNOME Remote Desktop, iyo inogamuchira mapasiwedhi asingapfuuri mavara 8"
+
+#: src/wayland_vnc/settings.py
+msgid "This desktop's backend always listens on this computer only"
+msgstr "Hwaro hwedesktop ino hunogara huchiteerera pakomputa ino chete"
+
+#: src/wayland_vnc/settings.py
+msgid "TigerVNC server, for KDE Plasma"
+msgstr "Seva yeTigerVNC, yeKDE Plasma"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Try a different search."
+msgstr "Edza kutsvaga kwakasiyana."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Type these into RealVNC Viewer on the other device. Use the eye to reveal the current password. Stored with mode 600."
+msgstr "Nyora izvi muRealVNC Viewer pane mumwe mudziyo. Shandisa ziso kuratidza pasiwedhi iripo. Yakachengetwa nemodhi 600."
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Username"
+msgstr "Zita remushandisi"
+
+#: src/wayland_vnc/runtime.py
+msgid "Username must be printable ASCII"
+msgstr "Zita remushandisi rinofanira kuva ASCII inoprindwa"
+
+#: src/wayland_vnc/settings.py
+msgid "Verdict"
+msgstr "Mutongo"
+
+#: src/wayland_vnc/settings_app.py src/wayland_vnc/settings_dialogs.py
+msgid "Viewer Credential"
+msgstr "Chitupa chemuoni"
+
+#: src/wayland_vnc/settings_app.py
+msgid "Viewer password saved"
+msgstr "Pasiwedhi yemuoni yachengetwa"
+
+#: src/wayland_vnc/settings.py
+msgid "WayVNC server, for wlroots compositors"
+msgstr "Seva yeWayVNC, yevabatanidzi vewlroots"
+
+#: src/wayland_vnc/settings.py
+msgid "Wayland Protocols"
+msgstr "Maprotokoro eWayland"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "Wayland VNC"
+msgstr "Wayland VNC"
+
+#: src/wayland_vnc/settings_dialogs.py
+msgid "What this desktop advertises, and what it means for remote access."
+msgstr "Zvinoziviswa nedhesikitopu iyi, uye zvazvinoreva pakusvika kure."
+
+#: src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
+msgid "Yes"
+msgstr "Hongu"
+
+#: src/wayland_vnc/settings_app.py
+msgid "every network this computer is on"
+msgstr "mitandao yese iyo komputa ino yakabatana nayo"
+
+#: src/wayland_vnc/settings_app.py
+msgid "local network only"
+msgstr "mutandao wemuno chete"
+
+#: src/wayland_vnc/settings.py
+msgid "mDNS name"
+msgstr "Zita re-mDNS"
+
+#: src/wayland_vnc/settings_app.py
+#, python-format
+msgid "mode %s (too open)"
+msgstr "modhi %s (yakavhurika zvakanyanya)"
+
+#: src/wayland_vnc/settings_app.py
+msgid "mode 600"
+msgstr "modhi 600"
+
+#: src/wayland_vnc/settings_app.py
+msgid "this machine only"
+msgstr "muchina uyu chete"
+
+#: src/wayland_vnc/settings.py
+msgid "unit is not installed"
+msgstr "yuniti haina kuiswa"
+
+#: src/wayland_vnc/settings.py
+msgid "unknown"
+msgstr "hazvizivikanwi"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe Wayland protocols"
+msgstr "inoshandiswa kuongorora maprotokoro eWayland"
+
+#: src/wayland_vnc/settings.py
+msgid "used to probe portals over D-Bus"
+msgstr "inoshandiswa kuongorora mapotari kuburikidza neD-Bus"
+
+#~ msgid "Qualification"
+#~ msgstr "Kukodzera"
+
+#~ msgid "0.0.0.0 makes the server reachable from devices on your local network; the service still blocks the internet. 127.0.0.1 limits it to this machine. Ports at or below 1024 are refused."
+#~ msgstr "0.0.0.0 inoita kuti seva isvikike nemidziyo iri panetiweki yako yemuno; sevhisi ichiri kuvhara indaneti. 127.0.0.1 inoiganhura kumuchina uyu chete. Mapoti ari pa 1024 kana pasi anorambwa."
+
+#~ msgid "local network only; internet blocked by the unit"
+#~ msgstr "netiweki yemuno chete; indaneti yakavharwa neyuniti"

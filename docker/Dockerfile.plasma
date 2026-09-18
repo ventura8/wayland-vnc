@@ -1,0 +1,51 @@
+# Development fixture only; package snapshot locking is required before qualification.
+# Stage 1 builds TigerVNC w0vncserver from the checksum-verified upstream archive pinned
+# in sources.json. Only the Wayland server targets are built; no X11 server is installed.
+FROM ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367 AS tigervnc-build
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl cmake g++ make pkg-config libpixman-1-dev zlib1g-dev libjpeg-dev libgnutls28-dev \
+    nettle-dev libglib2.0-dev libpipewire-0.3-dev uuid-dev libwayland-dev libxkbcommon-dev \
+    libpam0g-dev libx11-dev libxext-dev libxtst-dev libxdamage-dev libxfixes-dev libxrandr-dev \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /build
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+# The archive digest must match sources.json; a mismatch fails the build.
+RUN curl -fsSL -o /tmp/tigervnc.tar.gz \
+    https://codeload.github.com/TigerVNC/tigervnc/tar.gz/refs/tags/v1.16.2 \
+    && echo "b107c0c8b8a962594281690366c24186e95c2ea4a169acbc0076aa62ed01f467  /tmp/tigervnc.tar.gz" \
+    | sha256sum -c - \
+    && tar xzf /tmp/tigervnc.tar.gz --strip-components=1 \
+    && cmake -S . -B out -DCMAKE_BUILD_TYPE=Release -DENABLE_WAYLAND=ON -DBUILD_VIEWER=OFF \
+    -DENABLE_NLS=OFF -DENABLE_H264=OFF -DINSTALL_SYSTEMD_UNITS=OFF \
+    && cmake --build out --target w0vncserver w0vncserver-forget vncpasswd -j "$(nproc)" \
+    && install -d /opt/wayland-vnc/tigervnc/bin \
+    && install -m 755 out/unix/w0vncserver/w0vncserver out/unix/w0vncserver/w0vncserver-forget \
+    out/unix/vncpasswd/vncpasswd /opt/wayland-vnc/tigervnc/bin/
+
+# Stage 2: genuine KWin (virtual backend, QPainter compositing), PipeWire, and the KDE
+# RemoteDesktop/ScreenCast portals. No GPU, no X11, no host desktop access.
+FROM ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    kwin-wayland plasma-workspace plasma-desktop kscreen xdg-desktop-portal xdg-desktop-portal-kde \
+    pipewire wireplumber libpipewire-0.3-0t64 libgnutls30t64 libnettle8t64 libhogweed6t64 \
+    libjpeg8 libpixman-1-0 libuuid1 libwayland-client0 libxkbcommon0 \
+    dbus-daemon dbus-user-session libglib2.0-bin at-spi2-core python3 python3-gi python3-pyatspi \
+    python3-cairo python3-gi-cairo gir1.2-gtk-4.0 libgl1-mesa-dri fonts-dejavu-core \
+    libcap2-bin openssl \
+    && rm -rf /var/lib/apt/lists/* \
+    && usermod --login fixture --home /home/fixture --move-home ubuntu \
+    && groupmod --new-name fixture ubuntu \
+    && install -d -m 700 -o fixture -g fixture /tmp/wayland-vnc-runtime
+COPY --from=tigervnc-build /opt/wayland-vnc/tigervnc /opt/wayland-vnc/tigervnc
+COPY tests/fixtures /fixture
+COPY src/wayland_vnc /fixture/wayland_vnc
+# kwin_wayland carries cap_sys_nice, which no-new-privileges refuses to exec; the fixture
+# does not need realtime priority. Xwayland is replaced by the fail-closed stub.
+RUN setcap -r /usr/bin/kwin_wayland \
+    && install -m 755 /fixture/labwc/Xwayland-disabled /usr/bin/Xwayland
+USER fixture
+ENV XDG_RUNTIME_DIR=/tmp/wayland-vnc-runtime HOME=/home/fixture LANG=C.UTF-8 \
+    XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=KDE XDG_MENU_PREFIX=plasma- \
+    XDG_DATA_DIRS=/usr/local/share:/usr/share QT_QPA_PLATFORM=wayland \
+    QT_LINUX_ACCESSIBILITY_ALWAYS_ON=1 GDK_BACKEND=wayland GSK_RENDERER=cairo GTK_A11Y=none FIXTURE_COMPOSITOR=plasma
+ENTRYPOINT ["dbus-run-session", "--", "python3", "/fixture/plasma-session.py"]

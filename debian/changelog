@@ -1,0 +1,20 @@
+wayland-vnc (1.0.0) resolute; urgency=medium
+
+  * Initial release of the Wayland VNC server toolkit for RealVNC viewers.
+  * Installs a hardened systemd *user* unit running WayVNC inside the logged-in
+    Wayland session, and enables and starts it for every logged-in user. A random
+    viewer password is generated on first start, so it is never unauthenticated.
+  * Binds 127.0.0.1:5900, this machine only, by default. Local Network Access is
+    one switch in the settings app: on, the server binds every interface and is
+    reachable from every network the machine is on (a user unit cannot fence that,
+    so no such claim is made); off, it is back to this machine only.
+  * GTK4/libadwaita settings application, translated into 101 languages, following
+    the desktop's own language by default, with diacritics-tolerant search and a
+    verified right-to-left layout.
+  * On GNOME, requires the VNC listener to belong to this session's daemon and
+    adopts the daemon's keyring password into the stored credential. The patched
+    GNOME Remote Desktop backend ships separately as wayland-vnc-grd.
+  * Read-only compositor/portal/capability probing (doctor/status), provisioning
+    helpers, and the published qualification schema and safety documentation.
+
+ -- ventura8 <alexandrescu.sergiu@gmail.com>  Mon, 14 Sep 2026 00:00:00 +0300

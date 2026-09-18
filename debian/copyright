@@ -1,0 +1,38 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: wayland-vnc
+Source: https://github.com/ventura8/wayland-vnc
+
+Files: *
+Copyright: 2026 Sergiu Alexandrescu
+License: GPL-2.0-or-later
+
+Files: patches/gnome-remote-desktop/*
+Comment: Unified diffs against GNOME Remote Desktop 50.2. The context and the lines
+ they modify are upstream's, so upstream's copyright applies to those parts; the
+ changes themselves are this project's. The source package ships these patches, the
+ binary package does not.
+Copyright: 2015-2026 The GNOME Remote Desktop contributors
+           2026 Sergiu Alexandrescu
+License: GPL-2.0-or-later
+
+Files: patches/libvncserver/*
+Comment: Unified diffs against LibVNCServer 0.9.15, which itself derives from the
+ original VNC released by AT&T Laboratories Cambridge. Same split as above: upstream
+ owns the context, this project owns the changes.
+Copyright: 1999 AT&T Laboratories Cambridge
+           2001-2026 The LibVNCServer contributors
+           2026 Sergiu Alexandrescu
+License: GPL-2.0-or-later
+
+License: GPL-2.0-or-later
+ This program is free software; you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the Free
+ Software Foundation; either version 2 of the License, or (at your option)
+ any later version.
+ .
+ This program is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ .
+ On Debian systems, the full text of the GNU General Public License version 2
+ can be found in /usr/share/common-licenses/GPL-2.

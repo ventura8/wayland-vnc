@@ -1,0 +1,25 @@
+#!/usr/bin/make -f
+export DH_VERBOSE = 1
+SHELL := /bin/bash
+
+%:
+	dh $@ --buildsystem=none
+
+override_dh_auto_build:
+	@echo "No upstream build step (native Python diagnostic package)."
+
+override_dh_auto_test:
+ifeq (,$(findstring nocheck,$(DEB_BUILD_OPTIONS)))
+	# Import the modules stage-payload.sh actually ships. image_evidence is
+	# qualification tooling (needs Pillow, not a build-dep, never packaged), so importing
+	# it here broke the clean Launchpad sbuild while passing in a CI container that had PIL.
+	PYTHONPATH=src python3 -c "import wayland_vnc.cli, wayland_vnc.runtime, wayland_vnc.probe, wayland_vnc.backends, wayland_vnc.installer, wayland_vnc.tui, wayland_vnc.settings, wayland_vnc.i18n"
+else
+	@echo "Skipping dh_auto_test (DEB_BUILD_OPTIONS contains nocheck)."
+endif
+
+override_dh_auto_install:
+	"$(CURDIR)/packaging/stage-payload.sh" "$(CURDIR)/debian/wayland-vnc"
+
+override_dh_dwz:
+	@echo "Skipping dh_dwz (no native ELF payload)."

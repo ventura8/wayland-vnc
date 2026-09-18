@@ -1,0 +1,40 @@
+Subject: Private build: keep the PipeWire data loop off realtime scheduling
+Base: GNOME Remote Desktop 50.2 after the earlier private patches
+License: GPL-2.0-or-later (upstream-derived)
+Status: private build only; the distribution's daemon has the same exposure
+
+libpipewire's client configuration loads module-rt, which asks rtkit to schedule
+the stream's data loop thread SCHED_RR and, because rtkit demands it, lowers the
+process's RLIMIT_RTTIME to rtkit's ceiling (200 ms on Ubuntu). The kernel sends
+SIGKILL to a realtime thread that consumes that much CPU without sleeping once.
+The daemon receives the screen in system memory (wayland-vnc disables DMA-BUF
+import) and copies every frame on that thread: 33 MB per frame at 3840x2160, and
+when frames arrive faster than the copies finish, epoll never blocks and the
+budget runs out. Measured on 2026-09-17 with RealVNC Viewer 7.8.0 for Windows
+against a 4K session: the loop burnt 239 ms of CPU in 250 ms of wall time and
+the daemon died mid-stream in five sessions out of six. The process's own
+limits and rtkit's are outside a user unit's reach, and module-rt has no
+environment switch, so the daemon says so itself: `module.rt = false` is the
+condition under which client.conf (PipeWire 1.0 and later) skips module-rt.
+The loop stays an ordinary thread, no limit is set, and a frame it is late for
+is dropped by PipeWire as before. Older PipeWire ignores the property.
+--- a/src/grd-vnc-pipewire-stream.c
++++ b/src/grd-vnc-pipewire-stream.c
+@@ -1223,8 +1223,15 @@
+ 
+   stream->pipewire_source = (GSource *) pipewire_source;
+ 
+-  stream->pipewire_context = pw_context_new (pipewire_source->pipewire_loop,
+-                                             NULL, 0);
++  /* wayland-vnc: keep the data loop an ordinary thread. module.rt is the
++   * condition under which libpipewire's client.conf loads module-rt, and that
++   * module would make the loop realtime with a 200 ms RLIMIT_RTTIME budget the
++   * per-frame copies of a 4K stream exceed (the kernel then sends SIGKILL).
++   * The context takes ownership of the properties. */
++  stream->pipewire_context =
++    pw_context_new (pipewire_source->pipewire_loop,
++                    pw_properties_new ("module.rt", "false", NULL),
++                    0);
+   if (!stream->pipewire_context)
+     {
+       g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,

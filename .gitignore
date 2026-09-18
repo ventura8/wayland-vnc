@@ -31,6 +31,8 @@ MANIFEST
 #   before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+# ...but the RPM packaging source is checked in; it is authored, not generated.
+!packaging/rpm/*.spec
 
 # Installer logs
 pip-log.txt
@@ -54,6 +56,9 @@ cover/
 # Translations
 *.mo
 *.pot
+# ...but the translation template IS source: translators work from it, and the
+# pipeline compares it against the marked strings to catch a stale catalogue.
+!po/wayland-vnc.pot
 
 # Django stuff:
 *.log
@@ -209,6 +214,55 @@ tempCodeRunnerFile.py
 # PyPI configuration file
 .pypirc
 
+# wayland-vnc build and qualification outputs
+/artifacts/
+/vendor/
+/htmlcov/
+/coverage.json
+/.coverage*
+
+# Android emulators and proprietary RealVNC application files
+*.apk
+*.apks
+*.aab
+*.avd/
+*.vnc
+
+# Credentials, generated keys, certificates, and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+credentials/
+secrets/
+
+# Native build products and crash/debug output
+compile_commands.json
+CMakeCache.txt
+CMakeFiles/
+meson-private/
+meson-logs/
+Testing/
+core
+core.*
+*.ddeb
+*.deb
+*.rpm
+*.pkg.tar.*
+
+# Editors and operating-system noise
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
@@ -216,3 +270,24 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Packaging build outputs
+/packaging/appimage/AppDir/
+/packaging/appimage/appimagetool
+/packaging/appimage/appimagetool-*
+/packaging/flatpak/builddir/
+/packaging/flatpak/repo/
+/.flatpak-builder/
+/packaging/snap/parts/
+/packaging/snap/stage/
+/packaging/snap/prime/
+/packaging/snap/*.snap
+/debian/wayland-vnc/
+/debian/.debhelper/
+/debian/files
+/debian/*.substvars
+/debian/debhelper-build-stamp
+/reports/
+
+# KVM guest artifacts
+/artifacts/kvm/

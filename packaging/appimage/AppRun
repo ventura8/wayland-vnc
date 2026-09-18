@@ -1,0 +1,17 @@
+#!/bin/sh
+# AppImage entry point. A desktop launch (no arguments) opens the settings window,
+# which is what a person double-clicking an AppImage expects; arguments go to the CLI,
+# so `./wayland-vnc.AppImage doctor` still works from a terminal.
+HERE="$(dirname "$(readlink -f "$0")")"
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONPATH="$HERE/usr/lib/wayland-vnc"
+# The image bundles the product, not its runtimes: Python 3 comes from the host, as do
+# WayVNC and GTK for the window. Say so plainly instead of failing on a missing binary.
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "wayland-vnc: this AppImage needs the host's python3 (>= 3.11); install it first." >&2
+  exit 2
+fi
+if [ "$#" -eq 0 ]; then
+  exec python3 -c "from wayland_vnc.settings_app import main; raise SystemExit(main([]))"
+fi
+exec python3 -c "from wayland_vnc.cli import main; raise SystemExit(main())" "$@"

@@ -1,0 +1,53 @@
+Source: wayland-vnc-grd
+Section: admin
+Priority: optional
+Standards-Version: 4.7.2
+Rules-Requires-Root: no
+Maintainer: ventura8 <alexandrescu.sergiu@gmail.com>
+Homepage: https://github.com/ventura8/wayland-vnc
+Vcs-Git: https://github.com/ventura8/wayland-vnc.git
+Vcs-Browser: https://github.com/ventura8/wayland-vnc
+Build-Depends:
+ debhelper-compat (= 13),
+ cmake,
+ meson,
+ ninja-build,
+ pkg-config,
+ patch,
+ xz-utils,
+ zlib1g-dev,
+ libjpeg-dev,
+ libpng-dev,
+ libglib2.0-dev,
+ libglib2.0-bin,
+ libpipewire-0.3-dev,
+ libcairo2-dev,
+ libdrm-dev,
+ libepoxy-dev,
+ libei-dev,
+ libnotify-dev,
+ libsecret-1-dev,
+ libkrb5-dev,
+ libtss2-dev,
+ libxkbcommon-dev,
+ libdbus-1-dev
+
+Package: wayland-vnc-grd
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ gnome-remote-desktop
+Enhances: wayland-vnc
+Description: GNOME Remote Desktop VNC backend, patched, for wayland-vnc
+ The project's private build of GNOME Remote Desktop 50.2 and LibVNCServer 0.9.15
+ with the wayland-vnc patch series: no crash when a client disconnects, the colour
+ depth the encoder really uses, hung-up clients dropped from the connection queue,
+ every client message processed before an update is sent, and the PipeWire data
+ loop kept off the realtime scheduler so a 4K stream is not killed by the
+ watchdog. Installed under /opt/wayland-vnc and run in place of the distribution
+ daemon through a systemd user drop-in; the distribution package stays installed,
+ and removing this one puts it back.
+ .
+ Built from the checksum-pinned upstream tarballs vendored in this source package
+ (sources.json in the wayland-vnc repository), so it builds without network access.

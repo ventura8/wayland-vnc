@@ -1,0 +1,69 @@
+Subject: Private build: honour WAYLAND_VNC_LISTEN_ADDRESS for the VNC listener
+Base: GNOME Remote Desktop 50.2 after the earlier private patches
+License: GPL-2.0-or-later (upstream-derived)
+Status: private build only; wayland-vnc binds loopback unless local network access is on
+
+Upstream binds the VNC listener on every interface (g_socket_listener_add_inet_port
+with a NULL source). A systemd user unit cannot fence that, so wayland-vnc needs the
+daemon itself to bind one address: 127.0.0.1 by default (an unset variable included,
+so a daemon nothing has configured yet is still this computer only), and every
+interface (the upstream listener, IPv4 and IPv6) only when the user turns local
+network access on, which wayland-vnc expresses as an explicitly empty value. An
+unparseable address fails the start rather than falling back to every interface.
+--- a/src/grd-vnc-server.c
++++ b/src/grd-vnc-server.c
+@@ -148,6 +148,7 @@
+   int vnc_port;
+   uint16_t selected_vnc_port = 0;
+   gboolean negotiate_port;
++  const char *listen_address;
+   GrdDBusRemoteDesktopVncServer *vnc_server_iface;
+ 
+   g_object_get (G_OBJECT (settings),
+@@ -156,11 +157,41 @@
+                 NULL);
+ 
+   g_debug ("[VNC] Trying to bind to TCP socket:");
+-  if (!grd_bind_socket (G_SOCKET_LISTENER (vnc_server),
+-                        vnc_port,
+-                        &selected_vnc_port,
+-                        negotiate_port,
+-                        error))
++  /* wayland-vnc private build: WAYLAND_VNC_LISTEN_ADDRESS names the one address
++   * the VNC listener binds. Unset means 127.0.0.1, this computer only, which is
++   * the wayland-vnc default even when nothing has configured the daemon yet; an
++   * explicitly empty value is the user's local network opt-in and keeps upstream's
++   * listener on every interface. */
++  listen_address = g_getenv ("WAYLAND_VNC_LISTEN_ADDRESS");
++  if (!listen_address)
++    listen_address = "127.0.0.1";
++  if (*listen_address)
++    {
++      g_autoptr (GInetAddress) inet_address = NULL;
++      g_autoptr (GSocketAddress) socket_address = NULL;
++
++      inet_address = g_inet_address_new_from_string (listen_address);
++      if (!inet_address)
++        {
++          g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT,
++                       "Invalid WAYLAND_VNC_LISTEN_ADDRESS '%s'", listen_address);
++          return FALSE;
++        }
++      socket_address = g_inet_socket_address_new (inet_address, vnc_port);
++      if (!g_socket_listener_add_address (G_SOCKET_LISTENER (vnc_server),
++                                          socket_address,
++                                          G_SOCKET_TYPE_STREAM,
++                                          G_SOCKET_PROTOCOL_TCP,
++                                          NULL, NULL, error))
++        return FALSE;
++      selected_vnc_port = vnc_port;
++      g_debug ("[VNC] Bound to %s:%d", listen_address, vnc_port);
++    }
++  else if (!grd_bind_socket (G_SOCKET_LISTENER (vnc_server),
++                             vnc_port,
++                             &selected_vnc_port,
++                             negotiate_port,
++                             error))
+     return FALSE;
+ 
+   g_assert (selected_vnc_port != 0);

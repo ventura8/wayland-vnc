@@ -1,0 +1,129 @@
+#cloud-config
+# Isolated KVM guest for a wayland-vnc target that runs on a wlroots-style compositor
+# (sway, wayfire, Xfce or LXQt on labwc, Hyprland): the container fixture's session
+# script, scene and smoke contract
+# on a virtio-gpu KMS device with a seat, so the mode, hot-plug and lock scenarios run
+# against real DRM outputs and the machine can go through ACPI S3. The repo is shared
+# read-only over 9p at /mnt/repo for the first boot only. The builder substitutes the
+# double-underscored placeholders; every secret sits in a literal block scalar.
+hostname: wayland-vnc-__TARGET__
+users:
+  # The container fixtures run as `fixture` (uid 1000); the session script insists on
+  # that name and rewrites this account's password for the lock scenario.
+  - name: fixture
+    uid: 1000
+    groups: [video, render, input]
+    shell: /bin/bash
+    lock_passwd: false
+    passwd: __PASSWORD_HASH__
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+
+package_update: true
+packages:
+__PACKAGES__
+  - seatd
+  - openssl
+  - qemu-guest-agent
+
+write_files:
+  - path: /etc/systemd/system/wayland-vnc-guest.service
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=wayland-vnc __TARGET__ guest fixture
+      After=multi-user.target systemd-logind.service seatd.service
+      Wants=seatd.service
+      [Service]
+      User=fixture
+      # No PAM session on purpose: seatd provides the seat (the account is in the
+      # video group), and a logind session would move the fixture's processes into
+      # a session scope where the unit's stop could not reach them -- the next start
+      # would then find the DRM device busy.
+      Type=simple
+      StandardOutput=journal+console
+      StandardError=journal+console
+      # A runtime directory of the fixture's own: /run/user/1000 is logind's, created
+      # and removed with logind sessions this unit deliberately does not have.
+      Environment=XDG_RUNTIME_DIR=/run/wayland-vnc-runtime
+      Environment=XDG_SESSION_TYPE=wayland
+      Environment=HOME=/home/fixture
+      # The DRM output carries the desktop; the headless sub-backend provides the
+      # output the monitor-change scenario plugs in (a spare kept off, or for sway
+      # one created on request), and llvmpipe the GLES the compositors want.
+      Environment=WLR_BACKENDS=drm,headless
+      Environment=WLR_HEADLESS_OUTPUTS=__HEADLESS_OUTPUTS__
+      Environment=WLR_RENDERER=gles2
+      # virtio-gpu without virgl is llvmpipe; wlroots refuses software GLES unless told.
+      Environment=WLR_RENDERER_ALLOW_SOFTWARE=1
+      Environment=WLR_NO_HARDWARE_CURSORS=1
+      Environment=FIXTURE_COMPOSITOR=__TARGET__
+      Environment=FIXTURE_OUTPUT=Virtual-1
+      Environment=FIXTURE_SPARE_OUTPUT=HEADLESS-1
+      Environment=WAYLAND_VNC_CREDENTIAL_FILE=/home/fixture/.config/wayland-vnc/fixture.conf
+      Environment=WAYLAND_VNC_SERVER_KEY_FILE=/home/fixture/.config/wayland-vnc/rsa.pem
+      Environment=GDK_BACKEND=wayland
+      Environment=GSK_RENDERER=cairo
+      Environment=GTK_A11Y=none
+      Environment=QT_QPA_PLATFORM=wayland
+      RuntimeDirectory=wayland-vnc-runtime
+      RuntimeDirectoryMode=0700
+      ExecStart=/usr/bin/dbus-run-session -- /usr/bin/python3 /fixture/sway-session.py
+      # Hyprland 0.53 segfaults on its way out; writing that core keeps DRM master
+      # busy long enough for the next instance to block. No core, bounded stop.
+      LimitCORE=0
+      KillMode=control-group
+      TimeoutStopSec=15
+      Restart=no
+      [Install]
+      WantedBy=multi-user.target
+  # The fixture credential and the pinned server identity, exactly the files the
+  # container fixtures get mounted; deferred so the account exists.
+  - path: /home/fixture/.config/wayland-vnc/fixture.conf
+    owner: fixture:fixture
+    permissions: "0600"
+    defer: true
+    content: |
+      username=fixture
+      password=__VNC_PASSWORD__
+  - path: /home/fixture/.config/wayland-vnc/rsa.pem
+    owner: fixture:fixture
+    permissions: "0600"
+    defer: true
+    content: |
+__SERVER_KEY__
+
+runcmd:
+  - [groupadd, -f, seat]
+  - [usermod, -aG, seat, fixture]
+  - [systemctl, enable, seatd.service]
+  - [systemctl, enable, "--now", qemu-guest-agent.service]
+  - [mkdir, -p, /mnt/repo]
+  - "mount -t 9p -o trans=virtio,version=9p2000.L,ro repo /mnt/repo"
+  # The container fixture layout: /fixture holds the session script, scene, configs
+  # and the product module; /opt/wayland-vnc holds the tree the smoke runs from.
+  # Copied out of the share: virtio-9p does not survive ACPI S3.
+  - [mkdir, -p, /opt/wayland-vnc]
+  - [cp, -a, /mnt/repo/tests/fixtures, /fixture]
+  - [cp, -a, /mnt/repo/src/wayland_vnc, /fixture/wayland_vnc]
+  - [cp, -a, /mnt/repo/src, /opt/wayland-vnc/src]
+  - [cp, -a, /mnt/repo/tests, /opt/wayland-vnc/tests]
+  - [install, -m, "755", /fixture/labwc/Xwayland-disabled, /usr/bin/Xwayland]
+  # Xfce's own labwc configuration next to the fixture's sequenced session command
+  # (only where Xfce is installed; see docker/Dockerfile.xfce-labwc).
+  - "sh -euc 'if [ -f /usr/share/xfce4/labwc/labwc-rc.xml ]; then install -m 644 /usr/share/xfce4/labwc/labwc-rc.xml /fixture/xfce-labwc/rc.xml; install -m 644 /usr/share/xfce4/labwc/labwc-environment /fixture/xfce-labwc/environment; fi'"
+  - [install, -m, "644", /fixture/autostart/wayland-vnc-scene.desktop, /etc/xdg/autostart/]
+  - "install -d -m 700 -o fixture -g fixture /home/fixture/.config /home/fixture/.config/lxqt"
+  - "install -m 644 -o fixture -g fixture /fixture/lxqt/session.conf /home/fixture/.config/lxqt/session.conf"
+  - [chown, -R, "fixture:fixture", /home/fixture/.config]
+  # The session script sets the lock password by rewriting this account's shadow
+  # entry itself, as it does in the containers.
+  - [chown, "root:fixture", /etc/shadow]
+  - [chmod, "660", /etc/shadow]
+  # The contract path the smoke checks use for the runtime directory, and where the
+  # runner learns which directory this guest's fixture uses.
+  - [ln, -sfn, /run/wayland-vnc-runtime, /tmp/wayland-vnc-runtime]
+  - "sh -euc 'echo /run/wayland-vnc-runtime > /run/wayland-vnc-guest-runtime'"
+  - [umount, /mnt/repo]
+  - [systemctl, daemon-reload]
+  - [systemctl, enable, "--now", wayland-vnc-guest.service]
+  - "sh -euc 'test -e /fixture/scene.py && test -x /usr/bin/Xwayland && test -d /opt/wayland-vnc/src && touch /run/wayland-vnc-guest-ready'"

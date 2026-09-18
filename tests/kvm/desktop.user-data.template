@@ -1,0 +1,176 @@
+#cloud-config
+# Isolated KVM guest for a full-desktop wayland-vnc target (GNOME or KDE Plasma): the
+# container fixture's session script, scene and smoke contract on a virtio-gpu KMS
+# device inside a real logind session, so the compositor drives real DRM outputs
+# (modes, a second connector, the desktop's own lock screen) and the machine can go
+# through ACPI S3. GNOME serves through the project's private GNOME Remote Desktop
+# build installed from its .deb; Plasma through the project's TigerVNC w0vncserver
+# copied from its fixture image. The repo is shared read-only over 9p at /mnt/repo for
+# the first boot only. The builder substitutes the double-underscored placeholders;
+# every secret sits in a literal block scalar.
+#
+# The compositors' DisplayConfig offers only the modes the connector advertises, and
+# QEMU's virtio-gpu advertises either 4K or 720p, never both -- so the connector is
+# given a custom EDID (720p + 1080p + 4K) through the kernel's drm.edid_firmware. That
+# is read at DRM module load, so cloud-init sets it on the first boot and reboots once;
+# the fixture starts on the second boot with all the modes present. (A runtime debugfs
+# edid_override does not take on virtio-gpu.)
+hostname: wayland-vnc-__TARGET__
+users:
+  - name: fixture
+    uid: 1000
+    groups: [video, render, input]
+    shell: /bin/bash
+    lock_passwd: false
+    # The desktop's own lock screen authenticates this account with PAM; the hash is
+    # the fixture password's, so the viewer unlocks with the credential it already has.
+    passwd: __PASSWORD_HASH__
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+
+package_update: true
+packages:
+__PACKAGES__
+  - openssl
+  - qemu-guest-agent
+
+write_files:
+  - path: /etc/systemd/system/wayland-vnc-guest.service
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=wayland-vnc __TARGET__ guest fixture
+      # Not After=multi-user.target: the readiness service is After this unit and
+      # WantedBy multi-user, so ordering after multi-user too would be a cycle (systemd
+      # then drops the readiness service). logind is all this needs.
+      After=systemd-logind.service
+      # First boot has no custom EDID yet (cloud-init reboots once to load it); the
+      # fixture starts on the second boot, when the connector advertises all the modes.
+      ConditionKernelCommandLine=drm.edid_firmware
+      [Service]
+      User=fixture
+      # A logind session on purpose: Mutter's and KWin's native backends take the
+      # seat and the DRM device through logind. logind then moves the processes into
+      # a session scope, so the runner's restart kills the fixture account's
+      # processes itself rather than trusting the unit's stop.
+      PAMName=login
+      TTYPath=/dev/tty1
+      Type=simple
+      StandardOutput=journal+console
+      StandardError=journal+console
+      Environment=XDG_RUNTIME_DIR=/run/user/1000
+      Environment=XDG_SESSION_TYPE=wayland
+      Environment=HOME=/home/fixture
+      Environment=FIXTURE_COMPOSITOR=__TARGET__
+      # The session script runs its compositor on the DRM device instead of a
+      # headless or virtual backend, and skips what only a container needs.
+      Environment=FIXTURE_DRM=1
+      Environment=FIXTURE_OUTPUT=Virtual-1
+      Environment=FIXTURE_SPARE_OUTPUT=Virtual-2
+      Environment=WAYLAND_VNC_CREDENTIAL_FILE=/home/fixture/.config/wayland-vnc/fixture.conf
+      Environment=WAYLAND_VNC_SERVER_KEY_FILE=/home/fixture/.config/wayland-vnc/rsa.pem
+      Environment=GDK_BACKEND=wayland
+      Environment=GSK_RENDERER=cairo
+      Environment=GTK_A11Y=none
+      # Software rendering: virtio-gpu without virgl is llvmpipe.
+      Environment=LIBGL_ALWAYS_SOFTWARE=1
+__DESKTOP_ENVIRONMENT__
+      ExecStart=/usr/bin/dbus-run-session -- /usr/bin/python3 /fixture/__SESSION_SCRIPT__
+      KillMode=control-group
+      TimeoutStopSec=20
+      Restart=no
+      [Install]
+      WantedBy=multi-user.target
+  - path: /home/fixture/.config/wayland-vnc/fixture.conf
+    owner: fixture:fixture
+    permissions: "0600"
+    defer: true
+    content: |
+      username=fixture
+      password=__VNC_PASSWORD__
+  - path: /home/fixture/.config/wayland-vnc/rsa.pem
+    owner: fixture:fixture
+    permissions: "0600"
+    defer: true
+    content: |
+__SERVER_KEY__
+  # GNOME's lock screen needs a GDM Manager on the system bus (gnome-shell builds its
+  # ScreenShield only when it finds one); the guest runs no display manager, so the
+  # stub stands in. Enabled below only where gnome-shell is installed.
+  - path: /etc/systemd/system/wayland-vnc-gdm-stub.service
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=wayland-vnc GDM Manager stub (so gnome-shell builds its lock screen)
+      Before=wayland-vnc-guest.service
+      [Service]
+      ExecStart=/usr/bin/python3 /fixture/gnome/gdm-stub.py
+      Restart=on-failure
+      [Install]
+      WantedBy=multi-user.target
+  # The custom EDID (a sacrificial timing the connector always prunes, then 4K + 1080p +
+  # 720p) loaded over BOTH virtio-gpu connectors by the kernel, and the cmdline that
+  # points at them. Virtual-2 gets it too so it is a connected, mode-capable second
+  # output the hot-plug scenario can enable and disable (a firmware EDID also forces the
+  # connector's status to connected). Read at DRM module load, so it needs the reboot
+  # cloud-init performs after provisioning.
+  - path: /lib/firmware/edid/wayland-vnc.bin
+    permissions: "0644"
+    encoding: b64
+    content: __EDID_B64__
+  - path: /etc/default/grub.d/99-wayland-vnc-edid.cfg
+    permissions: "0644"
+    content: |
+      GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT drm.edid_firmware=Virtual-1:edid/wayland-vnc.bin,Virtual-2:edid/wayland-vnc.bin"
+  # The runtime-directory markers and the readiness marker the runner waits for, as a
+  # service so they are recreated on the second (post-reboot) boot, after the fixture.
+  - path: /etc/systemd/system/wayland-vnc-guest-ready.service
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=wayland-vnc guest readiness markers
+      After=wayland-vnc-guest.service
+      Requires=wayland-vnc-guest.service
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      # Only on the post-EDID boot (the cmdline then carries the firmware override):
+      # on the first boot the runner must not see readiness, or it races the reboot.
+      ExecStart=/bin/sh -c 'grep -q drm.edid_firmware /proc/cmdline || exit 0; ln -sfn /run/user/1000 /tmp/wayland-vnc-runtime; echo /run/user/1000 > /run/wayland-vnc-guest-runtime; touch /run/wayland-vnc-guest-ready'
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - [systemctl, enable, "--now", qemu-guest-agent.service]
+  - [mkdir, -p, /mnt/repo]
+  - "mount -t 9p -o trans=virtio,version=9p2000.L,ro repo /mnt/repo"
+  - [mkdir, -p, /opt/wayland-vnc]
+  - [cp, -a, /mnt/repo/tests/fixtures, /fixture]
+  - [cp, -a, /mnt/repo/src/wayland_vnc, /fixture/wayland_vnc]
+  - [cp, -a, /mnt/repo/src, /opt/wayland-vnc/src]
+  - [cp, -a, /mnt/repo/tests, /opt/wayland-vnc/tests]
+  # The desktop packages bring a real Xwayland; the fixture contract is the fail-closed
+  # stub (the compositors run with X11 off).
+  - [install, -m, "755", /fixture/labwc/Xwayland-disabled, /usr/bin/Xwayland]
+  # GNOME's lock screen GDM Manager stub (enabled only where gnome-shell is present).
+  - [install, -m, "644", /fixture/gnome/gdm-stub-dbus.conf, /etc/dbus-1/system.d/wayland-vnc-gdm-stub.conf]
+  - "sh -euc 'command -v gnome-shell >/dev/null && systemctl enable wayland-vnc-gdm-stub.service || true'"
+  # The VNC server under test: GNOME's private daemon from the project's .deb, Plasma's
+  # TigerVNC w0vncserver from the fixture image. Whichever the target has.
+  - "sh -euc 'set -- /mnt/repo/artifacts/grd-deb/wayland-vnc-grd_*_amd64.deb; if [ -f \"$1\" ]; then DEBIAN_FRONTEND=noninteractive apt-get install -y \"$1\"; fi'"
+  - "sh -euc 'if [ -d /mnt/repo/artifacts/kvm/tigervnc ]; then cp -a /mnt/repo/artifacts/kvm/tigervnc /opt/wayland-vnc/tigervnc; fi'"
+  # The session script starts PipeWire itself, as in the container; the user manager
+  # must not race it with its own instance.
+  - [systemctl, --global, mask, pipewire.socket, pipewire.service, pipewire-pulse.socket, pipewire-pulse.service, wireplumber.service]
+  - [chown, -R, "fixture:fixture", /home/fixture/.config]
+  # Put the custom EDID on the kernel cmdline for the reboot below.
+  - [update-grub]
+  - [umount, /mnt/repo]
+  - [systemctl, enable, wayland-vnc-guest.service, wayland-vnc-guest-ready.service]
+  # The fixture is NOT started here: it starts on the reboot, once the kernel has read
+  # the custom EDID. cloud-init reboots once, and everything above is on disk, so the
+  # second boot brings the fixture (and the readiness markers) up with all modes present.
+
+power_state:
+  mode: reboot
+  condition: true
+  message: wayland-vnc guest rebooting once to load the custom EDID
