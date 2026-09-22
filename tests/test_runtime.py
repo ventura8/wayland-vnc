@@ -54,7 +54,8 @@ def test_set_password_writes_mode_600_and_matches(tmp_path):
     path = runtime.set_password(tmp_path, read_secret=lambda _prompt: next(secrets))
     assert stat.S_IMODE(path.stat().st_mode) == 0o600
     creds = runtime.read_credentials(tmp_path)
-    assert creds.username == "vnc" and creds.password == "hunter2x"
+    assert creds.username == "vnc"
+    assert creds.password == "hunter2x"
     mismatch = iter(["hunter2x", "different"])
     with pytest.raises(ValueError, match="did not match"):
         runtime.set_password(tmp_path, read_secret=lambda _prompt: next(mismatch))
@@ -76,12 +77,14 @@ def test_provision_binds_loopback_by_default_and_is_600_and_reuses_key(tmp_path)
     calls = []
     config = runtime.provision(tmp_path, generate_key=lambda p: calls.append(p) or fake_key(p))
     text = config.read_text(encoding="utf-8")
-    assert "address=127.0.0.1" in text and "enable_auth=true" in text
+    assert "address=127.0.0.1" in text
+    assert "enable_auth=true" in text
     assert runtime.lan_access(tmp_path) is False
     runtime.provision(tmp_path, address=runtime.LAN_ADDRESS, generate_key=fake_key)
     assert runtime.lan_access(tmp_path) is True
     assert "relax_encryption=false" in text
-    assert "username=vnc" in text and "password=hunter2x" in text
+    assert "username=vnc" in text
+    assert "password=hunter2x" in text
     assert stat.S_IMODE(config.stat().st_mode) == 0o600
     assert stat.S_IMODE((tmp_path / runtime.KEY_NAME).stat().st_mode) == 0o600
     # A second provision must not regenerate the key.
@@ -108,7 +111,8 @@ def test_serve_execs_wayvnc_when_ready(tmp_path):
         generate_key=fake_key,
     )
     assert execed["path"] == "/usr/bin/wayvnc"
-    assert execed["argv"][0] == "/usr/bin/wayvnc" and "--config" in execed["argv"]
+    assert execed["argv"][0] == "/usr/bin/wayvnc"
+    assert "--config" in execed["argv"]
 
 
 def test_serve_refuses_x11_missing_password_and_missing_binary(tmp_path):
@@ -131,7 +135,7 @@ def test_serve_refuses_x11_missing_password_and_missing_binary(tmp_path):
         )
 
 
-def test_serve_refuses_group_readable_config(tmp_path):
+def test_serve_refuses_group_readable_config(tmp_path, monkeypatch):
     runtime.set_password(tmp_path, read_secret=lambda _p: "hunter2x")
 
     def loosen_key(path):
@@ -146,18 +150,16 @@ def test_serve_refuses_group_readable_config(tmp_path):
         path.chmod(0o644)
         return path
 
-    runtime.provision = loose_provision
-    try:
-        with pytest.raises(RuntimeError, match="group/world accessible"):
-            runtime.serve(
-                tmp_path,
-                capabilities=WLR,
-                env={"XDG_SESSION_TYPE": "wayland"},
-                host=runtime.Host(lambda _n: "/usr/bin/wayvnc", lambda *_a: None),
-                generate_key=loosen_key,
-            )
-    finally:
-        runtime.provision = original
+    monkeypatch.setattr(runtime, "provision", loose_provision)
+    host = runtime.Host(lambda _n: "/usr/bin/wayvnc", lambda *_a: None)
+    with pytest.raises(RuntimeError, match="group/world accessible"):
+        runtime.serve(
+            tmp_path,
+            capabilities=WLR,
+            env={"XDG_SESSION_TYPE": "wayland"},
+            host=host,
+            generate_key=loosen_key,
+        )
 
 
 def test_serve_generates_a_credential_on_first_run(tmp_path, capsys):
@@ -174,14 +176,16 @@ def test_serve_generates_a_credential_on_first_run(tmp_path, capsys):
         generate_key=fake_key,
     )
     stored = runtime.read_credentials(tmp_path)
-    assert stored.username == "vnc" and 6 <= len(stored.password) <= 64
+    assert stored.username == "vnc"
+    assert 6 <= len(stored.password) <= 64
     path = tmp_path / runtime.CREDENTIALS_NAME
     assert format(path.stat().st_mode & 0o777, "03o") == "600"
     assert "random one was generated" in capsys.readouterr().err
     assert execed["path"] == "/usr/bin/wayvnc"
     # A second run keeps the same secret rather than rotating it.
     again, generated = runtime.ensure_credentials(tmp_path)
-    assert again == stored and generated is False
+    assert again == stored
+    assert generated is False
 
 
 GRD_PID = 4242  # what `systemctl show --property=MainPID` answers for the fake daemon
@@ -656,7 +660,8 @@ def test_apply_bind_restarts_wayvnc_and_the_private_grd_but_not_the_distribution
         )
         is None
     )
-    assert calls == [] and not runtime.grd_listen_dropin_path().exists()
+    assert calls == []
+    assert not runtime.grd_listen_dropin_path().exists()
     # GNOME with the private daemon: the drop-in is written and the daemon restarted.
     assert (
         runtime.apply_bind(
@@ -721,12 +726,13 @@ def test_require_wayland_session_fails_closed_on_an_unknown_session(env, allowed
 
 def test_serve_refuses_when_the_probe_found_no_backend(tmp_path):
     """Falling through to WayVNC here would start a server that cannot capture."""
+    host = runtime.Host(lambda _n: "/usr/bin/wayvnc", lambda *_a: None)
     with pytest.raises(RuntimeError, match="Refusing to serve"):
         runtime.serve(
             tmp_path,
             capabilities=NO_BACKEND,
             env={"XDG_SESSION_TYPE": "wayland"},
-            host=runtime.Host(lambda _n: "/usr/bin/wayvnc", lambda *_a: None),
+            host=host,
             generate_key=fake_key,
         )
 
@@ -735,12 +741,13 @@ def test_serve_refuses_a_backend_this_package_does_not_install(tmp_path):
     """Plasma is served by w0vncserver; launching WayVNC there is the wrong server."""
     backend, _reason = runtime.select_backend(PLASMA)
     assert backend == "w0vncserver", "fixture must actually select the KDE backend"
+    host = runtime.Host(lambda _n: "/usr/bin/wayvnc", lambda *_a: None)
     with pytest.raises(RuntimeError, match="w0vncserver"):
         runtime.serve(
             tmp_path,
             capabilities=PLASMA,
             env={"XDG_SESSION_TYPE": "wayland"},
-            host=runtime.Host(lambda _n: "/usr/bin/wayvnc", lambda *_a: None),
+            host=host,
             generate_key=fake_key,
         )
 

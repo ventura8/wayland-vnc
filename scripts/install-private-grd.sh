@@ -147,6 +147,10 @@ off)
   rm -f "$debug_dropin"
   echo "== daemon debug logging off =="
   ;;
+*)
+  echo "internal error: unknown debug setting '$debug'" >&2
+  exit 2
+  ;;
 esac
 systemctl --user daemon-reload
 systemctl --user reset-failed gnome-remote-desktop.service || true

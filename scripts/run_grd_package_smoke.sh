@@ -55,5 +55,5 @@ INNER
 
 echo "=== grd deb smoke: ubuntu:26.04 ==="
 docker run --rm --network bridge -v "$artifacts_dir:/pkg:ro" -v "$runner:/runner.sh:ro" \
-  "ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367" \
+  "ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78" \
   bash /runner.sh 2>&1 | tee reports/distro-logs/grd-deb-smoke-ubuntu-26.04.log

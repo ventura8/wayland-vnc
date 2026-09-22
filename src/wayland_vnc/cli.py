@@ -154,9 +154,9 @@ def main(argv: list[str] | None = None) -> int:
         result = handler(args)
     except (
         OSError,
+        # ValueError also covers json.JSONDecodeError, which derives from it.
         ValueError,
         RuntimeError,
-        json.JSONDecodeError,
         # default_key_generator shells out to openssl: a non-zero exit or a
         # timeout raises SubprocessError, which is not an OSError.
         subprocess.SubprocessError,

@@ -214,6 +214,9 @@ tempCodeRunnerFile.py
 # PyPI configuration file
 .pypirc
 
+# SonarQube scanner working directory (the report it uploads, plus its cache)
+/.scannerwork/
+
 # wayland-vnc build and qualification outputs
 /artifacts/
 /vendor/

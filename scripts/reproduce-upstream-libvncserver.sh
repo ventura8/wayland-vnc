@@ -307,5 +307,5 @@ docker run --rm --network bridge \
   -e TARBALL_URL="$tarball_url" -e TARBALL_SHA="$tarball_sha" -e WITH_FIX="$with_fix" \
   -v "$work/runner.sh:/runner.sh:ro" -v "$work/probe.py:/probe.py:ro" \
   -v "$PWD/patches/libvncserver:/patches:ro" \
-  "ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367" \
+  "ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78" \
   bash /runner.sh

@@ -251,9 +251,11 @@ def test_kwin_outputs_uses_gdbus_with_the_compositor_bus(monkeypatch):
 
     monkeypatch.setattr(fixture_smoke.subprocess, "run", fake_run)
     outputs = fixture_smoke.kwin_outputs("unix:path=/bus")
-    assert outputs[0]["width"] == 1920 and outputs[0]["compositing"] == "OpenGL"
+    assert outputs[0]["width"] == 1920
+    assert outputs[0]["compositing"] == "OpenGL"
     args, kwargs = calls[0]
-    assert args[0] == "/usr/bin/gdbus" and "org.kde.KWin.supportInformation" in args
+    assert args[0] == "/usr/bin/gdbus"
+    assert "org.kde.KWin.supportInformation" in args
     assert kwargs["env"]["DBUS_SESSION_BUS_ADDRESS"] == "unix:path=/bus"
     assert kwargs["timeout"] == 10
     Result.stdout = "42\n"
@@ -288,7 +290,8 @@ def test_gnome_profile_uses_the_mutter_helper(healthy, monkeypatch):
     finally:
         for listener in sockets:
             listener.close()
-    assert problems == {} and seen == ["unix:path=/g"]
+    assert problems == {}
+    assert seen == ["unix:path=/g"]
 
     calls = []
 
@@ -407,17 +410,19 @@ def test_wait_fails_closed_at_deadline(healthy):
 
 
 def test_timeout_bounds():
+    expectation = Expectation("sway", 1920, 1080)
     with pytest.raises(ValueError):
-        wait_for_checks(Expectation("sway", 1920, 1080), timeout=0)
+        wait_for_checks(expectation, timeout=0)
     with pytest.raises(ValueError):
-        wait_for_checks(Expectation("sway", 1920, 1080), timeout=fixture_smoke.MAX_TIMEOUT + 1)
+        wait_for_checks(expectation, timeout=fixture_smoke.MAX_TIMEOUT + 1)
 
 
 def test_main_reports_json_and_exit_status(healthy, monkeypatch, capsys):
     monkeypatch.setattr(fixture_smoke, "CONTAINER", healthy)
     assert fixture_smoke.main(["--fixture", "labwc", "--timeout", "1"]) == 0
     report = json.loads(capsys.readouterr().out)
-    assert report["fixture"] == "labwc" and report["compositor"] == "labwc"
+    assert report["fixture"] == "labwc"
+    assert report["compositor"] == "labwc"
     # Only the module under test gets the fake clock: patching time.monotonic itself
     # with an exhaustible iterator would hand StopIteration to anything else in the
     # process that looked at the clock during this test.
@@ -441,7 +446,8 @@ def test_wayvnc_outputs_uses_bounded_control_query(monkeypatch, tmp_path):
     args, kwargs = calls[0]
     assert args[0] == "/usr/bin/wayvncctl"
     assert str(tmp_path / "wayvncctl") in args
-    assert kwargs["timeout"] == 10 and kwargs["check"] is True
+    assert kwargs["timeout"] == 10
+    assert kwargs["check"] is True
     Result.stdout = json.dumps({"not": "a list"})
     with pytest.raises(ValueError):
         fixture_smoke.wayvnc_outputs(tmp_path / "wayvncctl")

@@ -181,7 +181,8 @@ def test_connect_answers_every_screen_in_order_and_keeps_the_secret_off_argv():
     assert "input tap 1425 672" in shells  # OK on "Continue connecting?"
     assert shells.count("input tap 1767 126") == 2  # identity CONTINUE, then auth CONTINUE
     assert "input text fixture" in shells
-    assert "input keyevent 66" in shells and "input keyevent 4" in shells
+    assert "input keyevent 66" in shells
+    assert "input keyevent 4" in shells
     # The password went over stdin, never as an argument of any process on the host.
     assert all("s3cr3tpw" not in " ".join(call) for call in scripted.calls)
     assert scripted.stdin == ["input text s3cr3tpw\n"]
@@ -207,17 +208,14 @@ def test_a_dropped_first_keystroke_is_noticed_and_the_field_retyped():
     assert all("s3cr3tpw" not in " ".join(call) for call in scripted.calls)
 
 
-def test_connect_times_out_when_the_desktop_never_comes():
+def test_connect_times_out_when_the_desktop_never_comes(monkeypatch):
     viewer, scripted = _viewer([AUTH_XML])
     scripted.activity = DESKTOP_ACTIVITY.replace("DesktopActivity", "ConnectionChooserActivity")
     clock = iter([0.0] * 3 + [1000.0] * 10)
-    original = android_viewer.time.monotonic
-    android_viewer.time.monotonic = lambda: next(clock)
-    try:
-        outcome = viewer.connect("fixture", "s3cr3tpw", timeout=5, sleep=lambda _s: None)
-    finally:
-        android_viewer.time.monotonic = original
-    assert not outcome.connected and "did not appear" in outcome.error
+    monkeypatch.setattr(android_viewer.time, "monotonic", lambda: next(clock))
+    outcome = viewer.connect("fixture", "s3cr3tpw", timeout=5, sleep=lambda _s: None)
+    assert not outcome.connected
+    assert "did not appear" in outcome.error
 
 
 def test_type_secret_refuses_characters_the_shell_would_interpret():
@@ -261,7 +259,8 @@ def test_move_cursor_converges_with_an_unknown_gain_and_swipes_only_inside_the_s
         if len(call) > 6 and call[4] == "input" and call[5] == "swipe":
             x0, y0, x1, y1, duration = (int(v) for v in call[6:11])
             for x_pos, y_pos in ((x0, y0), (x1, y1)):
-                assert SAFE_LEFT <= x_pos <= SAFE_RIGHT and SAFE_TOP <= y_pos <= SAFE_BOTTOM
+                assert SAFE_LEFT <= x_pos <= SAFE_RIGHT
+                assert SAFE_TOP <= y_pos <= SAFE_BOTTOM
             # Never short enough to be read as a tap (a tap would be a click).
             assert max(abs(x1 - x0), abs(y1 - y0)) >= min(SLOW_MIN_PX, 40) or duration >= 100
 
@@ -273,7 +272,8 @@ def test_click_places_the_pointer_then_taps_and_drag_is_one_double_tap_and_hold_
     assert "input tap 960 800" in scripted.shells()
     viewer.drag(960, 626, 1460, 626, sleep=lambda _s: None)
     script = scripted.shells()[-1]
-    assert script.startswith("input tap ") and "input motionevent DOWN" in script
+    assert script.startswith("input tap ")
+    assert "input motionevent DOWN" in script
     assert "sleep 0.7" in script and script.rstrip().endswith(
         "input motionevent UP 660 230".split()[-1]
     )
@@ -350,7 +350,8 @@ def test_connect_waits_for_the_toolbar_or_several_quiet_dumps():
     empty = '<node text="" resource-id="" class="android.view.View" bounds="[0,0][1920,1080]"/>'
     viewer, scripted = _viewer([empty])
     outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
-    assert outcome.connected and outcome.steps == ["desktop"]
+    assert outcome.connected
+    assert outcome.steps == ["desktop"]
     dumps = sum(1 for call in scripted.calls if call[3:5] == ["shell", "uiautomator"])
     assert dumps >= android_viewer.QUIET_DUMPS
 
@@ -464,7 +465,8 @@ def test_desktop_size_waits_for_a_toolbar_that_a_relayout_hid_from_the_dump():
     scripted.advance_after_dumps = 1  # the first dump is the empty one
     slept = []
     assert viewer.desktop_size(sleep=slept.append, clock=lambda: 0.0) == (1920, 1080)
-    assert slept and f"input tap {android_viewer.INFO_BUTTON[0]}" in " ".join(scripted.shells())
+    assert slept
+    assert f"input tap {android_viewer.INFO_BUTTON[0]}" in " ".join(scripted.shells())
 
 
 def test_the_ra2_glitch_dialog_is_a_transient_error():
@@ -527,7 +529,8 @@ def test_each_credential_attempt_is_noted_without_the_secret():
     viewer, _scripted = _viewer([AUTH_XML, DESKTOP_XML])
     outcome = viewer.connect("fixture", "secret-pw", sleep=lambda _s: None)
     assert outcome.connected
-    assert outcome.notes and outcome.notes[0].startswith("credentials attempt 1: username field")
+    assert outcome.notes
+    assert outcome.notes[0].startswith("credentials attempt 1: username field")
     assert "9/9 characters" in outcome.notes[0]
     assert "secret-pw" not in " ".join(outcome.notes)
 

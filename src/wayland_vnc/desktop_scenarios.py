@@ -18,6 +18,9 @@ from typing import Protocol
 from wayland_vnc.image_evidence import detect_markers, verify_scene
 from wayland_vnc.qualification import PORTAL_SCENARIOS, SCENARIOS, artifact_entry
 
+# Every scenario that restarts the fixture reports the same refusal when the smoke
+# checks do not come back; the wording is the contract the records are read against.
+SMOKE_FAILED_AFTER_RESTART = "fixture did not pass smoke checks after restart"
 FIRST_FRAME_BUDGET = 10.0
 RECONNECT_CYCLES = 20
 # The RealVNC RA2 handshake occasionally returns a bad-length RSA on a rapid
@@ -267,7 +270,7 @@ def scenario_network_interruption(run: Session) -> Outcome:
 def scenario_server_restart(run: Session) -> Outcome:
     run.driver.restart()
     if not run.driver.smoke(BASE_MODE[0], BASE_MODE[1]):
-        return Outcome("failed", "fixture did not pass smoke checks after restart")
+        return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
     session, capture, elapsed = connect_and_capture(run, "server-restart.png")
     run.driver.disconnect(session)
     if capture is None:
@@ -375,7 +378,7 @@ def _fresh_portal_state(run: Session, *, forget: bool = True) -> bool:
 def scenario_portal_approve(run: Session) -> Outcome:
     """The real consent dialog is approved and the session then renders."""
     if not _fresh_portal_state(run):
-        return Outcome("failed", "fixture did not pass smoke checks after restart")
+        return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
     run.driver.portal_mode("approve")
     seen = len(run.driver.portal_events())
     session, capture, _ = connect_and_capture(run, "portal-approve.png")
@@ -391,7 +394,7 @@ def scenario_portal_approve(run: Session) -> Outcome:
 def scenario_portal_deny(run: Session) -> Outcome:
     """Denying the dialog must leave the viewer without any desktop pixels."""
     if not _fresh_portal_state(run):
-        return Outcome("failed", "fixture did not pass smoke checks after restart")
+        return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
     run.driver.portal_mode("deny")
     seen = len(run.driver.portal_events())
     try:
@@ -405,7 +408,7 @@ def scenario_portal_deny(run: Session) -> Outcome:
     if capture is not None:
         return Outcome("failed", "desktop pixels reached the viewer after Deny", [capture])
     if not _fresh_portal_state(run):
-        return Outcome("failed", "fixture did not pass smoke checks after restart")
+        return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
     session, recovered, _ = connect_and_capture(run, "portal-deny-recovery.png")
     run.driver.disconnect(session)
     if recovered is None:
@@ -416,7 +419,7 @@ def scenario_portal_deny(run: Session) -> Outcome:
 def scenario_portal_restore(run: Session) -> Outcome:
     """A persisted approval must survive a restart without raising the dialog."""
     if not _fresh_portal_state(run):
-        return Outcome("failed", "fixture did not pass smoke checks after restart")
+        return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
     run.driver.portal_mode("approve-persist")
     seen = len(run.driver.portal_events())
     try:
@@ -426,7 +429,7 @@ def scenario_portal_restore(run: Session) -> Outcome:
         if capture is None or not any(e.get("persist") for e in granted):
             return Outcome("failed", "persistent approval was not granted")
         if not _fresh_portal_state(run, forget=False):
-            return Outcome("failed", "fixture did not pass smoke checks after restart")
+            return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
         run.driver.portal_mode("none")
         seen = len(run.driver.portal_events())
         session, restored, _ = connect_and_capture(run, "portal-restore.png")

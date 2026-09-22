@@ -90,7 +90,7 @@ def parse(text: str) -> dict[str, str]:
             continue
         if line.startswith("msgctxt "):
             raise ValueError("message contexts are not supported")
-        if line.startswith("msgid_plural") or line.startswith("msgstr["):
+        if line.startswith(("msgid_plural", "msgstr[")):
             plural = True
             field = None
         elif line.startswith("msgid "):

@@ -99,6 +99,59 @@ jobs:
           grep -q '"passed": false' <<<"$verdict" ||
             { echo "check-release.py did not reach a verdict on the empty records" >&2; exit 1; }
 
+  # SonarQube Cloud static analysis, with coverage from the same pinned pytest run the
+  # local scan uses (scripts/run-sonar-scan.sh), so CI and a laptop report the same
+  # findings. Skipped for pull requests from forks: GitHub withholds secrets there, and
+  # public PR CI must never receive credentials (AGENTS.md).
+  sonar:
+    name: SonarQube Cloud analysis
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+    if: >-
+      github.event_name == 'push' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+          # Sonar attributes issues to commits and needs the history to do it; a
+          # shallow clone makes every line look new.
+          fetch-depth: 0
+
+      - name: Install test tools
+        run: |
+          set -euo pipefail
+          # Same system packages as the checks job: the settings-app tests import gi,
+          # and a venv that could not see it would report those files as uncovered.
+          sudo apt-get update
+          sudo apt-get install -y xvfb python3-gi python3-gi-cairo \
+            gir1.2-gtk-4.0 gir1.2-adw-1
+          python3 -m venv --system-site-packages /tmp/wayland-vnc-sonar
+          /tmp/wayland-vnc-sonar/bin/pip install -r requirements-dev.txt
+
+      - name: Coverage report for Sonar
+        id: analysis-inputs
+        run: |
+          set -euo pipefail
+          export PATH="/tmp/wayland-vnc-sonar/bin:$PATH" PYTHONPATH="$PWD/src"
+          coverage run -m pytest
+          coverage xml -o coverage.xml
+          # The release number lives only in VERSION; Sonar labels the analysis with it.
+          echo "version=$(cat VERSION)" >>"$GITHUB_OUTPUT"
+
+      # `qualitygate.wait` makes this step block on the gate's verdict and fail the
+      # job when it is red, so a regression stops the build instead of only colouring
+      # a dashboard nobody opens.
+      - name: SonarQube Cloud scan and quality gate
+        uses: SonarSource/sonarqube-scan-action@ba9859eae8dd6bd29e412f25ddbbef3d032000f4  # v8.2.2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >-
+            -Dsonar.projectVersion=${{ steps.analysis-inputs.outputs.version }}
+            -Dsonar.qualitygate.wait=true
+
   # Isolated Wayland compositor fixtures: build the image and run the in-container
   # smoke checker. Plasma needs a DRM render node; GPU-less runners report BLOCKED.
   # Every container job below runs on both architectures the product ships for.

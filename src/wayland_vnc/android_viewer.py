@@ -89,8 +89,14 @@ class ConnectOutcome:
     notes: list[str] = field(default_factory=list)
 
 
+UI_DUMP = "/sdcard/ui.xml"
+# The positive button of an Android system dialog.
+DIALOG_OK = "android:id/button1"
+# The event that ends one input report; every emulator gesture is framed by it.
+EV_SYN = "EV_SYN:0:0"
+
 NODE_RE = re.compile(r"<node [^>]*>")
-ATTR_RE = re.compile(r'(\S+?)="([^"]*)"')
+ATTR_RE = re.compile(r'([^\s=]+)="([^"]*)"')
 
 
 def parse_ui(xml: str) -> list[UiNode]:
@@ -135,14 +141,14 @@ class Adb:
     """The isolated AVD's adb, with the project's own key directories exported."""
 
     def __init__(self, adb: str, serial: str, env: dict, run: Runner | None = None):
-        self.adb = adb
+        self.binary = adb
         self.serial = serial
         self.env = env
         self._run = subprocess.run if run is None else run
 
     def run(self, *args: str, timeout: float = 60, **kwargs) -> subprocess.CompletedProcess:
         return self._run(
-            [self.adb, "-s", self.serial, *args],
+            [self.binary, "-s", self.serial, *args],
             env=self.env,
             capture_output=True,
             text=True,
@@ -160,7 +166,7 @@ class Adb:
 
     def screencap(self, path: Path) -> bool:
         result = self._run(
-            [self.adb, "-s", self.serial, "exec-out", "screencap", "-p"],
+            [self.binary, "-s", self.serial, "exec-out", "screencap", "-p"],
             env=self.env,
             capture_output=True,
             timeout=30,
@@ -175,9 +181,9 @@ class Adb:
         """A fresh dump, or nothing: the previous dump file is removed first, because
         a dump that fails mid-transition would otherwise leave the old tree to be
         re-read as if it were current (which once declared a connection 'up')."""
-        self.shell("rm", "-f", "/sdcard/ui.xml")
-        self.shell("uiautomator", "dump", "/sdcard/ui.xml")
-        return parse_ui(self.shell("cat", "/sdcard/ui.xml"))
+        self.shell("rm", "-f", UI_DUMP)
+        self.shell("uiautomator", "dump", UI_DUMP)
+        return parse_ui(self.shell("cat", UI_DUMP))
 
 
 class AndroidViewer:
@@ -272,9 +278,9 @@ class AndroidViewer:
         """Answer whichever of the app's screens is up; the step's name, "refused"
         for a credential refusal, None when no screen needed an answer."""
         simple = (
-            ("Continue connecting?", "android:id/button1", "continue-connecting"),
+            ("Continue connecting?", DIALOG_OK, "continue-connecting"),
             ("Identity check", "menu_done", "identity-check"),
-            ("Invalid username or password", "android:id/button1", "refused"),
+            ("Invalid username or password", DIALOG_OK, "refused"),
         )
         for text, button, step in simple:
             if find(nodes, text=text):
@@ -284,17 +290,17 @@ class AndroidViewer:
         if user_field is not None:
             if "credentials-entered" in outcome.steps:
                 return "waiting"
-            outcome.notes += self._enter_credentials(user_field, username, password, sleep)
+            outcome.notes += self._enter_credentials(username, password, sleep)
             self._tap(find(nodes, rid="menu_done"))
             sleep(1)
             return self._step(outcome, "credentials-entered")
         title = find(nodes, rid="alertTitle")
-        if title is not None and find(nodes, rid="android:id/button1"):
-            self._tap(find(nodes, rid="android:id/button1"))
+        if title is not None and find(nodes, rid=DIALOG_OK):
+            self._tap(find(nodes, rid=DIALOG_OK))
             return self._step(outcome, f"dialog:{title.text}")
         return None
 
-    def _enter_credentials(self, user_field, username, password, sleep) -> list[str]:
+    def _enter_credentials(self, username, password, sleep) -> list[str]:
         """Type both fields and read them back from the UI tree, retyping a field
         whose content is not what was typed: a freshly focused field drops its first
         keystroke now and then, and a truncated password is a refused connection.
@@ -305,12 +311,11 @@ class AndroidViewer:
             # the previous attempt hides them from the dump, and a tap at the field's
             # place would then hit a key. Close it first and look again.
             self._hide_ime(sleep)
-            fresh = find(self.adb.ui(), rid="UserEdit")
-            if fresh is None:
+            user_field = find(self.adb.ui(), rid="UserEdit")
+            if user_field is None:
                 notes.append(f"credentials attempt {attempt}: username field not in the tree")
                 sleep(1)
                 continue
-            user_field = fresh
             # The tap opens the full-screen IME; every key below goes to the focused
             # field; Back closes the IME again, and only then are the fields visible
             # to a UI dump (with the IME up a tap on the field's place hits a key).
@@ -380,8 +385,9 @@ class AndroidViewer:
         if find(nodes, rid="alertTitle") is not None:
             return False
         activities = self.adb.shell("dumpsys", "activity", "activities")
-        match = re.search(r"topResumedActivity=.*?(\S+/\S+)", activities)
-        return match is not None and match.group(1).endswith("/.app.DesktopActivity")
+        line = re.search(r"topResumedActivity=([^\n]*)", activities)
+        match = None if line is None else re.search(r"\S+/\S+", line.group(1))
+        return match is not None and match.group(0).endswith("/.app.DesktopActivity")
 
     def disconnect(self) -> None:
         self.adb.shell("am", "force-stop", PACKAGE)
@@ -530,8 +536,13 @@ class AndroidViewer:
             # Finer than one minimal swipe can move: go the minimal distance away
             # first, then come back by the minimal distance plus what was wanted.
             # Both swipes stay above the tap threshold; the net move is what was wanted.
-            away_x = -SLOW_MIN_PX if wanted_x > 0 else SLOW_MIN_PX if wanted_x < 0 else 0
-            away_y = -SLOW_MIN_PX if wanted_y > 0 else SLOW_MIN_PX if wanted_y < 0 else 0
+            def away(wanted: int) -> int:
+                """The minimal swipe pointing away from where the move is headed."""
+                if wanted == 0:
+                    return 0
+                return -SLOW_MIN_PX if wanted > 0 else SLOW_MIN_PX
+
+            away_x, away_y = away(wanted_x), away(wanted_y)
             self._swipe(away_x, away_y, "slow", sleep)
             wanted_x, wanted_y = wanted_x - away_x, wanted_y - away_y
             current = self.pointer_report() or current
@@ -586,7 +597,7 @@ class AndroidViewer:
                 f"EV_ABS:ABS_MT_POSITION_Y:{dev_y}",
                 "EV_ABS:ABS_MT_PRESSURE:1024",
             )
-        self._emu_send("EV_SYN:0:0")
+        self._emu_send(EV_SYN)
         sleep(0.1)
         steps = 12
         for step in range(1, steps + 1):
@@ -600,14 +611,14 @@ class AndroidViewer:
                     f"EV_ABS:ABS_MT_POSITION_X:{dev_x}",
                     f"EV_ABS:ABS_MT_POSITION_Y:{dev_y}",
                 ]
-            self._emu_send(*events, "EV_SYN:0:0")
+            self._emu_send(*events, EV_SYN)
             sleep(0.03)
         self._emu_send(
             "EV_ABS:ABS_MT_SLOT:0",
             "EV_ABS:ABS_MT_TRACKING_ID:4294967295",
             "EV_ABS:ABS_MT_SLOT:1",
             "EV_ABS:ABS_MT_TRACKING_ID:4294967295",
-            "EV_SYN:0:0",
+            EV_SYN,
         )
 
     @staticmethod

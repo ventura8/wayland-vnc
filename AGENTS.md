@@ -99,7 +99,10 @@ Never silence a linter anywhere: no `# noqa`, `# pylint: disable`, `# type: igno
 `# shellcheck disable`, `eslint-disable`, and **no per-file-ignore config of any kind**
 (no `[tool.ruff.lint.per-file-ignores]` or equivalent). Fix or restructure the code; if
 a whole rule category is wrong for the project, drop it from the global `select` (as
-ruff's bandit `S` category was), never ignore it per line or per file. See
+ruff's bandit `S` category was), never ignore it per line or per file. This covers
+SonarQube too: never resolve an issue as "won't fix" or "false positive" on the
+dashboard, and never add a `NOSONAR` comment -- turn the rule off in the quality
+profile, with a reason, or fix the code. See
 [`.agents/skills/code-linter/SKILL.md`](.agents/skills/code-linter/SKILL.md).
 
 ## New files must be linted and tested
@@ -117,6 +120,9 @@ without tests, or a translated/packaged path without its smoke, is incomplete wo
 - **Containers/CI/Docs**: `hadolint` (digest-pinned bases), `actionlint`, `yamllint`,
   and markdownlint (line length 140, wide enough for a table row), all via
   `scripts/lint-containers.sh`.
+- **Static analysis**: SonarQube Cloud (`ventura8_wayland-vnc`), locally with
+  `scripts/run-sonar-scan.sh` and in CI's `sonar` job, both reading the one
+  `sonar-project.properties` so the two agree. The quality gate is blocking in CI.
 
 ## Local pipeline & CI parity
 

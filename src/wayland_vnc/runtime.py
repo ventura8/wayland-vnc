@@ -193,7 +193,8 @@ def read_config(directory: Path) -> tuple[str, int] | None:
         text = (directory / CONFIG_NAME).read_text(encoding="utf-8")
     except OSError:
         return None
-    values = dict(line.split("=", 1) for line in text.splitlines() if "=" in line)
+    pairs = (line.partition("=") for line in text.splitlines())
+    values = {key: value for key, separator, value in pairs if separator}
     address = values.get("address", "").strip()
     try:
         port = int(values.get("port", "").strip())

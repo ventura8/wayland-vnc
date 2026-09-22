@@ -14,7 +14,7 @@ PATH="$(bash scripts/ensure-venv.sh):$PATH"
 export PATH
 mkdir -p reports/distro-logs
 
-UBUNTU="ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367"
+UBUNTU="ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78"
 
 # image|package-manager install command for python3 + GTK4 + libadwaita + Xvfb + openssl
 PLATFORMS=(
@@ -53,6 +53,10 @@ zypper --non-interactive install python3 python3-gobject python3-gobject-Gdk \
     echo 'pacman -Sy --noconfirm >/dev/null 2>&1
 pacman -S --noconfirm --needed python python-gobject gtk4 libadwaita xorg-server-xvfb \
   xorg-xauth librsvg ttf-dejavu iproute2 openssl >/dev/null 2>&1'
+    ;;
+  *)
+    echo "no dependency step for package manager '$1'" >&2
+    return 1
     ;;
   esac
 }

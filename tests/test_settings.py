@@ -75,7 +75,9 @@ def actions_fixture(tmp_path):
 
 def test_service_absent_is_reported_not_guessed():
     state = settings.service_state(runner({"is-enabled": "not-found"}))
-    assert not state.installed and not state.enabled and not state.active
+    assert not state.installed
+    assert not state.enabled
+    assert not state.active
     assert state.detail == "unit is not installed"
 
 
@@ -95,8 +97,10 @@ def test_gather_on_a_bare_directory_reports_nothing_configured(tmp_path):
     status = settings.gather(
         tmp_path, capabilities=capabilities(), run=runner({"is-enabled": "not-found"})
     )
-    assert not status.credential.present and status.credential.mode is None
-    assert not status.config.present and status.config.port is None
+    assert not status.credential.present
+    assert status.credential.mode is None
+    assert not status.config.present
+    assert status.config.port is None
     assert not status.config.auth_enabled
     assert status.wayland
 
@@ -105,10 +109,15 @@ def test_gather_reads_the_real_provisioned_config(actions, tmp_path):
     actions.set_credential("vnc", "hunter2x")
     actions.apply_network("127.0.0.1", 5900)
     status = actions.status()
-    assert status.credential.present and status.credential.secure_mode
-    assert status.config.present and status.config.loopback_only
-    assert status.config.port == 5900 and status.config.auth_enabled
-    assert status.service.installed and status.service.enabled and status.service.active
+    assert status.credential.present
+    assert status.credential.secure_mode
+    assert status.config.present
+    assert status.config.loopback_only
+    assert status.config.port == 5900
+    assert status.config.auth_enabled
+    assert status.service.installed
+    assert status.service.enabled
+    assert status.service.active
 
 
 def test_credential_is_written_restrictively(actions, tmp_path):
@@ -206,7 +215,8 @@ def test_a_host_without_systemctl_reports_the_unit_absent(monkeypatch, failure, 
 
     monkeypatch.setattr(settings.subprocess, "run", explode)
     state = settings.service_state(run=real_runners.systemctl)
-    assert not state.installed and state.detail == "unit is not installed"
+    assert not state.installed
+    assert state.detail == "unit is not installed"
 
 
 @pytest.mark.parametrize(
@@ -265,14 +275,17 @@ def test_lan_access_is_a_real_switch_only_where_the_backend_can_honour_it(tmp_pa
     gnome = capabilities(interfaces=[], gnome_remote_desktop=True, gnome_screencast=True)
     assert option(gnome, fake_host(private_grd=True)).available
     distro = option(gnome, fake_host(private_grd=False))
-    assert not distro.available and "wayland-vnc-grd" in distro.reason
+    assert not distro.available
+    assert "wayland-vnc-grd" in distro.reason
     plasma = capabilities(
         interfaces=[], kwin=True, remote_desktop_portal=True, screencast_portal=True
     )
     kde = option(plasma, fake_host())
-    assert not kde.available and "this computer only" in kde.reason
+    assert not kde.available
+    assert "this computer only" in kde.reason
     nothing = option(capabilities(interfaces=[]), fake_host())
-    assert not nothing.available and nothing.reason == "No supported backend"
+    assert not nothing.available
+    assert nothing.reason == "No supported backend"
 
 
 def test_lan_access_on_gnome_goes_through_the_private_daemons_drop_in(tmp_path):
@@ -355,7 +368,8 @@ def test_connect_info_lists_the_mdns_name_first_with_the_real_port():
 def test_connect_info_falls_back_to_the_default_port_when_unprovisioned():
     config = settings.ServerConfig(False, None, None, False)
     info = settings.connect_info(config, run=_ip("[]"), hostname="zenbook")
-    assert info.port == runtime.DEFAULT_PORT and info.addresses == ()
+    assert info.port == runtime.DEFAULT_PORT
+    assert info.addresses == ()
 
 
 def test_diagnostic_sections_group_the_flat_report_into_readable_categories():
@@ -436,7 +450,8 @@ def test_credential_returns_the_stored_pair(tmp_path):
     assert actions.credential() is None
     actions.set_credential("vnc", "phone123")
     stored = actions.credential()
-    assert stored.username == "vnc" and stored.password == "phone123"
+    assert stored.username == "vnc"
+    assert stored.password == "phone123"
 
 
 def test_credential_survives_an_unreadable_file(tmp_path):
@@ -487,7 +502,8 @@ def test_credential_shows_a_grd_password_our_own_rules_would_reject(tmp_path, mo
     )
     monkeypatch.setattr(settings.runtime, "grd_password", lambda: "abc")
     shown = actions.credential()
-    assert shown.password == "abc" and shown.username == "vnc"
+    assert shown.password == "abc"
+    assert shown.username == "vnc"
 
 
 def test_credential_on_a_wayvnc_host_uses_our_own_file(tmp_path, monkeypatch):

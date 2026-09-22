@@ -269,5 +269,6 @@ def test_collect_probes_protocols_inside_a_unit_that_only_exports_the_display():
         which=lambda name: "/usr/bin/wayland-info" if name == "wayland-info" else None,
     )
     assert caps["session_type"] == "wayland"
-    assert ran and ran[0] == ["/usr/bin/wayland-info"]
+    assert ran
+    assert ran[0] == ["/usr/bin/wayland-info"]
     assert "zwlr_screencopy_manager_v1" in caps["interfaces"]

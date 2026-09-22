@@ -27,7 +27,10 @@ logind_unavailable=
 wayland_socket() {
   # The compositor's display socket: wayland-0, wayland-1 ... but never their .lock.
   for candidate in "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"/wayland-[0-9]*; do
-    case "$candidate" in *.lock) continue ;; esac
+    case "$candidate" in
+    *.lock) continue ;;
+    *) ;; # any other name is a candidate socket
+    esac
     if [ -S "$candidate" ]; then
       basename -- "$candidate"
       return 0

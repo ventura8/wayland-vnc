@@ -245,7 +245,7 @@ def parse_kwin_support(text: str) -> list[dict]:
     section = None
     lines = text.splitlines()
     for index, line in enumerate(lines):
-        if index + 1 < len(lines) and lines[index + 1][:3] == "===":
+        if index + 1 < len(lines) and lines[index + 1].startswith("==="):
             section = line.strip()
             continue
         key, separator, value = line.partition(":")

@@ -54,7 +54,8 @@ def test_obfuscation_pads_and_truncates_to_the_des_block(password, expected_bloc
 
     def run(args, data):
         seen["data"] = data
-        assert "-provider" in args and "legacy" in args, "OpenSSL 3 needs the legacy provider"
+        assert "-provider" in args, "OpenSSL 3 needs the legacy provider"
+        assert "legacy" in args, "OpenSSL 3 needs the legacy provider"
         return b"\x01\x02\x03\x04\x05\x06\x07\x08"
 
     assert hardware.obfuscate_password(password, run=run) == "0102030405060708"
@@ -87,7 +88,8 @@ def test_frame_evidence_accepts_a_busy_desktop(tmp_path):
                 image.putpixel((x, y), (x % 256, y % 256, (x * y) % 256))
 
     evidence = hardware.frame_evidence(_frame(tmp_path, "busy.png", (800, 600), busy))
-    assert evidence.width == 800 and evidence.height == 600
+    assert evidence.width == 800
+    assert evidence.height == 600
     assert evidence.colours > 40
     assert evidence.as_dict()["colours"] == evidence.colours
 
@@ -149,8 +151,9 @@ def test_report_fails_the_run_when_any_phase_failed():
 
 
 def test_report_rejects_an_unknown_status():
+    report = _report()
     with pytest.raises(ValueError, match="unknown status"):
-        _report().record("install", "probably-fine", "no")
+        report.record("install", "probably-fine", "no")
 
 
 def test_grd_stored_password_reads_the_keyring(monkeypatch):

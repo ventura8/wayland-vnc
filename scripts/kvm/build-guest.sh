@@ -59,6 +59,10 @@ xfce-labwc) default_port=5923 ;;
 lxqt-labwc) default_port=5924 ;;
 gnome) default_port=5925 ;;
 plasma) default_port=5926 ;;
+*)
+  echo "no port assigned for target '$target'" >&2
+  exit 2
+  ;;
 esac
 port=${WAYLAND_VNC_KVM_PORT:-$default_port}
 work="artifacts/kvm/$target"
@@ -125,6 +129,7 @@ plasma)
     docker rm -f "$staging" >/dev/null
   fi
   ;;
+*) ;; # the wlroots guests install everything from the archive
 esac
 
 echo "== base cloud image =="
@@ -170,6 +175,7 @@ gnome | plasma)
   python3 scripts/kvm/make-edid.py "$tmp/edid.bin"
   edid_b64=$(base64 -w0 "$tmp/edid.bin")
   ;;
+*) ;; # the wlroots guests set their own modes and need no EDID
 esac
 export WAYLAND_VNC_TEMPLATE_EDID_B64="$edid_b64"
 # Substituted literally, and through the environment rather than argv. sed would

@@ -6,6 +6,7 @@ from pathlib import Path
 from PIL import Image
 
 TARGETS = ((255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 255))
+TOLERANCE_RANGE_ERROR = "Color tolerance must be between 0 and 64"
 
 
 @dataclass(frozen=True)
@@ -50,7 +51,7 @@ def _near(pixel: tuple[int, ...], target: tuple[int, int, int], tolerance: int) 
 def verify_scene(path: Path, *, tolerance: int = 24) -> SceneEvidence:
     """Find a wide, ordered red/green/blue/white scene row or fail closed."""
     if not 0 <= tolerance <= 64:
-        raise ValueError("Color tolerance must be between 0 and 64")
+        raise ValueError(TOLERANCE_RANGE_ERROR)
     with Image.open(path) as source:
         image = source.convert("RGB")
     width, height = image.size
@@ -80,7 +81,7 @@ def _find_band(
 ) -> tuple[int, int, int, list[int]]:
     """Find one row holding the ordered wide color bands; fail closed otherwise."""
     if not 0 <= tolerance <= 64:
-        raise ValueError("Color tolerance must be between 0 and 64")
+        raise ValueError(TOLERANCE_RANGE_ERROR)
     with Image.open(path) as source:
         image = source.convert("RGB")
     width, height = image.size
@@ -137,7 +138,7 @@ MARKERS = {
 def detect_markers(path: Path, *, tolerance: int = 24) -> set[str]:
     """Report which acknowledgement bands are present, each judged on its own."""
     if not 0 <= tolerance <= 64:
-        raise ValueError("Color tolerance must be between 0 and 64")
+        raise ValueError(TOLERANCE_RANGE_ERROR)
     with Image.open(path) as source:
         image = source.convert("RGB")
     width, height = image.size

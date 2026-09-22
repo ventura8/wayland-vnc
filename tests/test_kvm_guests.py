@@ -60,11 +60,13 @@ def test_every_wlroots_target_renders_valid_cloud_config(tmp_path, target):
     assert text.startswith("#cloud-config\n")
     data = yaml.safe_load(text)
     assert data["hostname"] == f"wayland-vnc-{target}"
-    assert data["users"][0]["name"] == "fixture" and data["users"][0]["uid"] == 1000
+    assert data["users"][0]["name"] == "fixture"
+    assert data["users"][0]["uid"] == 1000
     # The guest installs the container image's packages, plus what a machine needs.
     dockerfile = (REPO / "docker" / f"Dockerfile.{target}").read_text(encoding="utf-8")
     for package in ("wayvnc", "swaylock", "wlr-randr"):
-        assert package in dockerfile and package in data["packages"]
+        assert package in dockerfile
+        assert package in data["packages"]
     assert "dbus-daemon" not in data["packages"], "container-only package leaked into the guest"
     for machine_package in ("seatd", "qemu-guest-agent"):
         assert machine_package in data["packages"]
@@ -87,7 +89,8 @@ def test_secrets_are_taken_verbatim_and_the_key_is_indented_into_its_block(tmp_p
     files = {f["path"]: f for f in data["write_files"]}
     credential = files["/home/fixture/.config/wayland-vnc/fixture.conf"]
     assert credential["content"] == f"username=fixture\npassword={AWKWARD_PASSWORD}\n"
-    assert credential["permissions"] == "0600" and credential["defer"] is True
+    assert credential["permissions"] == "0600"
+    assert credential["defer"] is True
     key = files["/home/fixture/.config/wayland-vnc/rsa.pem"]
     assert key["content"] == KEY_PEM
     assert data["users"][0]["passwd"] == "$6$salt$hash"
@@ -95,9 +98,11 @@ def test_secrets_are_taken_verbatim_and_the_key_is_indented_into_its_block(tmp_p
 
 def test_a_multi_line_password_or_a_missing_key_is_refused(tmp_path):
     result, _ = _render("sway", tmp_path, password="two\nlines")
-    assert result.returncode != 0 and "single line" in result.stderr
+    assert result.returncode != 0
+    assert "single line" in result.stderr
     result, _ = _render("sway", tmp_path, key=False)
-    assert result.returncode != 0 and "WAYLAND_VNC_TEMPLATE_KEY" in result.stderr
+    assert result.returncode != 0
+    assert "WAYLAND_VNC_TEMPLATE_KEY" in result.stderr
 
 
 def test_no_placeholder_survives_rendering(tmp_path):
@@ -122,7 +127,8 @@ def test_builder_targets_and_ports_are_distinct_and_documented():
     testing = (REPO / "docs" / "testing.md").read_text(encoding="utf-8")
     assert "scripts/kvm/build-guest.sh TARGET" in testing
     qualify_all = (REPO / "scripts" / "qualify-all.sh").read_text(encoding="utf-8")
-    assert "--kvm" in qualify_all and "boot_guest" in qualify_all
+    assert "--kvm" in qualify_all
+    assert "boot_guest" in qualify_all
 
 
 @pytest.mark.parametrize("target", ("gnome", "plasma"))
@@ -143,7 +149,8 @@ def test_the_desktop_guests_render_a_logind_session_unit(tmp_path, target):
     assert session in unit["content"]
     # The runtime stage's packages, not the build stage's.
     compositor = "gnome-shell" if target == "gnome" else "kwin-wayland"
-    assert compositor in data["packages"] and "meson" not in data["packages"]
+    assert compositor in data["packages"]
+    assert "meson" not in data["packages"]
     # A custom EDID (720p + 1080p + 4K) loaded via the kernel cmdline, and a reboot to
     # read it: the compositor's DisplayConfig needs all three modes and virtio-gpu
     # advertises only some of them without this.
@@ -156,7 +163,8 @@ def test_the_desktop_guests_render_a_logind_session_unit(tmp_path, target):
     assert data["power_state"]["mode"] == "reboot"
     # The fixture is enabled but not started in runcmd; it comes up on the reboot.
     runcmd = " ".join(str(c) for c in data["runcmd"])
-    assert "enable" in runcmd and "wayland-vnc-guest.service" in runcmd
+    assert "enable" in runcmd
+    assert "wayland-vnc-guest.service" in runcmd
     assert "start" not in runcmd or "guest-agent" in runcmd
 
 

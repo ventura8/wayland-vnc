@@ -91,7 +91,8 @@ def qemu_fixture(tmp_path):
 def test_exec_runs_inside_the_guest_and_secrets_go_over_stdin_not_argv(tmp_path, qemu):
     guest = qemu_guest.QemuGuest(tmp_path)
     result = guest.exec(["/bin/true", "--flag"], stdin="s3cret")
-    assert result.exitcode == 3 and result.stdout == "/bin/true --flag <s3cret"
+    assert result.exitcode == 3
+    assert result.stdout == "/bin/true --flag <s3cret"
     sent = next(r for r in qemu.log if r["execute"] == "guest-exec")["arguments"]
     assert "s3cret" not in json.dumps(sent["arg"]), "secrets never appear on the guest argv"
     assert base64.b64decode(sent["input-data"]) == b"s3cret"
@@ -107,10 +108,12 @@ def test_suspend_and_wake_records_the_hypervisor_observed_cycle(tmp_path, qemu, 
     monkeypatch.setattr(qemu_guest.time, "sleep", lambda _s: None)
     transcript = qemu_guest.QemuGuest(tmp_path).suspend_and_wake(20, settle=5)
     assert transcript["after_suspend"]["status"] == "suspended"
-    assert transcript["after_wake"]["running"] and transcript["agent_back"]
+    assert transcript["after_wake"]["running"]
+    assert transcript["agent_back"]
     assert transcript["verdict"] == "suspended and resumed"
     commands = [r["execute"] for r in qemu.log]
-    assert "guest-suspend-ram" in commands and "system_wakeup" in commands
+    assert "guest-suspend-ram" in commands
+    assert "system_wakeup" in commands
     assert commands.index("guest-suspend-ram") < commands.index("system_wakeup")
 
 
@@ -125,8 +128,9 @@ def test_suspend_that_never_suspends_is_reported_not_papered_over(tmp_path, qemu
 
 
 def test_errors_from_qemu_raise(tmp_path, qemu):
+    guest = qemu_guest.QemuGuest(tmp_path)
     with pytest.raises(qemu_guest.GuestError):
-        qemu_guest.QemuGuest(tmp_path).qmp("no-such-command")
+        guest.qmp("no-such-command")
 
 
 def test_a_missing_guest_is_reported_not_hung(tmp_path, monkeypatch):
@@ -150,8 +154,9 @@ def test_a_connection_closed_without_a_reply_raises(tmp_path):
         conn.close()
 
     threading.Thread(target=hang_up, daemon=True).start()
+    guest = qemu_guest.QemuGuest(tmp_path)
     with pytest.raises(qemu_guest.GuestError, match="closed without a reply"):
-        qemu_guest.QemuGuest(tmp_path).qga("guest-ping")
+        guest.qga("guest-ping")
     server.close()
 
 
@@ -165,8 +170,9 @@ def test_exec_that_never_finishes_times_out(tmp_path, qemu, monkeypatch):
         return original(request)
 
     qemu.answer = never_exits
+    guest = qemu_guest.QemuGuest(tmp_path)
     with pytest.raises(qemu_guest.GuestError, match="did not finish"):
-        qemu_guest.QemuGuest(tmp_path).shell("sleep forever", timeout=0.01)
+        guest.shell("sleep forever", timeout=0.01)
 
 
 def test_a_machine_that_suspends_but_never_resumes_is_reported(tmp_path, qemu, monkeypatch):
