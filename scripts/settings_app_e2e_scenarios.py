@@ -14,6 +14,7 @@ import gettext as _gettext
 import os
 import subprocess
 import sys
+from functools import partial
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -72,11 +73,102 @@ def fake_systemctl(work, *, exit_code=0):
     os.environ["PATH"] = f"{bindir}:{os.environ['PATH']}"
 
 
-def _window_scenarios(
-    actions, adw, application, settings, settings_app, wayland_capabilities, work, _gtk
-):
-    """The scenarios that need a real window: the rendered page, the live switches,
-    every dialog, and the diagnostics view."""
+def _settle(glib, _root=None):
+    """Run pending main-loop work so the presented tree is laid out and
+    allocations are real, not zero."""
+    for _ in range(50):
+        if not glib.MainContext.default().iteration(False):
+            break
+
+
+def _text_dir(gtk, widget):
+    """The widget's text direction, asked of the Widget class on purpose:
+    subclasses such as MenuButton redefine get_direction() to mean the arrow."""
+    return gtk.Widget.get_direction(widget)
+
+
+def _inside_spin(widget):
+    """Numeric entries keep LTR digits under RTL, as GTK and the HIG require."""
+    parent = widget.get_parent()
+    while parent is not None:
+        if type(parent).__name__ in ("SpinButton", "SpinRow"):
+            return True
+        parent = parent.get_parent()
+    return False
+
+
+def _ltr_leftovers(gtk, rtl_dir, root):
+    return sorted(
+        {
+            type(w).__name__
+            for w in walk(root)
+            if _text_dir(gtk, w) != rtl_dir and not _inside_spin(w)
+        }
+    )
+
+
+def _frames(glib, root, count=6):
+    """Let a few frames render: presentation animates, and a snapshot needs
+    at least one drawn frame."""
+    for _ in range(count):
+        _settle(glib, root)
+        glib.usleep(40000)
+    _settle(glib, root)
+
+
+def _wait_laid_out(glib, root, widgets, tries=40):
+    """Iterate until every widget has a non-empty allocation AND its position
+    has stopped moving -- dialogs slide in, and a mid-animation read is a
+    coin toss."""
+    previous = None
+    for _ in range(tries):
+        _settle(glib, root)
+        bounds = [w.compute_bounds(root) for w in widgets]
+        if bounds and all(ok and rect.get_width() > 0 for ok, rect in bounds):
+            current = tuple(round(rect.get_x()) for _ok, rect in bounds)
+            if current == previous:
+                return True
+            previous = current
+        glib.usleep(40000)
+    return False
+
+
+def _automatic_label(i18n, _window=None):
+    return i18n._("Automatic (match the desktop)")
+
+
+def _choose_language(settings_dialogs, kit, lang_actions, glib, window, label, *, search=None):
+    """Open the chooser from the Language row and activate the row titled `label`;
+    with `search`, type it first and require the search to keep exactly that row
+    (searching the way a person does: accents optional, case irrelevant)."""
+    dialog = settings_dialogs.language_dialog(kit, lang_actions, window.relanguage)
+    titles = {row.get_title(): row for row in dialog.rows.values()}
+    check(label in titles, f"the language chooser offers {label!r}")
+    if search is not None:
+        dialog.search_entry.set_text(search)
+        dialog.search_entry.emit("search-changed")
+        matches = dialog.listbox.matches
+        kept = [row.get_title() for row in dialog.rows.values() if matches(row)]
+        check(kept == [label], f"searching {search!r} keeps only {label!r}, kept {kept}")
+    titles[label].emit("activated")
+    _settle(glib, window)
+
+
+def _menu_labels(root):
+    model = widgets_of(root, "MenuButton")[0].get_menu_model()
+    return [
+        model.get_item_attribute_value(i, "label", None).get_string()
+        for i in range(model.get_n_items())
+    ]
+
+
+def _titles_in(root):
+    return [w.get_title() for w in walk(root) if hasattr(w, "get_title") and w.get_title()]
+
+
+def _window_render_scenarios(actions, application, settings, settings_app):
+    """The window builds from real state, and the connect section names the host and
+    every LAN address with the port."""
     print("== happy: the real window builds and renders the provisioned state ==")
     window = settings_app.build_window(application, actions)
     check(window.get_mapped() or window.get_content() is not None, "window content built")
@@ -101,6 +193,12 @@ def _window_scenarios(
         not any(a[0].startswith(("docker", "lxc", "virbr")) for a in info.addresses),
         "virtual bridges a phone cannot reach are hidden",
     )
+    return window, info
+
+
+def _switch_scenarios(actions, info, window, work):
+    """The live switches drive the real unit, and the local-network switch opens and
+    closes the LAN in place."""
 
     def switch_rows():
         return {r.get_title(): r for r in widgets_of(window, "SwitchRow")}
@@ -158,6 +256,10 @@ def _window_scenarios(
     lan = switch_rows()[LAN_ROW]
     check(not lan.get_active(), "the redrawn switch shows local network access off")
 
+
+def _dialog_scenarios(_gtk, adw, settings, wayland_capabilities, work):
+    """Every dialog the window opens: credential, network, diagnostics, and the option
+    rows that must not duplicate the Service switches."""
     print("== happy: the credential dialog writes through the runtime ==")
     from wayland_vnc import settings_dialogs
 
@@ -247,6 +349,22 @@ def _window_scenarios(
     check(labels["diagnostic"] == "Diagnostics", "the diagnostics row is named 'Diagnostics'")
 
 
+def _window_scenarios(
+    actions, adw, application, settings, settings_app, wayland_capabilities, work, _gtk
+):
+    """The scenarios that need a real window: the rendered page, the live switches,
+    every dialog, and the diagnostics view."""
+    window, info = _window_render_scenarios(
+        actions=actions, application=application, settings=settings, settings_app=settings_app
+    )
+
+    _switch_scenarios(actions=actions, info=info, window=window, work=work)
+
+    _dialog_scenarios(
+        _gtk=_gtk, adw=adw, settings=settings, wayland_capabilities=wayland_capabilities, work=work
+    )
+
+
 def _language_scenarios(
     application, config, settings, settings_app, settings_dialogs, wayland_capabilities
 ):
@@ -261,90 +379,20 @@ def _language_scenarios(
 
     from gi.repository import GLib
 
-    def settle(_window):
-        """Run pending main-loop work so the presented tree is laid out and
-        allocations are real, not zero."""
-        for _ in range(50):
-            if not GLib.MainContext.default().iteration(False):
-                break
-
-    def text_dir(widget):
-        """The widget's text direction, asked of the Widget class on purpose:
-        subclasses such as MenuButton redefine get_direction() to mean the arrow."""
-        return gtk.Widget.get_direction(widget)
-
-    def inside_spin(widget):
-        """Numeric entries keep LTR digits under RTL, as GTK and the HIG require."""
-        parent = widget.get_parent()
-        while parent is not None:
-            if type(parent).__name__ in ("SpinButton", "SpinRow"):
-                return True
-            parent = parent.get_parent()
-        return False
-
-    def ltr_leftovers(root):
-        return sorted(
-            {type(w).__name__ for w in walk(root) if text_dir(w) != rtl_dir and not inside_spin(w)}
-        )
-
-    def frames(root, count=6):
-        """Let a few frames render: presentation animates, and a snapshot needs
-        at least one drawn frame."""
-        for _ in range(count):
-            settle(root)
-            GLib.usleep(40000)
-        settle(root)
-
-    def wait_laid_out(root, widgets, tries=40):
-        """Iterate until every widget has a non-empty allocation AND its position
-        has stopped moving -- dialogs slide in, and a mid-animation read is a
-        coin toss."""
-        previous = None
-        for _ in range(tries):
-            settle(root)
-            bounds = [w.compute_bounds(root) for w in widgets]
-            if bounds and all(ok and rect.get_width() > 0 for ok, rect in bounds):
-                current = tuple(round(rect.get_x()) for _ok, rect in bounds)
-                if current == previous:
-                    return True
-                previous = current
-            GLib.usleep(40000)
-        return False
-
-    def automatic_label(_window):
-        return i18n._("Automatic (match the desktop)")
-
-    def choose_language(window, label, *, search=None):
-        """Open the chooser from the Language row and activate the row titled `label`;
-        with `search`, type it first and require the search to keep exactly that row
-        (searching the way a person does: accents optional, case irrelevant)."""
-        dialog = settings_dialogs.language_dialog(kit, lang_actions, window.relanguage)
-        titles = {row.get_title(): row for row in dialog.rows.values()}
-        check(label in titles, f"the language chooser offers {label!r}")
-        if search is not None:
-            dialog.search_entry.set_text(search)
-            dialog.search_entry.emit("search-changed")
-            matches = dialog.listbox.matches
-            kept = [row.get_title() for row in dialog.rows.values() if matches(row)]
-            check(kept == [label], f"searching {search!r} keeps only {label!r}, kept {kept}")
-        titles[label].emit("activated")
-        settle(window)
-
-    def menu_labels(root):
-        model = widgets_of(root, "MenuButton")[0].get_menu_model()
-        return [
-            model.get_item_attribute_value(i, "label", None).get_string()
-            for i in range(model.get_n_items())
-        ]
-
-    def titles_in(root):
-        return [w.get_title() for w in walk(root) if hasattr(w, "get_title") and w.get_title()]
+    settle = partial(_settle, GLib)
+    ltr_leftovers = partial(_ltr_leftovers, gtk, rtl_dir)
+    frames = partial(_frames, GLib)
+    wait_laid_out = partial(_wait_laid_out, GLib)
+    automatic_label = partial(_automatic_label, i18n)
+    menu_labels = _menu_labels
+    titles_in = _titles_in
 
     lang_actions = settings.Actions(
         config,
         generate_key=lambda path: path.write_text("demo-key", encoding="utf-8"),
         capabilities=wayland_capabilities,
     )
+    choose_language = partial(_choose_language, settings_dialogs, kit, lang_actions, GLib)
     i18n.activate(i18n.AUTOMATIC)
     gtk.Widget.set_default_direction(gtk.TextDirection.LTR)
     window = settings_app.build_window(application, lang_actions)
@@ -405,31 +453,9 @@ def _language_scenarios(
     )
 
 
-def _rtl_scenarios(application, config, settings_app, settings_dialogs, staged_lib, work, lang):
-    """Arabic mirrors every UI element into a correct right-to-left layout."""
-    automatic_label = lang.automatic_label
-    choose_language = lang.choose_language
-    frames = lang.frames
-    gtk = lang.gtk
-    i18n = lang.i18n
-    kit = lang.kit
-    lang_actions = lang.lang_actions
-    ltr_leftovers = lang.ltr_leftovers
-    menu_labels = lang.menu_labels
-    rtl_dir = lang.rtl_dir
-    settle = lang.settle
-    titles_in = lang.titles_in
-    wait_laid_out = lang.wait_laid_out
-    window = settings_app.build_window(application, lang_actions)
-    window.present()
-    settle(window)
-    choose_language(window, "العربية")
-    check(i18n.read_language(config) == "ar", "Arabic is stored as the language")
-    check(gtk.Widget.get_default_direction() == rtl_dir, "the toolkit default direction is RTL")
-    # Every element, not a sample: anything still LTR would render its text and
-    # controls the wrong way round inside a mirrored window.
-    wrong = ltr_leftovers(window)
-    check(not wrong, f"every widget in the window is RTL (LTR leftovers: {wrong})")
+def _rtl_layout_scenarios(window):
+    """The visual mirroring itself: the menu button moves to the left edge, and each
+    row's suffix sits on the visual left of its title."""
     width = window.get_width()
     menu = widgets_of(window, "MenuButton")[0]
     check(
@@ -458,15 +484,12 @@ def _rtl_scenarios(application, config, settings_app, settings_dialogs, staged_l
         mirrored >= 3,
         f"row suffixes sit on the visual left of their titles ({mirrored} rows)",
     )
-    # Text: no English msgid may leak through once Arabic is active.
-    mo = staged_lib.parent.parent / "share" / "locale" / "ar" / "LC_MESSAGES" / "wayland-vnc.mo"
-    with mo.open("rb") as handle:
-        catalogue = _gettext.GNUTranslations(handle)._catalog
-    english = {k for k in catalogue if k}
-    leaked = sorted(t for t in [*titles_in(window), *menu_labels(window)] if t in english)
-    check(not leaked, f"no untranslated English title is shown in Arabic ({leaked})")
-    # Dialogs: header buttons mirror (Cancel to the visual right, Save to the left),
-    # and every element inside is RTL too.
+
+
+def _rtl_dialog_scenarios(
+    catalogue, kit, lang_actions, ltr_leftovers, settings_dialogs, settle, wait_laid_out, window
+):
+    """Every dialog the window opens is mirrored too, and stays mirrored once laid out."""
     for key in ("credential", "network"):
         opened = settings_dialogs.open_for(key, kit, lang_actions, window, lambda: None)
         settle(window)
@@ -487,9 +510,10 @@ def _rtl_scenarios(application, config, settings_app, settings_dialogs, staged_l
     settle(window)
     check(not ltr_leftovers(diag), "diagnostics dialog is fully RTL")
     diag.force_close()
-    # A picture for the record, next to the other run artifacts.
-    # Rendered through the window's own renderer from a snapshot of its child --
-    # the way GTK produces offscreen images -- so it works under Xvfb.
+
+
+def _rtl_screenshot_scenario(frames, gtk, window, work):
+    """A screenshot of the mirrored window, and the fonts that make it meaningful."""
     frames(window)
     shot = work / "settings-arabic-rtl.png"
     why = "ok"
@@ -522,9 +546,90 @@ def _rtl_scenarios(application, config, settings_app, settings_dialogs, staged_l
         why == "ok" and shot.stat().st_size > 1000 or why.startswith("skipped"),
         f"an RTL screenshot was saved: {shot} ({why})",
     )
+
+
+def _rtl_scenarios(application, config, settings_app, settings_dialogs, staged_lib, work, lang):
+    """Arabic mirrors every UI element into a correct right-to-left layout."""
+    automatic_label = lang.automatic_label
+    choose_language = lang.choose_language
+    frames = lang.frames
+    gtk = lang.gtk
+    i18n = lang.i18n
+    kit = lang.kit
+    lang_actions = lang.lang_actions
+    ltr_leftovers = lang.ltr_leftovers
+    menu_labels = lang.menu_labels
+    rtl_dir = lang.rtl_dir
+    settle = lang.settle
+    titles_in = lang.titles_in
+    wait_laid_out = lang.wait_laid_out
+    window = settings_app.build_window(application, lang_actions)
+    window.present()
+    settle(window)
+    choose_language(window, "العربية")
+    check(i18n.read_language(config) == "ar", "Arabic is stored as the language")
+    check(gtk.Widget.get_default_direction() == rtl_dir, "the toolkit default direction is RTL")
+    # Every element, not a sample: anything still LTR would render its text and
+    # controls the wrong way round inside a mirrored window.
+    wrong = ltr_leftovers(window)
+    check(not wrong, f"every widget in the window is RTL (LTR leftovers: {wrong})")
+    _rtl_layout_scenarios(window=window)
+    # Text: no English msgid may leak through once Arabic is active.
+    mo = staged_lib.parent.parent / "share" / "locale" / "ar" / "LC_MESSAGES" / "wayland-vnc.mo"
+    with mo.open("rb") as handle:
+        catalogue = _gettext.GNUTranslations(handle)._catalog
+    english = {k for k in catalogue if k}
+    leaked = sorted(t for t in [*titles_in(window), *menu_labels(window)] if t in english)
+    check(not leaked, f"no untranslated English title is shown in Arabic ({leaked})")
+    # Dialogs: header buttons mirror (Cancel to the visual right, Save to the left),
+    # and every element inside is RTL too.
+    _rtl_dialog_scenarios(
+        catalogue=catalogue,
+        kit=kit,
+        lang_actions=lang_actions,
+        ltr_leftovers=ltr_leftovers,
+        settings_dialogs=settings_dialogs,
+        settle=settle,
+        wait_laid_out=wait_laid_out,
+        window=window,
+    )
+    # A picture for the record, next to the other run artifacts.
+    # Rendered through the window's own renderer from a snapshot of its child --
+    # the way GTK produces offscreen images -- so it works under Xvfb.
+    _rtl_screenshot_scenario(frames=frames, gtk=gtk, window=window, work=work)
     choose_language(window, automatic_label(window))
     check(gtk.Widget.get_default_direction() != rtl_dir, "returning to Automatic restores LTR")
     window.close()
+
+
+def _verdict(application) -> int:
+    """The run's exit status, and the one line that says why. A platform with no
+    display server passes on the display-independent scenarios alone, and says so
+    rather than reporting a full pass it did not earn."""
+    if FAILURES:
+        print(f"SETTINGS APP E2E FAILED ({len(FAILURES)} check(s))")
+        for failure in FAILURES:
+            print(f"  - {failure}")
+        return 1
+    if application is None:
+        print("SETTINGS APP E2E PASSED (display-independent scenarios only)")
+    else:
+        print("SETTINGS APP E2E PASSED")
+    return 0
+
+
+def _gui_application(settings_app):
+    """The Adw.Application the widget scenarios need, or None where no display server
+    exists at all (RHEL 10 and rebuilds have neither Xvfb nor a GTK broadway backend).
+    There the window cannot be constructed by anyone, so those scenarios are reported
+    as skipped rather than silently passing."""
+    if not (os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY")):
+        return None, None, None
+    adw, gtk = settings_app._load_gtk()
+    application = adw.Application(application_id="io.github.ventura8.wayland_vnc.E2E")
+    # Emit GApplication::startup before any window is added, as a real launch would.
+    application.register(None)
+    return application, adw, gtk
 
 
 def main() -> int:
@@ -563,17 +668,7 @@ def main() -> int:
         generate_key=lambda path: path.write_text("demo-key", encoding="utf-8"),
         capabilities=wayland_capabilities,
     )
-    # Some supported platforms ship no headless display server at all (RHEL 10 and
-    # rebuilds have neither Xvfb nor a GTK broadway backend). There, the window cannot
-    # be constructed by anyone, so the widget scenarios are reported as skipped rather
-    # than silently passing; every display-independent scenario still runs.
-    gui = os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY")
-    application = None
-    if gui:
-        adw, _gtk = settings_app._load_gtk()
-        application = adw.Application(application_id="io.github.ventura8.wayland_vnc.E2E")
-        # Emit GApplication::startup before any window is added, as a real launch would.
-        application.register(None)
+    application, adw, _gtk = _gui_application(settings_app)
 
     print("== happy: a fresh host reports nothing configured ==")
     status = actions.status()
@@ -740,16 +835,7 @@ def main() -> int:
         )
 
     print()
-    if FAILURES:
-        print(f"SETTINGS APP E2E FAILED ({len(FAILURES)} check(s))")
-        for failure in FAILURES:
-            print(f"  - {failure}")
-        return 1
-    if application is None:
-        print("SETTINGS APP E2E PASSED (display-independent scenarios only)")
-    else:
-        print("SETTINGS APP E2E PASSED")
-    return 0
+    return _verdict(application)
 
 
 if __name__ == "__main__":
