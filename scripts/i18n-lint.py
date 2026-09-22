@@ -67,38 +67,58 @@ def offered_languages() -> set[str]:
     return set(re.findall(r'^\s*"([A-Za-z_]+)":', block, re.M))
 
 
+def _message_problems(code: str, template: dict, found: dict) -> list[str]:
+    """Everything wrong with one catalogue's messages, against the template."""
+    problems = []
+    for msgid in template:
+        if msgid not in found:
+            problems.append(f"{code}: missing {msgid!r}")
+            continue
+        msgstr, fuzzy = found[msgid]
+        if fuzzy:
+            problems.append(f"{code}: fuzzy {msgid!r}")
+        if not msgstr.strip():
+            problems.append(f"{code}: untranslated {msgid!r}")
+        elif sorted(PLACEHOLDER.findall(msgstr)) != sorted(PLACEHOLDER.findall(msgid)):
+            problems.append(f"{code}: placeholders differ in {msgid!r} -> {msgstr!r}")
+    return problems
+
+
+def _msgfmt_problems(msgfmt: str | None, code: str, path: Path) -> list[str]:
+    """What gettext's own checker says, when it is installed to say it."""
+    if not msgfmt:
+        return []
+    result = subprocess.run(
+        [msgfmt, "--check", "--check-format", "-o", "/dev/null", str(path)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return [] if result.returncode == 0 else [f"{code}: msgfmt: {result.stderr.strip()}"]
+
+
+def _coverage_problems(offered: set[str], catalogues: dict) -> list[str]:
+    """A language offered in the settings window with no catalogue behind it reaches
+    users as untranslated English; a catalogue nothing offers is never loaded."""
+    problems = [
+        f"{code}: offered in i18n.LANGUAGES but po/{code}.po does not exist"
+        for code in sorted(offered - set(catalogues))
+    ]
+    problems += [
+        f"{code}: po/{code}.po exists but i18n.LANGUAGES does not offer it"
+        for code in sorted(set(catalogues) - offered)
+    ]
+    return problems
+
+
 def lint() -> list[str]:
-    problems: list[str] = []
     template = entries(TEMPLATE)
     catalogues = {path.stem: path for path in PO_DIR.glob("*.po")}
-    offered = offered_languages()
-    for code in sorted(offered - set(catalogues)):
-        problems.append(f"{code}: offered in i18n.LANGUAGES but po/{code}.po does not exist")
-    for code in sorted(set(catalogues) - offered):
-        problems.append(f"{code}: po/{code}.po exists but i18n.LANGUAGES does not offer it")
     msgfmt = shutil.which("msgfmt")
+    problems = _coverage_problems(offered_languages(), catalogues)
     for code, path in sorted(catalogues.items()):
-        found = entries(path)
-        for msgid in template:
-            if msgid not in found:
-                problems.append(f"{code}: missing {msgid!r}")
-                continue
-            msgstr, fuzzy = found[msgid]
-            if fuzzy:
-                problems.append(f"{code}: fuzzy {msgid!r}")
-            if not msgstr.strip():
-                problems.append(f"{code}: untranslated {msgid!r}")
-            elif sorted(PLACEHOLDER.findall(msgstr)) != sorted(PLACEHOLDER.findall(msgid)):
-                problems.append(f"{code}: placeholders differ in {msgid!r} -> {msgstr!r}")
-        if msgfmt:
-            result = subprocess.run(
-                [msgfmt, "--check", "--check-format", "-o", "/dev/null", str(path)],
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-            if result.returncode != 0:
-                problems.append(f"{code}: msgfmt: {result.stderr.strip()}")
+        problems += _message_problems(code, template, entries(path))
+        problems += _msgfmt_problems(msgfmt, code, path)
     return problems
 
 

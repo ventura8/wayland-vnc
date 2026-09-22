@@ -299,46 +299,52 @@ class DockerRealVncDriver:
     # gives the desktops real DRM outputs and their own lock screens); none here.
     machine_capabilities = ()
 
-    def set_mode(self, width, height, scale):
-        if self.fixture not in RESIZABLE_FIXTURES and "resize" not in self.machine_capabilities:
-            raise ValueError("fixture output mode is not runner-controlled")
+    def _sway_mode_script(self, width, height, scale):
+        """Sway 1.11 segfaults on headless mode changes while WayVNC holds capture
+        state (wlr-randr and IPC alike). Detach WayVNC around the change; the live
+        resize scenario still changes the mode with the client attached."""
+        attached = self.live_resize
+        custom = "" if self._output_lists_mode(width, height) else "--custom "
+        return (
+            'export SWAYSOCK="$(ls "$XDG_RUNTIME_DIR"/sway-ipc.*.sock | head -1)"'
+            ' WAYLAND_DISPLAY="$(ls "$XDG_RUNTIME_DIR" | grep -E "^wayland-[0-9]+$" | head -1)"'
+            + ("" if attached else " && wayvncctl detach && sleep 1")
+            # Quoted as one command, or swaymsg reads --custom as an option of its own.
+            + f" && swaymsg 'output {self.primary_output} mode {custom}{width}x{height}"
+            + f" scale {scale}'"
+            + ("" if attached else ' && sleep 1 && wayvncctl attach "$WAYLAND_DISPLAY"')
+        )
+
+    def _wlroots_mode_script(self, width, height, scale):
+        """wlr-randr only accepts a mode the output advertises; anything else is custom."""
+        option = "--mode" if self._output_lists_mode(width, height) else "--custom-mode"
+        return f"wlr-randr --output {self.primary_output} {option} {width}x{height} --scale {scale}"
+
+    def _mode_script(self, width, height, scale):
+        """The command that sets the output mode, in this fixture's own dialect."""
         if self.fixture == "gnome":
-            script = (
+            return (
                 f"python3 /fixture/gnome/mutter-monitors.py mode {self.primary_output}"
                 f" {width}x{height} {scale}"
             )
-        elif self.fixture == "plasma":
-            script = (
+        if self.fixture == "plasma":
+            return (
                 f"kscreen-doctor output.{self.primary_output}.mode.{width}x{height}@60"
                 f" output.{self.primary_output}.scale.{scale}"
             )
-        elif self.fixture == "hyprland":
-            script = (
+        if self.fixture == "hyprland":
+            return (
                 f"hyprctl --instance 0 keyword monitor"
                 f" {self.primary_output},{width}x{height}@60,0x0,{scale}"
             )
-        elif self.fixture == "sway":
-            # Sway 1.11 segfaults on headless mode changes while WayVNC holds capture
-            # state (wlr-randr and IPC alike). Detach WayVNC around the change; the
-            # live resize scenario still changes the mode with the client attached.
-            attached = self.live_resize
-            custom = "" if self._output_lists_mode(width, height) else "--custom "
-            script = (
-                'export SWAYSOCK="$(ls "$XDG_RUNTIME_DIR"/sway-ipc.*.sock | head -1)"'
-                ' WAYLAND_DISPLAY="$(ls "$XDG_RUNTIME_DIR" | grep -E "^wayland-[0-9]+$" | head -1)"'
-                + ("" if attached else " && wayvncctl detach && sleep 1")
-                # Quoted as one command, or swaymsg reads --custom as an option of its own.
-                + f" && swaymsg 'output {self.primary_output} mode {custom}{width}x{height}"
-                + f" scale {scale}'"
-                + ("" if attached else ' && sleep 1 && wayvncctl attach "$WAYLAND_DISPLAY"')
-            )
-        else:
-            option = "--mode" if self._output_lists_mode(width, height) else "--custom-mode"
-            script = (
-                f"wlr-randr --output {self.primary_output} {option} {width}x{height}"
-                f" --scale {scale}"
-            )
-        result = self._fixture_exec(script, timeout=30)
+        if self.fixture == "sway":
+            return self._sway_mode_script(width, height, scale)
+        return self._wlroots_mode_script(width, height, scale)
+
+    def set_mode(self, width, height, scale):
+        if self.fixture not in RESIZABLE_FIXTURES and "resize" not in self.machine_capabilities:
+            raise ValueError("fixture output mode is not runner-controlled")
+        result = self._fixture_exec(self._mode_script(width, height, scale), timeout=30)
         if result.returncode != 0:
             raise OSError(f"mode change failed: {result.stderr.strip()}")
         time.sleep(3)
@@ -428,33 +434,36 @@ class DockerRealVncDriver:
         else:
             self._fixture_exec("pkill -x swaylock || true")
 
-    def hotplug(self, attach):
-        if self.fixture not in HOTPLUG_FIXTURES and "hotplug" not in self.machine_capabilities:
-            raise ValueError("this fixture cannot hot-plug outputs")
+    def _hotplug_command(self, attach):
+        """The command that plugs or unplugs the spare output, in this fixture's own
+        dialect. sway and Hyprland create the output on demand; the rest switch the
+        spare one the session script already made."""
         if self.fixture == "gnome":
             state = "on" if attach else "off"
             helper = "python3 /fixture/gnome/mutter-monitors.py"
-            result = self._fixture_exec(f"{helper} enable {self.spare_output} {state}")
-        elif self.fixture == "plasma":
+            return f"{helper} enable {self.spare_output} {state}"
+        if self.fixture == "plasma":
             state = "enable" if attach else "disable"
-            result = self._fixture_exec(f"kscreen-doctor output.{self.spare_output}.{state}")
-        elif self.fixture == "sway":
+            return f"kscreen-doctor output.{self.spare_output}.{state}"
+        if self.fixture == "sway":
             swaysock = 'export SWAYSOCK="$(ls "$XDG_RUNTIME_DIR"/sway-ipc.*.sock | head -1)" && '
             command = (
                 "swaymsg create_output" if attach else f"swaymsg output {self.spare_output} unplug"
             )
-            result = self._fixture_exec(swaysock + command)
-        elif self.fixture == "hyprland":
-            command = (
+            return swaysock + command
+        if self.fixture == "hyprland":
+            return (
                 "hyprctl --instance 0 output create headless"
                 if attach
                 else f"hyprctl --instance 0 output remove {self.spare_output}"
             )
-            result = self._fixture_exec(command)
-        else:
-            # The spare headless output the session script created and switched off.
-            state = "--on" if attach else "--off"
-            result = self._fixture_exec(f"wlr-randr --output {self.spare_output} {state}")
+        # The spare headless output the session script created and switched off.
+        return f"wlr-randr --output {self.spare_output} {'--on' if attach else '--off'}"
+
+    def hotplug(self, attach):
+        if self.fixture not in HOTPLUG_FIXTURES and "hotplug" not in self.machine_capabilities:
+            raise ValueError("this fixture cannot hot-plug outputs")
+        result = self._fixture_exec(self._hotplug_command(attach))
         if result.returncode != 0:
             raise OSError(f"output hot-plug failed: {result.stderr.strip()}")
 
@@ -868,8 +877,8 @@ class KvmHarnessDriver(HarnessViewerMixin, KvmDriver):
         super().__init__(**kwargs)
         self._harness_init(identities, viewer_config)
 
-    def start(self):
-        KvmDriver.start(self)
+    def start(self, network=None):
+        KvmDriver.start(self, network)
         listening = sh(["ss", "-ltnH", f"( sport = :{self.port} )"], timeout=15)
         if f"127.0.0.1:{self.port}" not in listening.stdout:
             raise SystemExit(
@@ -1044,7 +1053,7 @@ def android_viewer(sdk):
     return AndroidViewer(adb, pointer_report=lambda: None)
 
 
-def main():
+def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--fixture", choices=TARGETS, required=True)
     parser.add_argument("--port", type=int, required=True, help="loopback port for the fixture")
@@ -1092,8 +1101,12 @@ def main():
     )
     parser.add_argument("--identities", type=Path, default=None, help="private pinned identities")
     parser.add_argument("--viewer-config", type=Path, default=None, help="private viewer config")
-    args = parser.parse_args()
-    viewer_name = VIEWERS[args.viewer]
+    return parser
+
+
+def _validate(parser: argparse.ArgumentParser, args) -> None:
+    """Refuse a combination of options the run cannot honour, and refuse any private
+    file that is not mode 600 -- a credential others can read is not a private one."""
     if args.harness and (args.identities is None or args.viewer_config is None):
         parser.error("--harness needs --identities and --viewer-config")
     if args.viewer == "desktop" and args.connection is None:
@@ -1107,6 +1120,13 @@ def main():
             parser.error(f"{private} must be a private file with mode 600")
     if not (1024 < args.port < 65536):
         parser.error("port must be an unprivileged loopback port")
+
+
+def main():
+    parser = _parser()
+    args = parser.parse_args()
+    _validate(parser, args)
+    viewer_name = VIEWERS[args.viewer]
     os.umask(0o077)
     # The native fixture image; scripts/fixture-smoke.sh tags an emulated build
     # for another architecture separately, so this is always the host's.

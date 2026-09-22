@@ -63,19 +63,11 @@ def block(lines: list[str], indent: str) -> str:
     return "\n".join(indent + line if line else "" for line in lines)
 
 
-def main() -> None:
-    template_path, out_path = (pathlib.Path(arg) for arg in sys.argv[1:3])
-    env = os.environ
-    target = env["WAYLAND_VNC_TEMPLATE_TARGET"]
-    template = template_path.read_text(encoding="utf-8")
-    values = {
-        "__TARGET__": target,
-        "__PASSWORD_HASH__": env["WAYLAND_VNC_TEMPLATE_HASH"],
-        "__VNC_PASSWORD__": env["WAYLAND_VNC_TEMPLATE_PASSWORD"],
-    }
-    for name in ("__PASSWORD_HASH__", "__VNC_PASSWORD__"):
-        if "\n" in values[name] or "\r" in values[name]:
-            raise SystemExit(f"{name} must be a single line")
+def _optional_values(template: str, target: str, env) -> dict[str, str]:
+    """The placeholders only some templates carry, computed only when the template
+    actually asks for them -- a value produced for a template that does not name it
+    would fail the "not in template" check below."""
+    values: dict[str, str] = {}
     if "__PACKAGES__" in template:
         values["__PACKAGES__"] = block([f"- {p}" for p in dockerfile_packages(target)], "  ")
     if "__HEADLESS_OUTPUTS__" in template:
@@ -95,6 +87,30 @@ def main() -> None:
             raise SystemExit("this template pins a server key: WAYLAND_VNC_TEMPLATE_KEY is empty")
         key = pathlib.Path(key_path).read_text(encoding="utf-8").strip().splitlines()
         values["__SERVER_KEY__"] = block(key, "      ")
+    return values
+
+
+def _credential_values(env) -> dict[str, str]:
+    """The two secrets every template carries. A line break in either would end the
+    literal block they are written into and spill the rest into the document."""
+    values = {
+        "__PASSWORD_HASH__": env["WAYLAND_VNC_TEMPLATE_HASH"],
+        "__VNC_PASSWORD__": env["WAYLAND_VNC_TEMPLATE_PASSWORD"],
+    }
+    for name, value in values.items():
+        if "\n" in value or "\r" in value:
+            raise SystemExit(f"{name} must be a single line")
+    return values
+
+
+def main() -> None:
+    template_path, out_path = (pathlib.Path(arg) for arg in sys.argv[1:3])
+    env = os.environ
+    target = env["WAYLAND_VNC_TEMPLATE_TARGET"]
+    template = template_path.read_text(encoding="utf-8")
+    values = {"__TARGET__": target}
+    values.update(_credential_values(env))
+    values.update(_optional_values(template, target, env))
     for name, value in values.items():
         if name not in template:
             raise SystemExit(f"{name} is not in {template_path}")
