@@ -27,10 +27,10 @@ host_arch() {
 }
 
 arch=${WAYLAND_VNC_ARCH:-}
-if [ -z "$arch" ] && [ -n "${DOCKER_DEFAULT_PLATFORM:-}" ]; then
+if [[ -z $arch && -n ${DOCKER_DEFAULT_PLATFORM:-} ]]; then
   arch=${DOCKER_DEFAULT_PLATFORM#linux/}
 fi
-if [ -z "$arch" ]; then
+if [[ -z "$arch" ]]; then
   arch=$(host_arch)
 fi
 case "$arch" in
@@ -44,7 +44,7 @@ esac
 case "$spelling" in
 deb) echo "$arch" ;;
 platform) echo "linux/$arch" ;;
-appimage) [ "$arch" = amd64 ] && echo x86_64 || echo aarch64 ;;
+appimage) [[ "$arch" = amd64 ]] && echo x86_64 || echo aarch64 ;;
 *)
   echo "target-arch.sh: unknown spelling '$spelling' (deb, platform or appimage)" >&2
   exit 2

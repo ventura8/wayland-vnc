@@ -273,6 +273,25 @@ def fold(text: str) -> str:
     return stripped.translate(_PLAIN_LETTERS)
 
 
+def _filter_section(expander, title: str, rows, needle: str) -> int:
+    """Apply one folded query to one diagnostics section; returns how many of its rows
+    are left showing. A section whose own title matches shows all of its rows."""
+    if needle and needle in title:
+        for row, _text in rows:
+            row.set_visible(True)
+        hits = len(rows)
+    else:
+        hits = 0
+        for row, text in rows:
+            visible = not needle or needle in text
+            row.set_visible(visible)
+            hits += visible
+    expander.set_visible(not needle or hits > 0)
+    if needle and hits:
+        expander.set_expanded(True)
+    return hits if expander.get_visible() else 0
+
+
 def diagnostic_filter(sections, query: str) -> int:
     """Apply a search query to the diagnostics rows; returns how many rows match.
 
@@ -280,23 +299,7 @@ def diagnostic_filter(sections, query: str) -> int:
     sections are expanded so the hit is on screen. An empty query restores everything.
     """
     needle = fold(query.strip())
-    shown = 0
-    for expander, title, rows in sections:
-        hits = 0
-        for row, text in rows:
-            visible = not needle or needle in text
-            row.set_visible(visible)
-            hits += visible
-        section_hit = bool(needle) and needle in title
-        if section_hit:
-            for row, _text in rows:
-                row.set_visible(True)
-            hits = len(rows)
-        expander.set_visible(not needle or hits > 0)
-        if needle and hits:
-            expander.set_expanded(True)
-        shown += hits if expander.get_visible() else 0
-    return shown
+    return sum(_filter_section(expander, title, rows, needle) for expander, title, rows in sections)
 
 
 def _searchable(kit: Toolkit, dialog, sections, *, page, empty) -> None:

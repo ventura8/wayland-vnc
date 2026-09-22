@@ -47,7 +47,7 @@ arch=$(bash scripts/target-arch.sh deb)
 platform=$(bash scripts/target-arch.sh platform)
 host_arch=$(env -u WAYLAND_VNC_ARCH -u DOCKER_DEFAULT_PLATFORM bash scripts/target-arch.sh deb)
 image="wayland-vnc-$fixture:dev"
-[ "$arch" = "$host_arch" ] || image="wayland-vnc-$fixture:dev-$arch"
+[[ "$arch" = "$host_arch" ]] || image="wayland-vnc-$fixture:dev-$arch"
 container="wayland-vnc-$fixture-smoke-$$"
 
 cleanup() {

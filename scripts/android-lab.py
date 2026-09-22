@@ -42,16 +42,17 @@ subprocess.run(
     check=True,
     timeout=120,
 )
+PLAY_STORE_ON = "PlayStore.enabled=true\n"
 configuration = device / "config.ini"
 contents = configuration.read_text(encoding="utf-8")
 if "tag.id=google_apis_playstore\n" not in contents:
     parser.error("Created AVD does not use the requested official Play Store image")
 if "PlayStore.enabled=false\n" in contents:
-    contents = contents.replace("PlayStore.enabled=false\n", "PlayStore.enabled=true\n", 1)
+    contents = contents.replace("PlayStore.enabled=false\n", PLAY_STORE_ON, 1)
 elif "PlayStore.enabled=no\n" in contents:
-    contents = contents.replace("PlayStore.enabled=no\n", "PlayStore.enabled=true\n", 1)
-elif "PlayStore.enabled=true\n" not in contents:
-    contents = "PlayStore.enabled=true\n" + contents
+    contents = contents.replace("PlayStore.enabled=no\n", PLAY_STORE_ON, 1)
+elif PLAY_STORE_ON not in contents:
+    contents = PLAY_STORE_ON + contents
 configuration.write_text(contents, encoding="utf-8")
 print(f"Created isolated AVD: {device}")
 print("RealVNC app provisioning and ABI validation are still required; no qualification passed.")

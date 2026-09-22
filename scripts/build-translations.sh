@@ -18,21 +18,23 @@ sources=(src/wayland_vnc/settings.py src/wayland_vnc/settings_app.py
   src/wayland_vnc/probe.py)
 
 extract_to() {
+  local template=$1
   # --add-location=file keeps the source file a string came from, but not the line
   # number: line numbers move whenever anything above them is edited, which made the
   # staleness check below fail on changes that added no message at all.
   xgettext --language=Python --keyword=_ --keyword=translatable --from-code=UTF-8 \
     --package-name="$domain" --package-version="$(cat VERSION 2>/dev/null || echo 1.0.0)" \
     --msgid-bugs-address=https://github.com/ventura8/wayland-vnc/issues \
-    --add-comments=Translators --no-wrap --add-location=file --output="$1" "${sources[@]}"
+    --add-comments=Translators --no-wrap --add-location=file --output="$template" \
+    "${sources[@]}"
   # xgettext leaves a CHARSET placeholder and stamps a build date into the header. Fix
   # the charset before anything else reads the file (msgcat warns about the
   # placeholder), and drop the date so the template does not differ from itself on
   # every run, which would defeat the staleness check below.
-  sed -i -e 's/charset=CHARSET/charset=UTF-8/' -e '/^"POT-Creation-Date:/d' "$1"
+  sed -i -e 's/charset=CHARSET/charset=UTF-8/' -e '/^"POT-Creation-Date:/d' "$template"
   # xgettext's own --sort-output is deprecated; msgcat is the supported way to get a
   # stable order, which keeps the template's diff readable between runs.
-  msgcat --sort-output --no-wrap --output-file="$1" "$1"
+  msgcat --sort-output --no-wrap --output-file="$template" "$template"
 }
 
 case "${1:-compile}" in
@@ -40,7 +42,7 @@ extract)
   mkdir -p po
   extract_to "$potfile"
   for po in po/*.po; do
-    [ -e "$po" ] || continue
+    [[ -e "$po" ]] || continue
     # No --sort-output: it is deprecated, and msgmerge already follows the
     # template's order, which msgcat has already sorted.
     msgmerge --quiet --no-wrap --update --backup=none "$po" "$potfile"
@@ -51,7 +53,7 @@ compile)
   mkdir -p "$outdir"
   count=0
   for po in po/*.po; do
-    [ -e "$po" ] || continue
+    [[ -e "$po" ]] || continue
     lang=$(basename "$po" .po)
     mkdir -p "$outdir/$lang/LC_MESSAGES"
     # Compiled by Python, not msgfmt: packaging runs in containers that have Python
@@ -74,7 +76,7 @@ check)
   fi
   status=0
   for po in po/*.po; do
-    [ -e "$po" ] || continue
+    [[ -e "$po" ]] || continue
     msgfmt --check --check-format --output-file=/dev/null "$po" || status=1
   done
   exit "$status"

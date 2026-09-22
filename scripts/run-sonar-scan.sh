@@ -33,7 +33,7 @@ case "${1:-}" in
   ;;
 esac
 
-if [ -z "${SONAR_TOKEN:-}" ]; then
+if [[ -z "${SONAR_TOKEN:-}" ]]; then
   echo "SONAR_TOKEN is not set: generate a user token at ${host_url%/}/account/security" \
     "and export it before running this script" >&2
   exit 2
@@ -58,7 +58,7 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 main_branch=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
 main_branch=${main_branch#origin/}
 analysed=${WAYLAND_VNC_SONAR_BRANCH:-${main_branch:-main}}
-if [ "$analysed" != "$branch" ]; then
+if [[ "$analysed" != "$branch" ]]; then
   echo "note: on '$branch'; analysing as '$analysed' (the free plan has no feature-branch" \
     "analysis). Set WAYLAND_VNC_SONAR_BRANCH to override." >&2
 fi

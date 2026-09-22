@@ -9,7 +9,7 @@ PATH="$(bash scripts/ensure-venv.sh):$PATH"
 export PATH
 
 images=("${@:-}")
-if [ -z "${images[0]:-}" ]; then
+if [[ -z "${images[0]:-}" ]]; then
   images=(ubuntu:26.04 debian:trixie)
 fi
 artifacts_dir=${WAYLAND_VNC_DEB_ARTIFACTS_DIR:-artifacts/deb}
@@ -67,7 +67,7 @@ for image in "${images[@]}"; do
   slug=${image//[:\/]/-}
   echo "=== deb smoke: $image ==="
   digest_image="$image"
-  if [ "$image" = "ubuntu:26.04" ]; then
+  if [[ "$image" = "ubuntu:26.04" ]]; then
     digest_image="ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78"
   fi
   if ! docker run --rm --network bridge \

@@ -96,7 +96,7 @@ DIALOG_OK = "android:id/button1"
 EV_SYN = "EV_SYN:0:0"
 
 NODE_RE = re.compile(r"<node [^>]*>")
-ATTR_RE = re.compile(r'([^\s=]+)="([^"]*)"')
+ATTR_RE = re.compile(r'([^\s=]++)="([^"]*+)"')
 
 
 def parse_ui(xml: str) -> list[UiNode]:
@@ -386,11 +386,38 @@ class AndroidViewer:
             return False
         activities = self.adb.shell("dumpsys", "activity", "activities")
         line = re.search(r"topResumedActivity=([^\n]*)", activities)
-        match = None if line is None else re.search(r"\S+/\S+", line.group(1))
-        return match is not None and match.group(0).endswith("/.app.DesktopActivity")
+        if line is None:
+            return False
+        activity = next((word for word in line.group(1).split() if "/" in word), None)
+        return activity is not None and activity.endswith("/.app.DesktopActivity")
 
     def disconnect(self) -> None:
         self.adb.shell("am", "force-stop", PACKAGE)
+
+    def _open_info_screen(self, *, sleep, clock) -> tuple[object, bool, int, list[str]]:
+        """Poll until the information screen's size field is in the tree, tapping the
+        toolbar's information button once the toolbar itself has been seen in a dump.
+
+        Returns (field, tapped, dumps, ids): the field or None, whether the button was
+        ever tapped, how many dumps it took, and -- when it timed out -- the resource
+        ids of the last dump, which is what makes a timeout diagnosable afterwards.
+        """
+        deadline = clock() + INFO_SCREEN_TIMEOUT
+        tapped = False
+        dumps = 0
+        while True:
+            nodes = self.adb.ui()
+            dumps += 1
+            details = self._info_field(nodes)
+            if details is not None:
+                return details, tapped, dumps, []
+            if not tapped and find(nodes, rid="menu_pin") is not None:
+                self._tap_screen(*INFO_BUTTON)
+                tapped = True
+            if clock() >= deadline:
+                ids = sorted({node.resource_id.rsplit("/", 1)[-1] for node in nodes})[:12]
+                return None, tapped, dumps, ids
+            sleep(0.5)
 
     def desktop_size(self, *, sleep=time.sleep, clock=time.monotonic) -> tuple[int, int] | None:
         """The desktop size the app itself reports on its information screen, for a
@@ -405,24 +432,7 @@ class AndroidViewer:
         scenarios fail. Back closes the screen, and the field must be gone again before
         the caller captures the desktop.
         """
-        deadline = clock() + INFO_SCREEN_TIMEOUT
-        tapped = False
-        details = None
-        dumps = 0
-        ids: list[str] = []
-        while True:
-            nodes = self.adb.ui()
-            dumps += 1
-            details = self._info_field(nodes)
-            if details is not None:
-                break
-            if not tapped and find(nodes, rid="menu_pin") is not None:
-                self._tap_screen(*INFO_BUTTON)
-                tapped = True
-            if clock() >= deadline:
-                ids = sorted({node.resource_id.rsplit("/", 1)[-1] for node in nodes})[:12]
-                break
-            sleep(0.5)
+        details, tapped, dumps, ids = self._open_info_screen(sleep=sleep, clock=clock)
         size = None
         if details is not None:
             match = re.fullmatch(r"\s*(\d+)\s*x\s*(\d+)\s*", details.text)
@@ -434,8 +444,8 @@ class AndroidViewer:
             self.size_report_failure = (
                 f"{what} within {INFO_SCREEN_TIMEOUT:.0f}s ({dumps} dumps; last dump ids {ids})"
             )
-        if not tapped and details is None:
-            return None
+            if not tapped:
+                return None
         self.adb.shell("input", "keyevent", KEY_BACK)
         if self._await_info(present=False, sleep=sleep, clock=clock) is not None:
             self.adb.shell("input", "keyevent", KEY_BACK)

@@ -116,21 +116,23 @@ def test_serve_execs_wayvnc_when_ready(tmp_path):
 
 
 def test_serve_refuses_x11_missing_password_and_missing_binary(tmp_path):
+    host = runtime.Host(lambda _n: "/usr/bin/wayvnc", lambda *_a: None)
     with pytest.raises(RuntimeError, match="native Wayland"):
         runtime.serve(
             tmp_path,
             capabilities=WLR,
             env={"XDG_SESSION_TYPE": "x11"},
-            host=runtime.Host(lambda _n: "/usr/bin/wayvnc", lambda *_a: None),
+            host=host,
         )
     # No credential is not a refusal any more: serve provisions a random one so the
     # service runs right after install -- but it still never serves unauthenticated.
+    without_binary = runtime.Host(lambda _n: None, lambda *_a: None)
     with pytest.raises(RuntimeError, match="wayvnc server binary"):
         runtime.serve(
             tmp_path,
             capabilities=WLR,
             env={"XDG_SESSION_TYPE": "wayland"},
-            host=runtime.Host(lambda _n: None, lambda *_a: None),
+            host=without_binary,
             generate_key=fake_key,
         )
 
@@ -782,7 +784,8 @@ def test_refresh_config_puts_the_new_password_in_the_file_wayvnc_reads(tmp_path)
     assert runtime.refresh_config(tmp_path, generate_key=fake_key) is not None
     body = (tmp_path / runtime.CONFIG_NAME).read_text()
     assert "password=changed9" in body
-    assert "address=127.0.0.1" in body and "port=5999" in body, "the bind must survive"
+    assert "address=127.0.0.1" in body, "the bind must survive"
+    assert "port=5999" in body, "the bind must survive"
 
 
 def test_refresh_config_does_nothing_before_anything_is_provisioned(tmp_path):

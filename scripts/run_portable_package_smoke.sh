@@ -20,7 +20,7 @@ PATH="$(bash scripts/ensure-venv.sh):$PATH"
 export PATH
 
 formats=("${@:-}")
-if [ -z "${formats[0]:-}" ]; then
+if [[ -z "${formats[0]:-}" ]]; then
   formats=(appimage snap flatpak)
 fi
 mkdir -p reports/distro-logs artifacts/portable

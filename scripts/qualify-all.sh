@@ -64,14 +64,15 @@ viewer_args=(--harness --identities "$identities" --viewer-config "$viewer_confi
 # harness reaches the guest on the lab network; the Android app reaches it through
 # `adb reverse` to host loopback, so its guest is forwarded there instead.
 boot_guest() {
-  local work="artifacts/kvm/$1"
+  local target=$1
+  local work="artifacts/kvm/$target"
   local bind=(--harness)
   [[ "$viewer" == desktop ]] || bind=()
   if [[ -f "$work/qemu.pid" ]] && kill -0 "$(cat "$work/qemu.pid")" 2>/dev/null; then
     kill "$(cat "$work/qemu.pid")"
     sleep 3
   fi
-  bash scripts/kvm/build-guest.sh "$1" "${bind[@]}" >&2 || return 1
+  bash scripts/kvm/build-guest.sh "$target" "${bind[@]}" >&2 || return 1
   # Wait through the guest agent for the readiness marker, not the serial console:
   # a desktop guest reboots once to load its custom EDID, so the console's "Cloud-init
   # finished" line appears before the fixture exists.

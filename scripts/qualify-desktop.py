@@ -35,6 +35,7 @@ VIEWERS = {"desktop": "realvnc-desktop", "android": "realvnc-android"}
 ANDROID_AVD_ROOT = Path("artifacts/android")
 ANDROID_SERIAL = "emulator-5554"
 RENDER_NODE_FIXTURES = ("plasma",)
+AUTH_OK = "Authentication successful"
 LAB_NETWORK = "wayland-vnc-lab"
 HARNESS_IMAGE = "wayland-vnc-viewer-harness:dev"
 VERSION_COMMANDS = {
@@ -231,7 +232,7 @@ class DockerRealVncDriver:
         # A screenshot request during the RA2 handshake can stall the viewer before it
         # sends credentials, so wait for the viewer's own authentication verdict first.
         log = session.log_path.read_text(errors="replace")
-        if "Authentication successful" not in log:
+        if AUTH_OK not in log:
             return False
         result = sh([VNCVIEWER, "-screenshot", str(session.pid), str(path)], timeout=15)
         return result.returncode == 0 and path.exists() and path.stat().st_size > 0
@@ -261,7 +262,7 @@ class DockerRealVncDriver:
         log = session.log_path.read_text(errors="replace")
         if "RSA decrypt/check error" in log or "bad length" in log:
             return True
-        return "close: [EndOfStream]" in log and "Authentication successful" not in log
+        return "close: [EndOfStream]" in log and AUTH_OK not in log
 
     def pause(self, seconds):
         sh([DOCKER, "pause", self.container])
@@ -601,7 +602,7 @@ class HarnessViewerMixin:
         return session
 
     def screenshot(self, session, path):
-        if "Authentication successful" not in session.log_path.read_text(errors="replace"):
+        if AUTH_OK not in session.log_path.read_text(errors="replace"):
             return False
         result = self._exec(f"vncviewer -screenshot {session.pid} /out/{path.name}", timeout=20)
         return result.returncode == 0 and path.exists() and path.stat().st_size > 0
@@ -683,10 +684,12 @@ class HarnessDriver(HarnessViewerMixin, DockerRealVncDriver):
         super().__init__(**kwargs)
         self._harness_init(identities, viewer_config)
 
-    def start(self):
+    def start(self, network=LAB_NETWORK):
+        """The viewer lives in a container of its own, so both ends join the internal
+        lab network; a caller that names another one is honoured."""
         _ensure_lab_network()
-        DockerRealVncDriver.start(self, network=LAB_NETWORK)
-        self.start_harness(self.container, 5900, network=LAB_NETWORK)
+        DockerRealVncDriver.start(self, network=network)
+        self.start_harness(self.container, 5900, network=network)
 
     def stop(self):
         DockerRealVncDriver.stop(self)
@@ -728,7 +731,10 @@ class KvmDriver(DockerRealVncDriver):
             self.machine_capabilities = ("resize", "hotplug", "lock")
             self.spare_output = "Virtual-2"
 
-    def start(self):
+    def start(self, network=None):
+        # The fixture is a virtual machine, not a container: there is no Docker network
+        # to join, and the parameter exists only to keep the base class's contract.
+        del network
         pid_file = self.work / "qemu.pid"
         if not pid_file.is_file():
             raise SystemExit(f"no running guest under {self.work} (scripts/kvm/build-*.sh first)")
@@ -950,7 +956,7 @@ class AndroidViewerMixin:
             f"{self.viewer.version()}\nsteps: {' > '.join(outcome.steps)}\n"
             f"app dialogs answered in {submitted - started:.1f}s before the server was asked\n"
             + "".join(f"{note}\n" for note in outcome.notes)
-            + (f"error: {outcome.error}\n" if outcome.error else "Authentication successful\n"),
+            + (f"error: {outcome.error}\n" if outcome.error else AUTH_OK + "\n"),
             encoding="utf-8",
         )
         return AndroidSession(self.viewers, log_path, outcome.connected, submitted)

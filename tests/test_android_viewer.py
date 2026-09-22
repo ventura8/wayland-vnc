@@ -274,9 +274,8 @@ def test_click_places_the_pointer_then_taps_and_drag_is_one_double_tap_and_hold_
     script = scripted.shells()[-1]
     assert script.startswith("input tap ")
     assert "input motionevent DOWN" in script
-    assert "sleep 0.7" in script and script.rstrip().endswith(
-        "input motionevent UP 660 230".split()[-1]
-    )
+    assert "sleep 0.7" in script
+    assert script.rstrip().endswith("input motionevent UP 660 230".split()[-1])
     assert script.count("input motionevent MOVE") == 8
 
 

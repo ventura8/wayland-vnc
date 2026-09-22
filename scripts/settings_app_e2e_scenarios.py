@@ -16,6 +16,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+# The settings window's row titles, as the widget tree spells them.
+CREDENTIAL_ROW = "Viewer Credential"
+CONFIG_ROW = "Server Configuration"
+LAN_ROW = "Local Network Access"
+AUTOSTART_ROW = "Start at Login"
+RUNNING_ROW = "Running Now"
+
 FAILURES = []
 
 
@@ -117,8 +124,8 @@ def main() -> int:
     check(not status.credential.present, "no credential is reported on a fresh config dir")
     check(not status.config.present, "no server configuration is reported")
     rows = dict(settings_app.status_rows(status))
-    check(rows["Viewer Credential"] == "Not set", "status row says the credential is not set")
-    check(rows["Server Configuration"] == "Not provisioned", "status row says not provisioned")
+    check(rows[CREDENTIAL_ROW] == "Not set", "status row says the credential is not set")
+    check(rows[CONFIG_ROW] == "Not provisioned", "status row says not provisioned")
 
     print("== bad: the service control is refused with a reason before setup ==")
     options = {option.key: option for option in actions.options(status)}
@@ -184,7 +191,7 @@ def main() -> int:
             for w in walk(window)
             if type(w).__name__ == "ActionRow" and hasattr(w, "get_title")
         ]
-        check("Viewer Credential" in labels, "status rows are present in the live widget tree")
+        check(CREDENTIAL_ROW in labels, "status rows are present in the live widget tree")
         check("Set Viewer Password" in labels, "configuration rows are present in the widget tree")
 
         print("== happy: the connect section shows name and LAN addresses with the port ==")
@@ -211,29 +218,30 @@ def main() -> int:
 
             context = GLib.MainContext.default()
             while context.iteration(False):
-                pass
+                # Each call runs one pending idle; there is nothing else to do here.
+                continue
 
         print("== happy: toggling the live switches drives the real unit ==")
         rows = switch_rows()
         check(
-            list(rows) == ["Local Network Access", "Start at Login", "Running Now"],
+            list(rows) == [LAN_ROW, AUTOSTART_ROW, RUNNING_ROW],
             "the local-network switch and both service switches exist in the window",
         )
-        for title in ("Start at Login", "Running Now"):
+        for title in (AUTOSTART_ROW, RUNNING_ROW):
             check(rows[title].get_sensitive(), "service switch enabled once preconditions are met")
-        rows["Start at Login"].set_active(True)
-        rows["Running Now"].set_active(True)
+        rows[AUTOSTART_ROW].set_active(True)
+        rows[RUNNING_ROW].set_active(True)
         log = systemctl_log(work)
         check(any("enable wayland-vnc.service" in line for line in log), "switch ran enable")
         check(any("start wayland-vnc.service" in line for line in log), "switch ran start")
-        rows["Start at Login"].set_active(False)
+        rows[AUTOSTART_ROW].set_active(False)
         check(
             any("disable wayland-vnc.service" in line for line in systemctl_log(work)),
             "switching off ran systemctl disable",
         )
 
         print("== happy: the local-network switch opens and closes the LAN, live ==")
-        lan = switch_rows()["Local Network Access"]
+        lan = switch_rows()[LAN_ROW]
         check(lan.get_sensitive() and not lan.get_active(), "the switch is usable, off by default")
         # Toggle the slider inside the row, as a click does, holding no reference to the
         # row itself: the redraw that follows must not finalise it mid-signal.
@@ -242,7 +250,7 @@ def main() -> int:
         inner.set_active(True)
         check(actions.status().config.lan_access, "the wildcard bind is stored at once")
         settle()
-        lan = switch_rows()["Local Network Access"]
+        lan = switch_rows()[LAN_ROW]
         check(lan.get_active(), "the redrawn switch shows local network access on")
         addresses = [
             w
@@ -253,7 +261,7 @@ def main() -> int:
         lan.set_active(False)
         settle()
         check(actions.status().config.loopback_only, "off again: this machine only")
-        lan = switch_rows()["Local Network Access"]
+        lan = switch_rows()[LAN_ROW]
         check(not lan.get_active(), "the redrawn switch shows local network access off")
 
         print("== happy: the credential dialog writes through the runtime ==")
@@ -360,21 +368,21 @@ def main() -> int:
     print("== bad: a loose credential mode is reported, not hidden ==")
     (config / "credentials").chmod(0o644)
     loose = dict(settings_app.status_rows(actions.status()))
-    check("too open" in loose["Viewer Credential"], "a 0644 credential is flagged as too open")
+    check("too open" in loose[CREDENTIAL_ROW], "a 0644 credential is flagged as too open")
     (config / "credentials").chmod(0o600)
 
     print("== happy: the default bind is this machine only; the switch opens the LAN ==")
     actions.apply_network(runtime.DEFAULT_ADDRESS, 5900)
     default = dict(settings_app.status_rows(actions.status()))
     check(
-        "this machine only" in default["Server Configuration"],
+        "this machine only" in default[CONFIG_ROW],
         "the default 127.0.0.1 bind is described as this machine only",
     )
     check(not actions.status().config.lan_access, "local network access starts off")
     actions.set_lan_access(True)
     lan = dict(settings_app.status_rows(actions.status()))
     check(
-        "every network this computer is on" in lan["Server Configuration"],
+        "every network this computer is on" in lan[CONFIG_ROW],
         "the opt-in is described as every network this computer is on, no fence claimed",
     )
     actions.set_lan_access(False)
@@ -383,7 +391,7 @@ def main() -> int:
     actions.apply_network("8.8.8.8", 5900)
     exposed = dict(settings_app.status_rows(actions.status()))
     check(
-        "PUBLIC ADDRESS" in exposed["Server Configuration"],
+        "PUBLIC ADDRESS" in exposed[CONFIG_ROW],
         "a public bind is called out loudly in the status view",
     )
 

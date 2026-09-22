@@ -37,7 +37,7 @@ apk=""
 url=""
 sdk=${ANDROID_SDK_ROOT:-$HOME/Android/Sdk}
 serial=${ANDROID_EMULATOR_SERIAL:-emulator-5554}
-while [ $# -gt 0 ]; do
+while [[ $# -gt 0 ]]; do
   case "$1" in
   --apk)
     apk=$2
@@ -58,12 +58,12 @@ while [ $# -gt 0 ]; do
   *) usage ;;
   esac
 done
-[ -n "$apk" ] || [ -n "$url" ] || usage
-[ -z "$apk" ] || [ -z "$url" ] || usage
+[[ -n $apk || -n $url ]] || usage
+[[ -z $apk || -z $url ]] || usage
 
 apksigner=$(find "$sdk/build-tools" -mindepth 2 -maxdepth 2 -name apksigner 2>/dev/null | sort -V | tail -1)
 aapt=$(find "$sdk/build-tools" -mindepth 2 -maxdepth 2 -name aapt2 2>/dev/null | sort -V | tail -1)
-[ -x "$apksigner" ] || {
+[[ -x "$apksigner" ]] || {
   echo "apksigner not found under $sdk/build-tools; install the build tools" >&2
   exit 2
 }
@@ -73,13 +73,13 @@ mkdir -p "$root"
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 
-if [ -n "$url" ]; then
+if [[ -n "$url" ]]; then
   echo "== downloading the APK =="
   echo "  from: $url"
   curl -fsSL --max-time 600 -o "$work/viewer.apk" "$url"
   apk="$work/viewer.apk"
 fi
-[ -f "$apk" ] || {
+[[ -f "$apk" ]] || {
   echo "$apk is not a file" >&2
   exit 1
 }
@@ -100,7 +100,7 @@ signer_dn=$(echo "$verify" | grep -m1 -E "^V[0-9.]+ Signer: certificate DN: " | 
 signer_sha=$(echo "$verify" | grep -m1 -E "^V[0-9.]+ Signer: certificate SHA-256 digest: " | sed 's/^.*digest: //')
 echo "  signer: $signer_dn"
 echo "  signer certificate SHA-256: $signer_sha"
-[ "$signer_sha" = "$REALVNC_SIGNER_SHA256" ] || {
+[[ "$signer_sha" = "$REALVNC_SIGNER_SHA256" ]] || {
   echo "REFUSED: signer certificate is not RealVNC's pinned release certificate" >&2
   exit 1
 }
@@ -112,7 +112,7 @@ case "$signer_dn" in
   ;;
 esac
 signers=$(echo "$verify" | grep -cE "^V[0-9.]+ Signer: certificate SHA-256 digest: " || true)
-[ "$signers" -eq 1 ] || {
+[[ "$signers" -eq 1 ]] || {
   echo "REFUSED: expected exactly one signer, found $signers" >&2
   exit 1
 }
@@ -120,11 +120,11 @@ echo "  ok: signed by RealVNC Ltd with the pinned certificate"
 
 package=""
 version=""
-if [ -x "$aapt" ]; then
+if [[ -x "$aapt" ]]; then
   badging=$("$aapt" dump badging "$apk" 2>/dev/null || true)
   package=$(echo "$badging" | sed -n "s/^package: name='\([^']*\)'.*/\1/p" | head -1)
   version=$(echo "$badging" | sed -n "s/^package: .*versionName='\([^']*\)'.*/\1/p" | head -1)
-  [ -z "$package" ] || [ "$package" = "$PACKAGE" ] || {
+  [[ -z $package || $package == "$PACKAGE" ]] || {
     echo "REFUSED: the APK is $package, not $PACKAGE" >&2
     exit 1
   }

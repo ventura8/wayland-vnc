@@ -50,8 +50,8 @@ def unquote(line: str) -> str:
     return "".join(text)
 
 
-def parse(text: str) -> dict[str, str]:
-    """Read a .po file into msgid -> msgstr.
+class _PoReader:
+    """One .po file, read line by line.
 
     Fuzzy entries and entries with an empty translation are left out, exactly as
     msgfmt does: both mean "no translation yet", and including them would hand the
@@ -59,56 +59,70 @@ def parse(text: str) -> dict[str, str]:
     The header (msgid "") is kept even when marked fuzzy, because it carries the
     charset the reader needs.
     """
-    entries: dict[str, str] = {}
-    msgid: str | None = None
-    msgstr: str | None = None
-    field: str | None = None
-    # A `#, fuzzy` comment applies to the entry that follows it, not the one above.
-    pending_fuzzy = False
-    fuzzy = False
-    plural = False
 
-    def flush() -> None:
-        if msgid is None:
+    def __init__(self) -> None:
+        self.entries: dict[str, str] = {}
+        self.msgid: str | None = None
+        self.msgstr: str | None = None
+        # Which field a bare `"..."` continuation line belongs to.
+        self.field: str | None = None
+        # A `#, fuzzy` comment applies to the entry that follows it, not the one above.
+        self.pending_fuzzy = False
+        self.fuzzy = False
+        self.plural = False
+
+    def flush(self) -> None:
+        """Store the entry just finished, if it is one that msgfmt would store."""
+        if self.msgid is None:
             return
         # Checked before the msgstr guard: a plural entry never fills msgstr, so the
         # guard alone would drop the message silently instead of reporting it.
-        if plural:
-            raise ValueError(f"plural forms are not supported: {msgid!r}")
-        if msgstr is None:
+        if self.plural:
+            raise ValueError(f"plural forms are not supported: {self.msgid!r}")
+        if self.msgstr is None:
             return
-        if msgid == "" or (msgstr != "" and not fuzzy):
-            entries[msgid] = msgstr
+        if self.msgid == "" or (self.msgstr != "" and not self.fuzzy):
+            self.entries[self.msgid] = self.msgstr
 
-    for raw in text.splitlines():
+    def _continue_field(self, line: str) -> None:
+        """A continuation of whichever field was last opened."""
+        if self.field == "id":
+            self.msgid += unquote(line)
+        elif self.field == "str":
+            self.msgstr += unquote(line)
+
+    def _start_entry(self, line: str) -> None:
+        self.flush()
+        self.msgid, self.msgstr, self.field = unquote(line[6:]), None, "id"
+        self.fuzzy, self.pending_fuzzy, self.plural = self.pending_fuzzy, False, False
+
+    def feed(self, raw: str) -> None:
         line = raw.strip()
         if line.startswith("#"):
-            if line.startswith("#,") and "fuzzy" in line:
-                pending_fuzzy = True
-            continue
-        if not line:
-            continue
-        if line.startswith("msgctxt "):
+            self.pending_fuzzy = self.pending_fuzzy or (line.startswith("#,") and "fuzzy" in line)
+        elif not line:
+            return
+        elif line.startswith("msgctxt "):
             raise ValueError("message contexts are not supported")
-        if line.startswith(("msgid_plural", "msgstr[")):
-            plural = True
-            field = None
+        elif line.startswith(("msgid_plural", "msgstr[")):
+            self.plural, self.field = True, None
         elif line.startswith("msgid "):
-            flush()
-            msgid, msgstr, field = unquote(line[6:]), None, "id"
-            fuzzy, pending_fuzzy, plural = pending_fuzzy, False, False
+            self._start_entry(line)
         elif line.startswith("msgstr "):
-            msgstr, field = unquote(line[7:]), "str"
+            self.msgstr, self.field = unquote(line[7:]), "str"
         elif line.startswith('"'):
-            # A continuation of whichever field was last opened.
-            if field == "id":
-                msgid += unquote(line)
-            elif field == "str":
-                msgstr += unquote(line)
+            self._continue_field(line)
         else:
             raise ValueError(f"unrecognised line: {raw!r}")
-    flush()
-    return entries
+
+
+def parse(text: str) -> dict[str, str]:
+    """Read a .po file into msgid -> msgstr; see _PoReader for what is left out."""
+    reader = _PoReader()
+    for raw in text.splitlines():
+        reader.feed(raw)
+    reader.flush()
+    return reader.entries
 
 
 def serialise(entries: dict[str, str]) -> bytes:

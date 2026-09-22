@@ -604,7 +604,8 @@ def test_the_banner_offers_the_fix_when_the_blocker_is_a_missing_password(displa
     banner.emit("button-clicked")
     assert chosen == ["credential"]
     x11 = next(_rows(_window_for(tmp_path, "BannerNoFix", session_type="x11"), "Banner"))
-    assert x11.get_revealed() and not x11.get_button_label(), "X11 has no in-app fix"
+    assert x11.get_revealed(), "X11 has no in-app fix"
+    assert not x11.get_button_label(), "X11 has no in-app fix"
 
 
 def test_keyboard_shortcuts_are_offered_where_libadwaita_has_the_dialog(display, tmp_path):
@@ -688,7 +689,8 @@ def test_the_chooser_lists_automatic_first_marks_the_current_and_applies_on_acti
     monkeypatch.setenv("WAYLAND_VNC_LOCALEDIR", str(localedir))
     window, dialog, chosen = _language_chooser(tmp_path, "LangDlg")
     codes = list(dialog.rows)
-    assert codes[0] == i18n.AUTOMATIC and codes[1:] == ["ja", "ro"], "installed, by code"
+    assert codes[0] == i18n.AUTOMATIC, "installed, by code"
+    assert codes[1:] == ["ja", "ro"], "installed, by code"
     assert [dialog.rows[c].get_title() for c in codes[1:]] == ["日本語", "Română"], "endonyms"
     assert dialog.rows[i18n.AUTOMATIC].check.get_visible(), "the current choice is checked"
     assert not dialog.rows["ro"].check.get_visible()

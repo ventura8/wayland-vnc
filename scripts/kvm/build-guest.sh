@@ -41,11 +41,11 @@ gnome | plasma) template=tests/kvm/desktop.user-data.template ;;
 esac
 shift
 harness=0
-if [ "${1:-}" = "--harness" ]; then
+if [[ "${1:-}" = "--harness" ]]; then
   harness=1
   shift
 fi
-[ $# -eq 0 ] || {
+[[ $# -eq 0 ]] || {
   echo "unexpected arguments: $*" >&2
   exit 2
 }
@@ -84,7 +84,7 @@ esac
 # for the Android viewer adb reverse points the emulator at the same loopback port.
 # Loopback keeps the guest reachable only from the host, never the LAN.
 bind=${WAYLAND_VNC_KVM_BIND:-127.0.0.1}
-[ "$harness" -eq 1 ] && echo "== harness mode: guest VNC on $bind (host-network viewer) =="
+[[ "$harness" -eq 1 ]] && echo "== harness mode: guest VNC on $bind (host-network viewer) =="
 image_url="https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img"
 image_sha256=8196be9d7958059cb56c6c75c80fdf6cee8a8885bc149ea791d7db1c7ef93035
 base="artifacts/kvm/resolute-cloudimg-amd64.img"
@@ -94,17 +94,17 @@ vars="$work/OVMF_VARS.fd"
 credential=${WAYLAND_VNC_CREDENTIAL:-artifacts/desktop-viewer/fixture.conf}
 server_key=${WAYLAND_VNC_SERVER_KEY:-artifacts/desktop-viewer/fixture-rsa.pem}
 
-[ -f "$credential" ] || {
+[[ -f "$credential" ]] || {
   echo "Missing private credential file: $credential" >&2
   exit 2
 }
 # Everything after the FIRST "=" is the password: it may contain "=" itself.
 password=$(sed -n 's/^password=//p' "$credential" | head -1)
-[ -n "$password" ] || {
+[[ -n "$password" ]] || {
   echo "No password in $credential" >&2
   exit 2
 }
-[ -f "$server_key" ] || {
+[[ -f "$server_key" ]] || {
   echo "Missing private server key: $server_key (the harness pins this identity)" >&2
   exit 2
 }
@@ -119,7 +119,7 @@ gnome)
 plasma)
   # The project's TigerVNC w0vncserver, taken out of the Plasma fixture image once
   # (a copy brought from another lab machine is kept as it is).
-  if [ ! -x artifacts/kvm/tigervnc/bin/w0vncserver ]; then
+  if [[ ! -x artifacts/kvm/tigervnc/bin/w0vncserver ]]; then
     echo "== TigerVNC w0vncserver from the Plasma fixture image =="
     docker image inspect wayland-vnc-plasma:dev >/dev/null 2>&1 ||
       docker build -q -f docker/Dockerfile.plasma -t wayland-vnc-plasma:dev . >/dev/null
@@ -137,7 +137,7 @@ echo "== base cloud image =="
 # whenever it republishes the image, so without this two runs could use different
 # guest contents while both claiming to be the same evidence environment. Refresh
 # image_sha256 deliberately when moving to a newer image, and re-record the evidence.
-if [ ! -f "$base" ]; then
+if [[ ! -f "$base" ]]; then
   curl -fSL -o "$base.part" "$image_url"
   if ! printf '%s  %s\n' "$image_sha256" "$base.part" | sha256sum -c - >/dev/null 2>&1; then
     echo "Cloud image does not match the pinned digest $image_sha256." >&2
@@ -153,7 +153,7 @@ fi
 # and starting a second QEMU on the same forwarded port would break both. Refuse
 # while its pid is alive; otherwise clear what it left (the pid file and the two
 # control sockets), so this QEMU binds fresh ones.
-if [ -f "$work/qemu.pid" ] && kill -0 "$(cat "$work/qemu.pid")" 2>/dev/null; then
+if [[ -f "$work/qemu.pid" ]] && kill -0 "$(cat "$work/qemu.pid")" 2>/dev/null; then
   echo "a $target guest is already running (pid $(cat "$work/qemu.pid")); stop it first:" >&2
   echo "  kill \$(cat $work/qemu.pid)" >&2
   exit 2

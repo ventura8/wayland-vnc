@@ -41,10 +41,13 @@ if ! docker image inspect "$image" >/dev/null 2>&1; then
   echo "image $image is not built; run scripts/fixture-smoke.sh gnome first" >&2
   exit 2
 fi
-release() { sed -n 's/^VERSION_ID="\(.*\)"$/\1/p' "$1"; }
+release() {
+  local os_release=$1
+  sed -n 's/^VERSION_ID="\(.*\)"$/\1/p' "$os_release"
+}
 host_release=$(release /etc/os-release)
 image_release=$(docker run --rm --entrypoint sh "$image" -c 'sed -n '"'"'s/^VERSION_ID="\(.*\)"$/\1/p'"'"' /etc/os-release')
-if [ "$host_release" != "$image_release" ]; then
+if [[ "$host_release" != "$image_release" ]]; then
   echo "the private build was made on Ubuntu $image_release; this host is $host_release" >&2
   exit 2
 fi
@@ -74,7 +77,7 @@ if ldd "$incoming/grd/libexec/gnome-remote-desktop-daemon" | grep -q "not found"
 fi
 restore() {
   for part in grd libvnc; do
-    if [ -d "$previous/$part" ]; then
+    if [[ -d "$previous/$part" ]]; then
       sudo rm -rf "/opt/wayland-vnc/$part"
       sudo mv "$previous/$part" "/opt/wayland-vnc/$part"
     fi
@@ -83,7 +86,7 @@ restore() {
 }
 sudo install -d -m 755 "$previous"
 for part in grd libvnc; do
-  if [ -d "/opt/wayland-vnc/$part" ]; then
+  if [[ -d "/opt/wayland-vnc/$part" ]]; then
     sudo mv "/opt/wayland-vnc/$part" "$previous/$part" || {
       restore
       echo "could not set the previous $part aside; nothing was replaced" >&2
@@ -101,14 +104,14 @@ done
 # nothing to go back to. The drop-in is restored with it, so a first install that
 # fails does not leave a drop-in pointing at a daemon that was rolled away.
 saved_dropin=
-if [ -f "$dropin" ]; then
+if [[ -f "$dropin" ]]; then
   saved_dropin=$(mktemp)
   cp -- "$dropin" "$saved_dropin"
 fi
 roll_back() {
   echo "rolling back to the previously installed daemon" >&2
   restore
-  if [ -n "$saved_dropin" ]; then
+  if [[ -n "$saved_dropin" ]]; then
     cp -- "$saved_dropin" "$dropin"
     rm -f -- "$saved_dropin"
   else

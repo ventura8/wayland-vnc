@@ -331,7 +331,8 @@ def test_diagnostics_search_filters_rows_expands_hits_and_shows_an_empty_state(k
     assert shown > 0
     verdict = next(e for e, title, _rows in dialog.sections if title == "verdict")
     protocols = next(e for e, title, _rows in dialog.sections if title == "wayland protocols")
-    assert protocols.get_visible() and protocols.get_expanded(), "a hit is opened on screen"
+    assert protocols.get_visible(), "a hit is opened on screen"
+    assert protocols.get_expanded(), "a hit is opened on screen"
     assert settings_dialogs.diagnostic_filter(dialog.sections, "no-such-thing-xyz") == 0
     assert not any(e.get_visible() for e, _t, _r in dialog.sections)
     assert settings_dialogs.diagnostic_filter(dialog.sections, "") > 0, "empty query restores"

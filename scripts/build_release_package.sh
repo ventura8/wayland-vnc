@@ -115,7 +115,7 @@ build_appimage() {
     return 1
     ;;
   esac
-  if [ ! -x "$tool" ]; then
+  if [[ ! -x "$tool" ]]; then
     wget -qO "$tool.download" \
       "https://github.com/AppImage/appimagetool/releases/download/${tool_version}/appimagetool-${arch}.AppImage"
     mv -- "$tool.download" "$tool"

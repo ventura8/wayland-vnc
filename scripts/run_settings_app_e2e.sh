@@ -27,7 +27,8 @@ PLATFORMS=(
 )
 
 deps_for() {
-  case "$1" in
+  local manager=$1
+  case "$manager" in
   apt)
     echo 'export DEBIAN_FRONTEND=noninteractive
 apt-get update >/dev/null
@@ -55,7 +56,7 @@ pacman -S --noconfirm --needed python python-gobject gtk4 libadwaita xorg-server
   xorg-xauth librsvg ttf-dejavu iproute2 openssl >/dev/null 2>&1'
     ;;
   *)
-    echo "no dependency step for package manager '$1'" >&2
+    echo "no dependency step for package manager '$manager'" >&2
     return 1
     ;;
   esac

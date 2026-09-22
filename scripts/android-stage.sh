@@ -24,7 +24,7 @@ export ANDROID_USER_HOME="$root/user"
 adb="$sdk/platform-tools/adb"
 emulator="$sdk/emulator/emulator"
 
-[ -d "$ANDROID_AVD_HOME/$avd_name.avd" ] || {
+[[ -d "$ANDROID_AVD_HOME/$avd_name.avd" ]] || {
   echo "Isolated AVD missing; run: python3 scripts/android-lab.py --sdk '$sdk'" >&2
   exit 2
 }
@@ -36,7 +36,7 @@ if "$adb" devices | grep -q "^$serial"; then
   # own accounts in it, is not a qualification device. The console answers the AVD
   # name on its first line; anything else, including no answer, stops here.
   attached=$("$adb" -s "$serial" emu avd name 2>/dev/null | tr -d '\r' | sed -n 1p || true)
-  if [ "$attached" != "$avd_name" ]; then
+  if [[ "$attached" != "$avd_name" ]]; then
     echo "the emulator at $serial is not the isolated AVD $avd_name" \
       "(it reports '${attached:-nothing}'); stop it, or pick another ANDROID_EMULATOR_PORT" >&2
     exit 1
@@ -62,22 +62,22 @@ timeout 180 "$adb" -s "$serial" wait-for-device || {
 # is accepted in the emulator window. That tap is the user's, like the Play sign-in.
 for _ in $(seq 1 60); do
   state=$("$adb" -s "$serial" get-state 2>/dev/null | tr -d '\r' || true)
-  [ "$state" = "device" ] && break
+  [[ "$state" = "device" ]] && break
   if "$adb" devices | grep -q "^${serial}[[:space:]]*unauthorized"; then
     echo "  waiting: accept 'Allow USB debugging' in the emulator window..."
   fi
   sleep 3
 done
-[ "$("$adb" -s "$serial" get-state 2>/dev/null | tr -d '\r')" = "device" ] || {
+[[ "$("$adb" -s "$serial" get-state 2>/dev/null | tr -d '\r')" = "device" ]] || {
   echo "adb is not authorized; accept the 'Allow USB debugging' prompt and re-run" >&2
   exit 1
 }
 echo "== wait for boot_completed =="
 for _ in $(seq 1 120); do
-  [ "$("$adb" -s "$serial" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ] && break
+  [[ "$("$adb" -s "$serial" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ]] && break
   sleep 2
 done
-[ "$("$adb" -s "$serial" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ] || {
+[[ "$("$adb" -s "$serial" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ]] || {
   echo "emulator did not finish booting" >&2
   exit 1
 }
@@ -91,7 +91,7 @@ echo "  adb reverse set: inside the app, connect to 127.0.0.1:5900"
 is_installed=$("$adb" -s "$serial" shell pm list packages com.realvnc.viewer.android 2>/dev/null | tr -d '\r')
 echo
 echo "=== STAGED — hand-off to you ==="
-if [ -n "$is_installed" ]; then
+if [[ -n "$is_installed" ]]; then
   echo "RealVNC Viewer is already installed ($is_installed)."
   echo "You can launch it and connect to 127.0.0.1:5900."
 else

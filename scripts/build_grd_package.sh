@@ -33,7 +33,7 @@ image="wayland-vnc-grd-build:dev-$arch"
 # image is told so, because one sanitizer check cannot run there (Dockerfile.gnome).
 emulated=0
 host_arch=$(env -u WAYLAND_VNC_ARCH -u DOCKER_DEFAULT_PLATFORM bash scripts/target-arch.sh deb)
-[ "$arch" = "$host_arch" ] || emulated=1
+[[ "$arch" = "$host_arch" ]] || emulated=1
 
 echo "== building the private daemon for $arch (docker/Dockerfile.gnome, stage grd-build) =="
 docker build -q --platform "$platform" --target grd-build \
