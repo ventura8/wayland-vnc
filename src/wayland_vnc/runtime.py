@@ -263,6 +263,41 @@ GRD_VNC_PORT = 5900
 TCP_TABLES = (Path("/proc/net/tcp"), Path("/proc/net/tcp6"))
 
 
+def _listening_inodes(tables: tuple[Path, ...], port: int) -> set[str]:
+    """The socket inodes listening on `port`, as /proc/net/tcp* spells them. State 0A
+    is LISTEN; the local address is `hex-address:hex-port`. A table we cannot read
+    contributes nothing rather than failing the whole lookup -- the IPv6 table is
+    absent on a kernel built without it."""
+    inodes = set()
+    for table in tables:
+        try:
+            lines = table.read_text(encoding="utf-8").splitlines()[1:]
+        except OSError:
+            continue
+        for line in lines:
+            fields = line.split()
+            if len(fields) <= 9 or fields[3] != "0A":
+                continue
+            if int(fields[1].rsplit(":", 1)[1], 16) == port:
+                inodes.add(f"socket:[{fields[9]}]")
+    return inodes
+
+
+def _pid_holding(proc: Path, inodes: set[str]) -> int | None:
+    """The pid of the first process holding one of `inodes` open, or None when no
+    process we can see into holds any of them."""
+    for entry in proc.iterdir():
+        if not entry.name.isdigit():
+            continue
+        try:
+            for fd in (entry / "fd").iterdir():
+                if os.readlink(fd) in inodes:
+                    return int(entry.name)
+        except OSError:
+            continue
+    return None
+
+
 def listener_pid(
     port: int, tables: tuple[Path, ...] = TCP_TABLES, proc: Path = Path("/proc")
 ) -> int | None:
@@ -275,32 +310,11 @@ def listener_pid(
     own process reading from inside an unprivileged user namespace, which is why the
     unit that runs this must not use PrivateTmp).
     """
-    inodes = set()
-    for table in tables:
-        try:
-            lines = table.read_text(encoding="utf-8").splitlines()[1:]
-        except OSError:
-            continue
-        for line in lines:
-            fields = line.split()
-            if (
-                len(fields) > 9
-                and fields[3] == "0A"
-                and int(fields[1].rsplit(":", 1)[1], 16) == port
-            ):
-                inodes.add(f"socket:[{fields[9]}]")
+    inodes = _listening_inodes(tables, port)
     if not inodes:
         return None
-    for entry in proc.iterdir():
-        if not entry.name.isdigit():
-            continue
-        try:
-            for fd in (entry / "fd").iterdir():
-                if os.readlink(fd) in inodes:
-                    return int(entry.name)
-        except OSError:
-            continue
-    return 0
+    owner = _pid_holding(proc, inodes)
+    return 0 if owner is None else owner
 
 
 def wait_for_listener(

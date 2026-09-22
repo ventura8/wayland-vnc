@@ -50,6 +50,18 @@ fi
 
 version=$(cat VERSION)
 branch=$(git rev-parse --abbrev-ref HEAD)
+# SonarQube Cloud's free plan analyses the main branch and pull requests; a long-lived
+# feature branch is a paid feature, and naming one here produces a branch entry the
+# server never analyses -- a scan that looks like it worked and reports nothing. A
+# local run is a pre-merge check of the working tree, so it is sent as the main branch
+# unless WAYLAND_VNC_SONAR_BRANCH names another, and says which it used.
+main_branch=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
+main_branch=${main_branch#origin/}
+analysed=${WAYLAND_VNC_SONAR_BRANCH:-${main_branch:-main}}
+if [ "$analysed" != "$branch" ]; then
+  echo "note: on '$branch'; analysing as '$analysed' (the free plan has no feature-branch" \
+    "analysis). Set WAYLAND_VNC_SONAR_BRANCH to override." >&2
+fi
 
 # The analyser needs the network to reach SonarQube Cloud, so --network none is not
 # available here; everything else stays as locked down as the offline linters, and the
@@ -60,4 +72,4 @@ docker run --rm \
   -v "$PWD:/usr/src" -w /usr/src \
   "$SCANNER_IMAGE" \
   -Dsonar.projectVersion="$version" \
-  -Dsonar.branch.name="$branch"
+  -Dsonar.branch.name="$analysed"
