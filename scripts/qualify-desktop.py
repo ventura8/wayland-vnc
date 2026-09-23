@@ -860,7 +860,11 @@ class KvmDriver(DockerRealVncDriver):
             return " ".join((result.stdout + result.stderr).split()) or "unknown"
 
         compositor = inside(VERSION_COMMANDS[self.fixture])
-        backend = inside(["wayvnc", "--version"])
+        # Per fixture, like the container driver: GNOME is served by the patched
+        # gnome-remote-desktop and Plasma by w0vncserver, so probing for wayvnc there
+        # recorded the shell's "not found" as the backend version -- a non-blank string
+        # the gate accepts while the evidence says nothing true about what served.
+        backend = inside(BACKEND_COMMANDS.get(self.fixture, ["wayvnc", "--version"]))
         distribution = inside(['. /etc/os-release && echo "$PRETTY_NAME"'])
         return self._versions(compositor, backend, distribution + " (KVM guest)")
 
