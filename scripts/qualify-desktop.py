@@ -368,22 +368,21 @@ class DockerRealVncDriver:
         if mode not in ("approve", "approve-persist", "deny", "none"):
             raise ValueError(f"unknown portal consent mode {mode!r}")
         script = f'printf "%s\\n" "{mode}" > "$XDG_RUNTIME_DIR/portal-consent-mode"'
-        result = sh([DOCKER, "exec", self.container, "sh", "-c", script], timeout=30)
+        # Through the fixture hook like every other fixture operation, so a KVM guest
+        # runs it too -- a bare `docker exec` had no container to exec into there.
+        result = self._fixture_exec(script, timeout=30)
         if result.returncode != 0:
             raise OSError(f"could not set the consent mode: {result.stderr.strip()}")
 
     def portal_forget(self):
         """Delete w0vncserver's stored restore token with the server's own tool."""
-        result = sh(
-            [DOCKER, "exec", self.container, "/opt/wayland-vnc/tigervnc/bin/w0vncserver-forget"],
-            timeout=30,
-        )
+        result = self._fixture_exec("/opt/wayland-vnc/tigervnc/bin/w0vncserver-forget", timeout=30)
         if result.returncode != 0 and "No such file" not in result.stderr:
             raise OSError(f"w0vncserver-forget failed: {(result.stderr or result.stdout).strip()}")
 
     def portal_events(self):
         script = 'cat "$XDG_RUNTIME_DIR/portal-consent.jsonl" 2>/dev/null || true'
-        result = sh([DOCKER, "exec", self.container, "sh", "-c", script], timeout=30)
+        result = self._fixture_exec(script, timeout=30)
         events = []
         for line in result.stdout.splitlines():
             try:

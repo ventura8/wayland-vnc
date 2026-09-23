@@ -13,6 +13,13 @@ LibVNCServer:
 - [libvncserver-02-message-drain.md](libvncserver-02-message-drain.md) — an update is
   encoded in the old pixel format although `SetPixelFormat` has already arrived.
 
+Hyprland's aquamarine (found on a QEMU virtio-gpu output, reduced to plain Hyprland in a
+guest):
+
+- [aquamarine-01-modeset-with-stale-framebuffer.md](aquamarine-01-modeset-with-stale-framebuffer.md)
+  — a live switch to any larger mode is committed with the previous framebuffer still
+  attached; virtio-gpu rejects it and the output falls back to 800x600.
+
 GNOME Remote Desktop:
 
 - [gnome-remote-desktop-01-disconnect-crash.md](gnome-remote-desktop-01-disconnect-crash.md)

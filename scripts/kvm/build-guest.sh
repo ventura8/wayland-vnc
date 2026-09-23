@@ -76,9 +76,15 @@ case "$target" in
 # The desktop guests carry a custom EDID (720p + 1080p + 4K) their compositor's
 # DisplayConfig needs, loaded over the connector in the guest, and a second output
 # for the monitor-change scenario.
-gnome | plasma) gpu=(-device "virtio-gpu-pci,max_outputs=2,edid=on") ;;
-*) gpu=(-device "virtio-gpu-pci,max_outputs=1,xres=3840,yres=2160") ;;
+gnome | plasma) gpu=(-device "virtio-gpu-pci,max_outputs=2,edid=on,max_hostmem=1G") ;;
+*) gpu=(-device "virtio-gpu-pci,max_outputs=1,xres=3840,yres=2160,max_hostmem=1G") ;;
 esac
+# max_hostmem caps the total size of the guest's 2D framebuffer resources, 256 MiB by
+# default: eight 3840x2160 buffers. Hyprland keeps more than that alive through a mode
+# change -- the old 1080p swapchain, the new 4K one, WayVNC's capture pool and the
+# cursor -- and the device refused RESOURCE_CREATE_2D with OUT_OF_MEMORY (0x1201),
+# the output fell back to 800x600 and WayVNC crashed. The other compositors fitted
+# under the default by chance, not by design.
 # The guest's VNC port is forwarded to host loopback in every mode. With --harness the
 # viewer runs in a container on the host network namespace, which reaches 127.0.0.1;
 # for the Android viewer adb reverse points the emulator at the same loopback port.
