@@ -117,6 +117,8 @@ class ScriptedAdb:
             self.index = min(self.index + 1, len(self.screens) - 1)
         if tail[:3] == ["shell", "input", "tap"] and tail[3:5] == ["960", "464"]:
             self.focus = "UserEdit"
+        elif tail[:3] == ["shell", "input", "tap"] and tail[3:5] == ["960", "647"]:
+            self.focus = "PassEdit"  # a password-only sheet's field
         elif tail[:3] == ["shell", "input", "keyevent"] and tail[3] == "66" and self.focus:
             self.focus = "PassEdit"
         elif tail[:3] == ["shell", "input", "keyevent"] and tail[3] == "67" and self.focus:
@@ -742,3 +744,47 @@ def test_a_toolbar_already_at_the_top_is_left_alone():
     outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
     assert "toolbar-homed" not in outcome.steps
     assert not [s for s in scripted.shells() if s.startswith("input swipe")]
+
+
+PASSWORD_ONLY_XML = (
+    '<node text="" resource-id="com.realvnc.viewer.android:id/authentication_dialog"'
+    ' class="android.widget.LinearLayout" bounds="[0,63][1920,1017]"/>'
+    '<node text="CONTINUE" resource-id="com.realvnc.viewer.android:id/menu_done"'
+    ' class="android.widget.Button" bounds="[1657,63][1878,189]"/>'
+    '<node text="Password" resource-id="com.realvnc.viewer.android:id/PassEdit"'
+    ' class="android.widget.EditText" bounds="[48,584][1872,710]"/>'
+)
+UNENCRYPTED_XML = (
+    '<node text="Unencrypted connection" resource-id="" class="android.widget.TextView"'
+    ' bounds="[189,100][591,151]"/>'
+    '<node text="OK" resource-id="com.realvnc.viewer.android:id/menu_done"'
+    ' class="android.widget.Button" bounds="[1657,63][1878,189]"/>'
+)
+
+
+def test_a_password_only_sheet_is_answered():
+    """w0vncserver's RA2 and GNOME's VncAuth ask for a password alone. The driver
+    answered only sheets with a username field, so Plasma never authenticated."""
+    viewer, scripted = _viewer([PASSWORD_ONLY_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "credentials-entered" in outcome.steps
+    assert scripted.fields["PassEdit"] == "s3cr3tpw"
+    assert outcome.notes[0] == "password-only attempt 1: password field 8/8 characters"
+    assert "s3cr3tpw" not in " ".join(outcome.notes)
+
+
+def test_the_unencrypted_warning_is_accepted_and_recorded():
+    """GNOME offers only VncAuth. The session is unencrypted, and the record says so."""
+    viewer, _scripted = _viewer([UNENCRYPTED_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "unencrypted-accepted" in outcome.steps
+
+
+def test_the_desktop_is_not_visible_under_a_form():
+    """Both belong to the desktop activity; unanswered, each read as the desktop and
+    every later capture was a picture of a form."""
+    for screen in (PASSWORD_ONLY_XML, UNENCRYPTED_XML):
+        viewer, _scripted = _viewer([screen])
+        assert viewer.desktop_visible(parse_ui(f"<hierarchy>{screen}</hierarchy>")) is False

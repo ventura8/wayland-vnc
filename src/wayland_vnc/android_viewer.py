@@ -36,6 +36,7 @@ import subprocess
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from functools import partial
 from pathlib import Path
 
 PACKAGE = "com.realvnc.viewer.android"
@@ -116,6 +117,25 @@ HELP_VIEW = "help_view"
 # toolbar and dims everything behind it. The scene is on screen but not verifiable: the
 # colour bands are really there and the capture still is not a frame.
 SKIP_TUTORIAL = "SKIP TUTORIAL"
+# GNOME Remote Desktop offers only VncAuth, so the app asks before every session
+# whether to continue unencrypted. The desktop runner answers the same prompt with
+# -WarnUnencrypted=0 and records it; here each session accepts it and records
+# `unencrypted-accepted`, so the evidence says the session was not encrypted. The
+# app's "Warn me every time" is left as it is.
+UNENCRYPTED = "Unencrypted connection"
+# The app's own views that can stand in front of the desktop while the desktop
+# activity is on top -- so the activity check cannot see them -- and that a capture
+# must never be taken under: a dialog, the first-run help and coach-mark, the
+# credentials sheet and the unencrypted-connection page. Each was, at some point, the
+# picture a whole run's worth of captures turned out to show. ("id", x) is a resource
+# id, ("text", x) a visible string.
+COVERS_DESKTOP = (
+    ("id", "alertTitle"),
+    ("id", HELP_VIEW),
+    ("text", SKIP_TUTORIAL),
+    ("id", "authentication_dialog"),
+    ("text", UNENCRYPTED),
+)
 # The event that ends one input report; every emulator gesture is framed by it.
 EV_SYN = "EV_SYN:0:0"
 # Pinches that reach the app's minimum zoom from its default 1:1 on a 4K desktop;
@@ -180,6 +200,11 @@ def _between(
         start[0] + (end[0] - start[0]) * step // steps,
         start[1] + (end[1] - start[1]) * step // steps,
     )
+
+
+def _covers(nodes: list[UiNode], cover: tuple[str, str]) -> bool:
+    kind, value = cover
+    return (find(nodes, rid=value) if kind == "id" else find(nodes, text=value)) is not None
 
 
 def find(nodes: list[UiNode], *, text: str | None = None, rid: str | None = None) -> UiNode | None:
@@ -392,20 +417,16 @@ class AndroidViewer:
         simple = (
             ("Continue connecting?", DIALOG_OK, "continue-connecting"),
             ("Identity check", "menu_done", "identity-check"),
+            (UNENCRYPTED, "menu_done", "unencrypted-accepted"),
             ("Invalid username or password", DIALOG_OK, "refused"),
         )
         for text, button, step in simple:
             if find(nodes, text=text):
                 self._tap(find(nodes, rid=button))
                 return step if step == "refused" else self._step(outcome, step)
-        user_field = find(nodes, rid="UserEdit")
-        if user_field is not None:
-            if "credentials-entered" in outcome.steps:
-                return "waiting"
-            outcome.notes += self._enter_credentials(username, password, sleep)
-            self._tap(find(nodes, rid="menu_done"))
-            sleep(1)
-            return self._step(outcome, "credentials-entered")
+        credentials = self._answer_credentials(nodes, outcome, username, password, sleep)
+        if credentials is not None:
+            return credentials
         title = find(nodes, rid="alertTitle")
         if title is not None and find(nodes, rid=DIALOG_OK):
             self._tap(find(nodes, rid=DIALOG_OK))
@@ -452,6 +473,48 @@ class AndroidViewer:
                     break
         return notes
 
+    def _answer_credentials(self, nodes, outcome, username, password, sleep) -> str | None:
+        """The credentials sheet, with a username field or -- for a server that
+        authenticates by password alone, w0vncserver's RA2 and GNOME's VncAuth --
+        without one. None when no sheet is up."""
+        if find(nodes, rid="UserEdit") is not None:
+            notes = partial(self._enter_credentials, username, password, sleep)
+        elif find(nodes, rid="PassEdit") is not None:
+            notes = partial(self._enter_password_only, password, sleep)
+        else:
+            return None
+        if "credentials-entered" in outcome.steps:
+            return "waiting"
+        outcome.notes += notes()
+        self._tap(find(nodes, rid="menu_done"))
+        sleep(1)
+        return self._step(outcome, "credentials-entered")
+
+    def _enter_password_only(self, password, sleep) -> list[str]:
+        """Type the password into a sheet that has no username field, and read it
+        back, retyping when the field does not hold it; one note per attempt."""
+        notes = []
+        for attempt in range(1, 4):
+            self._hide_ime(sleep)
+            pass_field = find(self.adb.ui(), rid="PassEdit")
+            if pass_field is None:
+                notes.append(f"password-only attempt {attempt}: field not in the tree")
+                sleep(1)
+                continue
+            self._tap(pass_field)
+            sleep(0.3)
+            self._retype("PassEdit", password, secret=True, sleep=sleep)
+            self._hide_ime(sleep)
+            secret = find(self.adb.ui(), rid="PassEdit")
+            shown = None if secret is None else secret.text
+            notes.append(
+                f"password-only attempt {attempt}: password field "
+                f"{_password_field_note(shown, password)}"
+            )
+            if shown is not None and _password_field_holds(shown, password):
+                break
+        return notes
+
     def _ime_up(self) -> bool:
         """Whether the soft keyboard is on screen: the input method service says so,
         or its full-screen extract view is in the UI tree -- the latter has been seen
@@ -494,14 +557,7 @@ class AndroidViewer:
         """The connected view: the app's desktop activity is in front and no dialog
         is up. (Its toolbar hides itself after a few seconds, so it is no signal.)"""
         nodes = self.adb.ui() if nodes is None else nodes
-        if find(nodes, rid="alertTitle") is not None:
-            return False
-        # The first-run help view is part of the desktop activity, so the activity
-        # check below cannot see it; the desktop is not visible underneath it.
-        if find(nodes, rid=HELP_VIEW) is not None:
-            return False
-        # The coach-mark dims the desktop it points at; a capture under it is not a frame.
-        if find(nodes, text=SKIP_TUTORIAL) is not None:
+        if any(_covers(nodes, cover) for cover in COVERS_DESKTOP):
             return False
         activities = self.adb.shell("dumpsys", "activity", "activities")
         line = re.search(r"topResumedActivity=([^\n]*)", activities)

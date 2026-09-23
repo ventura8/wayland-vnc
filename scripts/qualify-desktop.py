@@ -856,7 +856,9 @@ class KvmDriver(DockerRealVncDriver):
 
     def versions(self):
         def inside(command):
-            result = self._fixture(" ".join(command), timeout=30)
+            # One string for the guest's shell: quoted, or a probe such as GNOME's
+            # `sh -c "echo ..."` reaches it as a bare `echo` and records "unknown".
+            result = self._fixture(shlex.join(command), timeout=30)
             return " ".join((result.stdout + result.stderr).split()) or "unknown"
 
         compositor = inside(VERSION_COMMANDS[self.fixture])
