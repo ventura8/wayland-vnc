@@ -59,3 +59,16 @@ def test_the_no_spelling_of_the_play_store_flag_is_handled():
     )
     assert "PlayStore.enabled=true\n" in configured
     assert configured.count("PlayStore.enabled=") == 1
+
+
+def test_the_ram_is_raised_past_what_system_ui_needs():
+    """2G starved System UI into "isn't responding" and crashed the emulator mid-run."""
+    configured = lab.configure(AS_CREATED + "hw.ramSize=2G\n")
+    assert "hw.ramSize=4096M\n" in configured
+    assert configured.count("hw.ramSize=") == 1
+
+
+def test_unrelated_lines_survive():
+    configured = lab.configure(AS_CREATED)
+    assert "hw.lcd.density=420\n" in configured
+    assert "tag.id=google_apis_playstore\n" in configured

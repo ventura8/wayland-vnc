@@ -7,28 +7,34 @@ from pathlib import Path
 
 AVD_NAME = "wayland-vnc-api36"
 PACKAGE = "system-images;android-36;google_apis_playstore;x86_64"
-PLAY_STORE_ON = "PlayStore.enabled=true\n"
-# `adb shell input text` injects through the hardware-keyboard path. avdmanager writes
-# hw.keyboard=no for the pixel_2 profile, and with no hardware keyboard that call
-# reports success and types nothing: the credential fields stay empty, the app never
-# authenticates, and every scenario fails on "no valid frame" with no hint why.
-HARDWARE_KEYBOARD_ON = "hw.keyboard=yes\n"
+# The settings the lab AVD needs that avdmanager's pixel_2 profile does not give it.
+# Each replaces whatever value the profile wrote for that key.
+SETTINGS = {
+    # The official image is chosen for the Play Store; the profile leaves it off.
+    "PlayStore.enabled": "true",
+    # `adb shell input text` injects through the hardware-keyboard path. With
+    # hw.keyboard=no it reports success and types nothing: the credential fields stay
+    # empty and every scenario fails on "no valid frame" with no hint why.
+    "hw.keyboard": "yes",
+    # The profile's 2G is too little for API 36 with Play services under SwiftShader
+    # software rendering at 1920x1080: System UI starves, raises "System UI isn't
+    # responding", and the emulator falls over mid-run.
+    "hw.ramSize": "4096M",
+}
 
 
 def configure(contents: str) -> str:
-    """The two settings the lab AVD needs that the pixel_2 profile does not give it:
-    the Play Store the official image is chosen for, and a hardware keyboard, without
-    which `adb shell input text` silently types nothing."""
-    for setting, off in (
-        (PLAY_STORE_ON, ("PlayStore.enabled=false\n", "PlayStore.enabled=no\n")),
-        (HARDWARE_KEYBOARD_ON, ("hw.keyboard=no\n",)),
-    ):
-        written = next((value for value in off if value in contents), None)
-        if written is not None:
-            contents = contents.replace(written, setting, 1)
-        elif setting not in contents:
-            contents = setting + contents
-    return contents
+    """Apply SETTINGS to an AVD config.ini: replace each key's line wherever the
+    profile wrote it, add it where it did not, and leave every other line alone."""
+    lines = contents.splitlines(keepends=True)
+    seen = set()
+    for index, line in enumerate(lines):
+        key = line.split("=", 1)[0].strip()
+        if key in SETTINGS:
+            lines[index] = f"{key}={SETTINGS[key]}\n"
+            seen.add(key)
+    missing = [f"{key}={value}\n" for key, value in SETTINGS.items() if key not in seen]
+    return "".join(missing + lines)
 
 
 def main() -> None:
