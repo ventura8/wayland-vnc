@@ -42,6 +42,9 @@ PACKAGE = "com.realvnc.viewer.android"
 SCREEN = (1920, 1080)
 # The touch surface that is neither a system gesture zone nor the app's toolbar.
 SAFE_LEFT, SAFE_TOP, SAFE_RIGHT, SAFE_BOTTOM = 160, 230, 1760, 900
+# Where a fresh install puts the floating toolbar's top edge; the safe zone above
+# assumes it is there.
+TOOLBAR_HOME_TOP = 58
 # IME action (Enter on the soft keyboard = Next/Done) and Back.
 KEY_ENTER, KEY_BACK = "66", "4"
 # Consecutive UI dumps with nothing to answer before a toolbar-less desktop counts.
@@ -167,6 +170,16 @@ def _password_field_note(shown: str | None, password: str) -> str:
     if shown and set(shown) <= {"\u2022", "*"}:
         return f"{len(shown)}/{len(password)} masked characters, short"
     return f"{len(shown)} characters that are neither the password nor masked input"
+
+
+def _between(
+    start: tuple[int, int], end: tuple[int, int], step: int, steps: int
+) -> tuple[int, int]:
+    """The point `step` of `steps` along the straight line from start to end."""
+    return (
+        start[0] + (end[0] - start[0]) * step // steps,
+        start[1] + (end[1] - start[1]) * step // steps,
+    )
 
 
 def find(nodes: list[UiNode], *, text: str | None = None, rid: str | None = None) -> UiNode | None:
@@ -310,11 +323,31 @@ class AndroidViewer:
                 if not self.ensure_landscape(sleep=sleep):
                     outcome.error = "the emulator would not turn to landscape"
                     return outcome
+                if self._home_toolbar(sleep):
+                    outcome.steps.append("toolbar-homed")
                 outcome.connected = True
                 outcome.steps.append("desktop")
                 return outcome
         outcome.error = outcome.error or "the desktop did not appear in time"
         return outcome
+
+    def _home_toolbar(self, sleep) -> bool:
+        """Put the floating toolbar back at the top if it has been left anywhere else.
+
+        The app remembers where its toolbar was dragged, across connections. The
+        pointer swipes start inside a safe zone laid out around a toolbar at the top;
+        with the toolbar left at the bottom, a swipe that starts on it drags it
+        instead of moving the cursor, and every input scenario fails to place the
+        pointer -- on this and every later run. True when it had to be moved.
+        """
+        toolbar = find(self.adb.ui(), rid="fabTlbrGroup")
+        if toolbar is None or toolbar.bounds[3] <= SAFE_TOP:
+            return False
+        x_pos, y_pos = toolbar.center
+        home_y = (toolbar.bounds[3] - toolbar.bounds[1]) // 2 + TOOLBAR_HOME_TOP
+        self.adb.shell("input", "swipe", str(x_pos), str(y_pos), str(x_pos), str(home_y), "800")
+        sleep(1)
+        return True
 
     def _answer_first_run(self, nodes) -> str | None:
         """Answer whichever first-run screen is up, or None when none is.
@@ -735,11 +768,8 @@ class AndroidViewer:
         steps = 12
         for step in range(1, steps + 1):
             events = []
-            for slot, ((x_from, y_from), (x_to, y_to)) in enumerate(zip(starts, ends, strict=True)):
-                dev_x, dev_y = self._natural(
-                    x_from + (x_to - x_from) * step // steps,
-                    y_from + (y_to - y_from) * step // steps,
-                )
+            for slot, (start, end) in enumerate(zip(starts, ends, strict=True)):
+                dev_x, dev_y = self._natural(*_between(start, end, step, steps))
                 events += [
                     f"EV_ABS:ABS_MT_SLOT:{slot}",
                     f"EV_ABS:ABS_MT_POSITION_X:{dev_x}",

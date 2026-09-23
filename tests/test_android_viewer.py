@@ -721,3 +721,24 @@ def test_the_information_button_is_found_where_the_toolbar_was_left():
     viewer._open_info_screen(sleep=lambda _s: None, clock=iter([0.0, 0.0, 999.0]).__next__)
     assert "input tap 457 951" in scripted.shells()
     assert "input tap 457 129" not in scripted.shells()
+
+
+def test_a_toolbar_left_at_the_bottom_is_dragged_home_on_connect():
+    """The app remembers where its toolbar was dragged. Left at the bottom, it sits
+    where pointer swipes start, and every input scenario fails to place the pointer."""
+    bottom_bar = (
+        '<node text="" resource-id="com.realvnc.viewer.android:id/fabTlbrGroup"'
+        ' class="android.widget.LinearLayout" bounds="[58,880][741,1022]"/>'
+    )
+    viewer, scripted = _viewer([AUTH_XML, DESKTOP_XML + bottom_bar])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "toolbar-homed" in outcome.steps
+    assert "input swipe 399 951 399 129 800" in scripted.shells()
+
+
+def test_a_toolbar_already_at_the_top_is_left_alone():
+    viewer, scripted = _viewer([AUTH_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert "toolbar-homed" not in outcome.steps
+    assert not [s for s in scripted.shells() if s.startswith("input swipe")]
