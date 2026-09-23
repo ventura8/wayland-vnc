@@ -13,7 +13,8 @@ wayland-vnc (1.0.1) resolute; urgency=medium
   * Two regular expressions in the Android qualification harness backtracked
     super-linearly; both now match in linear time.
   * The Ubuntu 26.04 base image digest every fixture and package smoke pins was
-    refreshed.
+    refreshed, as was the Ubuntu cloud image the KVM qualification guests are
+    built from, verified against Ubuntu's signed SHA256SUMS.
 
  -- ventura8 <alexandrescu.sergiu@gmail.com>  Wed, 23 Sep 2026 00:00:00 +0300
 

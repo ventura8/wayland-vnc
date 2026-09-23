@@ -86,7 +86,14 @@ esac
 bind=${WAYLAND_VNC_KVM_BIND:-127.0.0.1}
 [[ "$harness" -eq 1 ]] && echo "== harness mode: guest VNC on $bind (host-network viewer) =="
 image_url="https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img"
-image_sha256=8196be9d7958059cb56c6c75c80fdf6cee8a8885bc149ea791d7db1c7ef93035
+# `current/` is a mutable path Ubuntu republishes, so the digest is pinned and checked
+# below. This one was taken from that day's SHA256SUMS after verifying its detached
+# signature against Ubuntu's UEC image signing key, fingerprint
+# D2EB 4462 6FDD C30B 513D  5BB7 1A5D 6C4C 7DB8 7C81 -- never from the image alone,
+# which would only prove the download matched itself:
+#   curl -fsSLO .../SHA256SUMS -O .../SHA256SUMS.gpg
+#   gpg --verify SHA256SUMS.gpg SHA256SUMS && grep amd64.img SHA256SUMS
+image_sha256=2d3b9b1f76fc204f684a2313113b1d7c2b35eabba19cfcbcec5eae2aed3cc853
 base="artifacts/kvm/resolute-cloudimg-amd64.img"
 overlay="$work/guest.qcow2"
 seed="$work/seed.iso"
