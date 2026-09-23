@@ -56,6 +56,15 @@ for missing in "${required[@]}"; do
     exit 2
   }
 done
+# A run that is killed -- a closed terminal, a torn-down session -- never reaches its
+# own cleanup, and the fixture container it started keeps the lab port bound. Every
+# later run then dies on "port is already allocated" before a single scenario. Only
+# this runner's own fixtures carry the -qualify- name, and one campaign runs at a time.
+mapfile -t stale < <(docker ps -aq --filter "name=^wayland-vnc-.*-qualify-")
+if ((${#stale[@]})); then
+  echo "removing ${#stale[@]} fixture container(s) left behind by an interrupted run" >&2
+  docker rm -f "${stale[@]}" >/dev/null
+fi
 viewer_args=(--harness --identities "$identities" --viewer-config "$viewer_config" --connection "$connection")
 [[ "$viewer" == desktop ]] || viewer_args=(--viewer android)
 
