@@ -739,3 +739,31 @@ def test_scenario_filter_without_first_frame_skips_the_derived_rows(lab):
     assert "first-frame" not in outcomes
     assert "colors" not in outcomes
     assert "1080p-100" not in outcomes
+
+
+def test_a_targeted_rerun_records_what_it_skipped_as_not_run(lab):
+    """--scenario used to crash fill_record with a KeyError on the first scenario it
+    had not run. The skipped ones are recorded as not-run, so the record cannot pass."""
+    run, _driver, root = lab
+    outcomes = {"colors": ds.Outcome("passed", "ok")}
+    record = new_partial_record(
+        commit="c", target="sway", viewer="realvnc-desktop", versions=VERSIONS
+    )
+    record = ds.fill_record(record, run, outcomes, root)
+    assert record["status"] != "passed"
+    assert record["scenarios"]["colors"] == "passed"
+    assert record["scenarios"]["first-frame"] == "not-run"
+    assert "targeted re-run" in record["scenario_details"]["first-frame"]
+
+
+def test_high_dpi_asks_a_viewer_that_can_zoom_to_fit_before_capturing(lab):
+    """A viewer showing the desktop 1:1 on a smaller screen has only a corner of a 4K
+    desktop in view. One that can fit is asked to, and only for the 4K capture: the
+    base-resolution scenarios must not pay for a pinch they do not need."""
+    run, driver, _root = lab
+    fitted = []
+    driver.fit_desktop = fitted.append
+    assert ds.scenario_high_dpi(run).status == "passed"
+    assert len(fitted) == 1
+    ds.scenario_first_frame(run)
+    assert len(fitted) == 1

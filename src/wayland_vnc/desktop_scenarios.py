@@ -164,7 +164,9 @@ def _framebuffer_size(run: Session, session: object, capture: Path) -> tuple[int
     return _dimensions(capture)
 
 
-def connect_and_capture(run: Session, name: str) -> tuple[object, Path | None, float]:
+def connect_and_capture(
+    run: Session, name: str, *, fit: bool = False
+) -> tuple[object, Path | None, float]:
     """Connect and wait for the first valid frame; one bounded retry when the viewer
     reports a transport-level transient (a connection dropped before any RFB byte, or
     the RA2 handshake glitch) -- noted in the run log, never silent. A server that
@@ -177,6 +179,12 @@ def connect_and_capture(run: Session, name: str) -> tuple[object, Path | None, f
         # clock; the first-frame budget is the server's to meet from that moment, not
         # from the automation's typing. Drivers without it are timed from the call.
         started = getattr(session, "started_at", None) or started
+        # A viewer that shows the desktop 1:1 on a smaller screen (the Android app) has
+        # only part of a large desktop in view; one that can zoom to fit is asked to,
+        # so the capture is of the whole scene. Viewers that always fit need nothing.
+        fit_desktop = getattr(run.driver, "fit_desktop", None)
+        if fit and fit_desktop is not None:
+            fit_desktop(session)
         capture = run.capture_valid(session, name, started + FIRST_FRAME_BUDGET)
         if capture is not None or attempt == 2 or not run.driver.transient_error(session):
             return session, capture, run.clock() - started
@@ -351,7 +359,7 @@ def scenario_high_dpi(run: Session) -> Outcome:
     run.current_mode = HIGH_DPI_MODE
     if not run.driver.smoke(width, height):
         return Outcome("failed", f"fixture rejected {width}x{height}@{scale}")
-    session, capture, _ = connect_and_capture(run, "4k-200.png")
+    session, capture, _ = connect_and_capture(run, "4k-200.png", fit=True)
     # Asked while still connected: a viewer that reports its desktop size can only
     # do so for a live session.
     size = _framebuffer_size(run, session, capture) if capture is not None else None
@@ -706,8 +714,13 @@ def run_scenarios(run: Session) -> dict[str, Outcome]:
 def fill_record(record: dict, run: Session, outcomes: dict[str, Outcome], root: Path) -> dict:
     """Complete a partial record; it becomes 'passed' only if nothing is missing."""
     required = list(SCENARIOS) + (list(PORTAL_SCENARIOS) if run.fixture == "plasma" else [])
-    record["scenarios"] = {name: outcomes[name].status for name in required}
-    record["scenario_details"] = {name: outcomes[name].detail for name in required}
+    # A targeted re-run (--scenario) runs only what it names; the rest are recorded as
+    # not-run with that reason, which the gate rejects -- so a partial re-run can
+    # never be mistaken for a qualifying record, and it no longer crashes on the gap.
+    skipped = Outcome("not-run", "not selected: a targeted re-run (--scenario)")
+    verdicts = {name: outcomes.get(name, skipped) for name in required}
+    record["scenarios"] = {name: verdict.status for name, verdict in verdicts.items()}
+    record["scenario_details"] = {name: verdict.detail for name, verdict in verdicts.items()}
     record["first_frame_seconds"] = run.first_frame_seconds
     record["reconnect_cycles"] = run.reconnect_cycles
     captures = []

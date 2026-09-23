@@ -992,6 +992,10 @@ class AndroidViewerMixin:
         del session
         return self.viewer.transient_error()
 
+    def fit_desktop(self, session):
+        if session.connected:
+            self.viewer.fit_desktop()
+
     def type_text(self, text):
         self.viewer.type_text(text)
 

@@ -46,8 +46,8 @@ SAFE_LEFT, SAFE_TOP, SAFE_RIGHT, SAFE_BOTTOM = 160, 230, 1760, 900
 KEY_ENTER, KEY_BACK = "66", "4"
 # Consecutive UI dumps with nothing to answer before a toolbar-less desktop counts.
 QUIET_DUMPS = 4
-# The information button on the app's floating toolbar (which the app shows again
-# on a tap while it is hidden; the second tap then opens the screen).
+# Where a fresh install puts the information button on the app's floating toolbar;
+# used only when the toolbar's own `menu_information` node is not in the dump.
 INFO_BUTTON = (457, 129)
 # How long the information screen may take to open or close on a loaded emulator
 # (a single uiautomator dump takes about two seconds there).
@@ -115,6 +115,9 @@ HELP_VIEW = "help_view"
 SKIP_TUTORIAL = "SKIP TUTORIAL"
 # The event that ends one input report; every emulator gesture is framed by it.
 EV_SYN = "EV_SYN:0:0"
+# Pinches that reach the app's minimum zoom from its default 1:1 on a 4K desktop;
+# once at the minimum, more change nothing.
+PINCH_REPEATS = 3
 
 NODE_RE = re.compile(r"<node [^>]*>")
 ATTR_RE = re.compile(r'([^\s=]++)="([^"]*+)"')
@@ -495,7 +498,14 @@ class AndroidViewer:
             if details is not None:
                 return details, tapped, dumps, []
             if not tapped and find(nodes, rid="menu_pin") is not None:
-                self._tap_screen(*INFO_BUTTON)
+                # The toolbar can be dragged, and the app remembers where it was left,
+                # so its information button is found in the tree, not assumed to be
+                # where a fresh install puts it.
+                button = find(nodes, rid="menu_information")
+                if button is not None:
+                    self._tap(button)
+                else:
+                    self._tap_screen(*INFO_BUTTON)
                 tapped = True
             if clock() >= deadline:
                 ids = sorted({node.resource_id.rsplit("/", 1)[-1] for node in nodes})[:12]
@@ -677,11 +687,41 @@ class AndroidViewer:
         self.two_finger_swipe(0, -200, sleep=sleep)
 
     def two_finger_swipe(self, delta_x: int, delta_y: int, *, sleep=time.sleep) -> None:
-        """Two pointers 100 px apart moving together by (delta_x, delta_y), as raw
-        multi-touch slots through the emulator console."""
+        """Two pointers 100 px apart moving together by (delta_x, delta_y): the app's
+        scroll gesture."""
         x_start, y_start = 900, 600
-        fingers = ((x_start, y_start), (x_start + 100, y_start))
-        for slot, (x_pos, y_pos) in enumerate(fingers):
+        self._two_fingers(
+            ((x_start, y_start), (x_start + 100, y_start)),
+            ((x_start + delta_x, y_start + delta_y), (x_start + 100 + delta_x, y_start + delta_y)),
+            sleep=sleep,
+        )
+
+    def fit_desktop(self, *, sleep=time.sleep) -> None:
+        """Zoom the view out until the whole remote desktop is on screen.
+
+        The app shows the desktop 1:1, so a desktop larger than the phone's screen --
+        3840x2160 on a 1920x1080 display -- has only its top-left corner in view, and
+        a capture of that is not the scene. Pinching in, repeatedly, reaches the app's
+        minimum zoom, which is fit-to-screen; further pinches change nothing, so this
+        is safe to repeat and a no-op on a desktop that already fits.
+        """
+        # Right of and below the toolbar: it can be dragged, and a finger that starts
+        # on it moves it instead of zooming -- after which the information button is
+        # no longer where desktop_size() taps it. Clear of the screen edges as well,
+        # which the system keeps for its own gestures.
+        centre_x, centre_y = 1300, 600
+        for _ in range(PINCH_REPEATS):
+            self._two_fingers(
+                ((centre_x - 500, centre_y - 300), (centre_x + 500, centre_y + 300)),
+                ((centre_x - 40, centre_y - 24), (centre_x + 40, centre_y + 24)),
+                sleep=sleep,
+            )
+            sleep(0.5)
+
+    def _two_fingers(self, starts, ends, *, sleep) -> None:
+        """Two pointers from `starts` to `ends` in straight lines, as raw multi-touch
+        slots through the emulator console (the only route that injects both)."""
+        for slot, (x_pos, y_pos) in enumerate(starts):
             dev_x, dev_y = self._natural(x_pos, y_pos)
             self._emu_send(
                 f"EV_ABS:ABS_MT_SLOT:{slot}",
@@ -695,9 +735,10 @@ class AndroidViewer:
         steps = 12
         for step in range(1, steps + 1):
             events = []
-            for slot, (x_pos, y_pos) in enumerate(fingers):
+            for slot, ((x_from, y_from), (x_to, y_to)) in enumerate(zip(starts, ends, strict=True)):
                 dev_x, dev_y = self._natural(
-                    x_pos + delta_x * step // steps, y_pos + delta_y * step // steps
+                    x_from + (x_to - x_from) * step // steps,
+                    y_from + (y_to - y_from) * step // steps,
                 )
                 events += [
                     f"EV_ABS:ABS_MT_SLOT:{slot}",

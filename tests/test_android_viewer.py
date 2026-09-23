@@ -706,3 +706,18 @@ def test_the_keyboards_extract_view_in_the_tree_counts_as_keyboard_up():
     assert viewer._ime_up() is True
     viewer, _scripted = _viewer([DESKTOP_XML])
     assert viewer._ime_up() is False
+
+
+def test_the_information_button_is_found_where_the_toolbar_was_left():
+    """The app remembers where its toolbar was dragged; tapping the fresh-install
+    position then opens nothing, and the desktop size can never be read."""
+    moved = (
+        '<node text="" resource-id="com.realvnc.viewer.android:id/menu_pin"'
+        ' class="android.widget.ImageButton" bounds="[58,894][172,1009]"/>'
+        '<node text="" resource-id="com.realvnc.viewer.android:id/menu_information"'
+        ' class="android.widget.ImageButton" bounds="[400,894][514,1009]"/>'
+    )
+    viewer, scripted = _viewer([moved])
+    viewer._open_info_screen(sleep=lambda _s: None, clock=iter([0.0, 0.0, 999.0]).__next__)
+    assert "input tap 457 951" in scripted.shells()
+    assert "input tap 457 129" not in scripted.shells()
