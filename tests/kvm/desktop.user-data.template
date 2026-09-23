@@ -74,7 +74,13 @@ write_files:
       # Software rendering: virtio-gpu without virgl is llvmpipe.
       Environment=LIBGL_ALWAYS_SOFTWARE=1
 __DESKTOP_ENVIRONMENT__
-      ExecStart=/usr/bin/dbus-run-session -- /usr/bin/python3 /fixture/__SESSION_SCRIPT__
+      # pam_systemd (systemd 258+) gives the session an ambient CAP_WAKE_ALARM that
+      # every process inherits except kwin_wayland, whose file capability resets it.
+      # The kernel then refuses KWin a look at its clients' /proc/<pid>/exe, KWin
+      # cannot identify xdg-desktop-portal-kde, withholds zkde_screencast_unstable_v1,
+      # and every Plasma RemoteDesktop session fails. The fixture needs no capability,
+      # so it is dropped above dbus-run-session, which D-Bus-activated services inherit.
+      ExecStart=/usr/bin/setpriv --inh-caps=-all --ambient-caps=-all /usr/bin/dbus-run-session -- /usr/bin/python3 /fixture/__SESSION_SCRIPT__
       KillMode=control-group
       TimeoutStopSec=20
       Restart=no

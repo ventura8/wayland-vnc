@@ -21,11 +21,16 @@ def main() -> int:
     guest = QemuGuest(work)
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
-        if guest.ping(2):
-            ready = guest.shell("test -f /run/wayland-vnc-guest-ready", timeout=15)
-            if ready.exitcode == 0:
-                print("ready")
-                return 0
+        # A desktop guest reboots once to load its EDID; an agent that answered the
+        # ping can go away mid-request, which is a reason to ask again, not to fail.
+        try:
+            if guest.ping(2):
+                ready = guest.shell("test -f /run/wayland-vnc-guest-ready", timeout=15)
+                if ready.exitcode == 0:
+                    print("ready")
+                    return 0
+        except OSError:
+            pass
         time.sleep(10)
     print(f"the guest under {work} was not ready within {timeout}s", file=sys.stderr)
     return 1

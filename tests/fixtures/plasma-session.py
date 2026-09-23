@@ -116,6 +116,17 @@ try:
     compositor = start(kwin_command)
     os.environ["WAYLAND_DISPLAY"] = wait_socket("wayland-*", 30, compositor).name
     time.sleep(2)
+    if os.environ.get("FIXTURE_DRM") == "1":
+        # The guest forces its spare output connected (video=<spare>:e) so the
+        # monitor-change scenario can enable it; KWin lights every connected output,
+        # so the session starts with the spare switched off, as in the container.
+        spare_output = os.environ.get("FIXTURE_SPARE_OUTPUT")
+        if spare_output:
+            subprocess.run(
+                ["/usr/bin/kscreen-doctor", f"output.{spare_output}.disable"],
+                check=True,
+                timeout=20,
+            )
     shell_env = {**os.environ, "QT_QUICK_BACKEND": "software"}
     shell = start(["/usr/bin/plasmashell", "--no-respawn"], env=shell_env)
     (runtime / "env").write_text(
