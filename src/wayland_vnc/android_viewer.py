@@ -109,6 +109,10 @@ FULLSCREEN_HINT_DISMISS = "Got it"
 # it. It is the desktop activity's own view, so nothing about the activity or an
 # alertTitle betrays it -- a capture taken under it is a picture of the help text.
 HELP_VIEW = "help_view"
+# And once the help view is closed, a coach-mark over the live desktop points at the
+# toolbar and dims everything behind it. The scene is on screen but not verifiable: the
+# colour bands are really there and the capture still is not a frame.
+SKIP_TUTORIAL = "SKIP TUTORIAL"
 # The event that ends one input report; every emulator gesture is framed by it.
 EV_SYN = "EV_SYN:0:0"
 
@@ -316,6 +320,10 @@ class AndroidViewer:
         device that simply accepted the final page would start reporting usage data
         from a qualification run.
         """
+        skip = find(nodes, text=SKIP_TUTORIAL)
+        if skip is not None:
+            self._tap(skip)
+            return "first-run-tutorial-skipped"
         if find(nodes, rid=HELP_VIEW) is not None:
             self.adb.shell("input", "keyevent", KEY_BACK)
             return "first-run-help"
@@ -455,6 +463,9 @@ class AndroidViewer:
         # The first-run help view is part of the desktop activity, so the activity
         # check below cannot see it; the desktop is not visible underneath it.
         if find(nodes, rid=HELP_VIEW) is not None:
+            return False
+        # The coach-mark dims the desktop it points at; a capture under it is not a frame.
+        if find(nodes, text=SKIP_TUTORIAL) is not None:
             return False
         activities = self.adb.shell("dumpsys", "activity", "activities")
         line = re.search(r"topResumedActivity=([^\n]*)", activities)

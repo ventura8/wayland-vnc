@@ -78,6 +78,7 @@ class ScriptedAdb:
         ["539", "1308"],
         ["540", "938"],
         ["1462", "500"],
+        ["959", "639"],
     )
 
     def __init__(self, screens, *, drop_first=False):
@@ -193,6 +194,28 @@ HELP_VIEW_XML = (
     '<node text="How to control" resource-id="" class="android.widget.TextView"'
     ' bounds="[189,100][430,151]"/>'
 )
+
+
+TUTORIAL_XML = (
+    '<node text="This is your toolbar" resource-id="" class="android.widget.TextView"'
+    ' bounds="[736,390][1183,445]"/>'
+    '<node text="SKIP TUTORIAL" resource-id="" class="android.widget.Button"'
+    ' bounds="[777,586][1142,692]"/>'
+)
+
+
+def test_the_toolbar_coach_mark_is_skipped():
+    """The last first-run screen sits on the live desktop: the scene really is behind
+    it, which is why a capture taken under it looks almost right and is not a frame."""
+    viewer, _scripted = _viewer([AUTH_XML, TUTORIAL_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "first-run-tutorial-skipped" in outcome.steps
+
+
+def test_the_desktop_is_not_visible_under_the_coach_mark():
+    viewer, _scripted = _viewer([TUTORIAL_XML])
+    assert viewer.desktop_visible(parse_ui(f"<hierarchy>{TUTORIAL_XML}</hierarchy>")) is False
 
 
 def test_the_first_run_help_view_is_closed_with_back():
