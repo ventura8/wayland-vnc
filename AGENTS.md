@@ -174,6 +174,8 @@ Skills live under `.agents/skills/*/SKILL.md`:
 - [`fixture-qualifier`](.agents/skills/fixture-qualifier/SKILL.md) — actual-viewer qualification.
 - [`native-patch-verifier`](.agents/skills/native-patch-verifier/SKILL.md) — patch series,
   sanitizers and units.
+- [`hardware-validator`](.agents/skills/hardware-validator/SKILL.md) — the packaged
+  product on real hardware, install to uninstall, with an honest phase report.
 - [`release`](.agents/skills/release/SKILL.md) — release docs, version pins, PPA revision.
 - [`resolve-pr-comments`](.agents/skills/resolve-pr-comments/SKILL.md) — resolve every PR
   review thread.
