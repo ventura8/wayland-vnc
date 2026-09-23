@@ -68,8 +68,17 @@ class ScriptedAdb:
     field, once per field."""
 
     # Taps that move the app to its next screen: the dialog's OK / the CONTINUE button
-    # / the toolbar's information button.
-    ADVANCING_TAPS = (["1425", "672"], ["1767", "126"], ["457", "129"])
+    # / the toolbar's information button / the first-run tour's Next, its final page's
+    # Get Started, and the full-screen hint's Got it. The analytics checkbox is
+    # deliberately absent: clearing it stays on the same page.
+    ADVANCING_TAPS = (
+        ["1425", "672"],
+        ["1767", "126"],
+        ["457", "129"],
+        ["539", "1308"],
+        ["540", "938"],
+        ["1462", "500"],
+    )
 
     def __init__(self, screens, *, drop_first=False):
         self.screens = list(screens)
@@ -150,6 +159,80 @@ def _viewer(screens, pointer=lambda: None):
     scripted = ScriptedAdb(screens)
     adb = Adb("/sdk/adb", "emulator-5554", {}, run=scripted)
     return AndroidViewer(adb, pointer_report=pointer), scripted
+
+
+# A freshly installed viewer: the tour, then the final page whose analytics checkbox
+# ships ticked, then the full-screen hint the app lays over the desktop on first use.
+TOUR_XML = (
+    '<node text="Take control" resource-id="com.realvnc.viewer.android:id/textView"'
+    ' class="android.widget.TextView" bounds="[159,431][920,577]"/>'
+    '<node text="Next" resource-id="com.realvnc.viewer.android:id/next_button"'
+    ' class="android.widget.Button" bounds="[424,1245][655,1371]"/>'
+)
+FIRST_RUN_LAST_XML = (
+    '<node text="Get Started" resource-id="com.realvnc.viewer.android:id/accept_button"'
+    ' class="android.widget.Button" bounds="[358,875][722,1001]"/>'
+    '<node text="Send anonymous usage data to improve the app"'
+    ' resource-id="com.realvnc.viewer.android:id/analytics_checkbox"'
+    ' class="android.widget.CheckBox" checked="true" bounds="[63,1211][1017,1329]"/>'
+)
+FIRST_RUN_LAST_UNTICKED_XML = FIRST_RUN_LAST_XML.replace('checked="true"', 'checked="false"')
+FULLSCREEN_HINT_XML = (
+    '<node text="Viewing full screen" resource-id="" class="android.widget.TextView"'
+    ' bounds="[700,220][1220,300]"/>'
+    '<node text="Got it" resource-id="" class="android.widget.Button"'
+    ' bounds="[1375,455][1550,545]"/>'
+)
+
+
+def test_parse_ui_reads_the_checked_attribute():
+    """The analytics checkbox is answered on this attribute, so it has to survive the
+    parse; a node without it reads as unchecked rather than as missing."""
+    nodes = parse_ui(f"<hierarchy>{FIRST_RUN_LAST_XML}</hierarchy>")
+    assert find(nodes, rid="analytics_checkbox").checked is True
+    assert find(nodes, rid="accept_button").checked is False
+
+
+def test_first_run_tour_is_walked_and_analytics_is_declined():
+    """A fresh install shows the tour before anything else. The suite must reach the
+    desktop through it, and must clear the analytics checkbox on the way: it ships
+    ticked, so accepting the page as-is would opt a qualification device into
+    reporting usage data."""
+    viewer, scripted = _viewer([TOUR_XML, TOUR_XML, FIRST_RUN_LAST_XML, AUTH_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert outcome.steps.count("first-run-tour") == 2
+    assert "first-run-analytics-declined" in outcome.steps
+    # The checkbox is tapped before the page is accepted, or the tap lands on a page
+    # that is already gone.
+    taps = [c for c in scripted.calls if "tap" in " ".join(c)]
+    assert len(taps) >= 2
+
+
+def test_an_already_ticked_off_analytics_box_is_left_alone():
+    """Declining twice would re-enable it."""
+    viewer, _scripted = _viewer([FIRST_RUN_LAST_UNTICKED_XML, AUTH_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "first-run-accepted" in outcome.steps
+    assert "first-run-analytics-declined" not in outcome.steps
+
+
+def test_the_full_screen_hint_is_dismissed_before_the_desktop_counts():
+    """The hint covers the desktop. A capture taken under it is a picture of a
+    tutorial card, which is how a fresh AVD produced fifteen failed scenarios."""
+    viewer, _scripted = _viewer([AUTH_XML, FULLSCREEN_HINT_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "first-run-fullscreen-hint" in outcome.steps
+
+
+def test_a_provisioned_viewer_shows_no_first_run_screens():
+    """An AVD that has already been through the tour must not pay for any of this."""
+    viewer, _scripted = _viewer([AUTH_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert not [s for s in outcome.steps if s.startswith("first-run")]
 
 
 def test_parse_ui_and_find_read_bounds_ids_and_text():

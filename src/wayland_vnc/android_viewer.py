@@ -68,6 +68,9 @@ class UiNode:
     resource_id: str
     class_name: str
     bounds: tuple[int, int, int, int]
+    # Only the first-run analytics checkbox is read through this, but any node
+    # carries it, and a missing attribute reads as unchecked.
+    checked: bool = False
 
     @property
     def center(self) -> tuple[int, int]:
@@ -92,6 +95,15 @@ class ConnectOutcome:
 UI_DUMP = "/sdcard/ui.xml"
 # The positive button of an Android system dialog.
 DIALOG_OK = "android:id/button1"
+# A freshly installed viewer shows a four-page tour, a final page whose analytics
+# checkbox is ticked by default, and -- on the first connection -- a full-screen hint
+# over the desktop. A lab AVD is built per campaign, so the suite meets all three; the
+# hint in particular covers the desktop, and a capture taken under it is not a frame.
+FIRST_RUN_NEXT = "next_button"
+FIRST_RUN_ACCEPT = "accept_button"
+ANALYTICS_CHECKBOX = "analytics_checkbox"
+FULLSCREEN_HINT = "Viewing full screen"
+FULLSCREEN_HINT_DISMISS = "Got it"
 # The event that ends one input report; every emulator gesture is framed by it.
 EV_SYN = "EV_SYN:0:0"
 
@@ -113,6 +125,7 @@ def parse_ui(xml: str) -> list[UiNode]:
                 resource_id=attrs.get("resource-id", ""),
                 class_name=attrs.get("class", ""),
                 bounds=tuple(int(n) for n in numbers),  # type: ignore[arg-type]
+                checked=attrs.get("checked") == "true",
             )
         )
     return nodes
@@ -274,9 +287,39 @@ class AndroidViewer:
         outcome.error = outcome.error or "the desktop did not appear in time"
         return outcome
 
+    def _answer_first_run(self, nodes) -> str | None:
+        """Answer whichever first-run screen is up, or None when none is.
+
+        Declining the analytics checkbox is deliberate: it ships ticked, so a lab
+        device that simply accepted the final page would start reporting usage data
+        from a qualification run.
+        """
+        if find(nodes, text=FULLSCREEN_HINT) is not None:
+            dismiss = find(nodes, text=FULLSCREEN_HINT_DISMISS)
+            if dismiss is not None:
+                self._tap(dismiss)
+                return "first-run-fullscreen-hint"
+        accept = find(nodes, rid=FIRST_RUN_ACCEPT)
+        if accept is not None:
+            analytics = find(nodes, rid=ANALYTICS_CHECKBOX)
+            step = "first-run-accepted"
+            if analytics is not None and analytics.checked:
+                self._tap(analytics)
+                step = "first-run-analytics-declined"
+            self._tap(accept)
+            return step
+        nxt = find(nodes, rid=FIRST_RUN_NEXT)
+        if nxt is not None:
+            self._tap(nxt)
+            return "first-run-tour"
+        return None
+
     def _answer_screen(self, nodes, outcome, username, password, sleep) -> str | None:
         """Answer whichever of the app's screens is up; the step's name, "refused"
         for a credential refusal, None when no screen needed an answer."""
+        first_run = self._answer_first_run(nodes)
+        if first_run is not None:
+            return self._step(outcome, first_run)
         simple = (
             ("Continue connecting?", DIALOG_OK, "continue-connecting"),
             ("Identity check", "menu_done", "identity-check"),
