@@ -104,6 +104,11 @@ FIRST_RUN_ACCEPT = "accept_button"
 ANALYTICS_CHECKBOX = "analytics_checkbox"
 FULLSCREEN_HINT = "Viewing full screen"
 FULLSCREEN_HINT_DISMISS = "Got it"
+# After the first successful connection the app opens a full-page "How to control"
+# help view over the desktop. Its close button carries no resource id, but Back closes
+# it. It is the desktop activity's own view, so nothing about the activity or an
+# alertTitle betrays it -- a capture taken under it is a picture of the help text.
+HELP_VIEW = "help_view"
 # The event that ends one input report; every emulator gesture is framed by it.
 EV_SYN = "EV_SYN:0:0"
 
@@ -311,6 +316,9 @@ class AndroidViewer:
         device that simply accepted the final page would start reporting usage data
         from a qualification run.
         """
+        if find(nodes, rid=HELP_VIEW) is not None:
+            self.adb.shell("input", "keyevent", KEY_BACK)
+            return "first-run-help"
         if find(nodes, text=FULLSCREEN_HINT) is not None:
             dismiss = find(nodes, text=FULLSCREEN_HINT_DISMISS)
             if dismiss is not None:
@@ -443,6 +451,10 @@ class AndroidViewer:
         is up. (Its toolbar hides itself after a few seconds, so it is no signal.)"""
         nodes = self.adb.ui() if nodes is None else nodes
         if find(nodes, rid="alertTitle") is not None:
+            return False
+        # The first-run help view is part of the desktop activity, so the activity
+        # check below cannot see it; the desktop is not visible underneath it.
+        if find(nodes, rid=HELP_VIEW) is not None:
             return False
         activities = self.adb.shell("dumpsys", "activity", "activities")
         line = re.search(r"topResumedActivity=([^\n]*)", activities)

@@ -125,7 +125,9 @@ class ScriptedAdb:
                 self.sticky_ime -= 1  # the keyboard stayed up this time
             else:
                 self.focus = None  # Back closes the keyboard: nothing is focused for typing
-            if "text_view_desktop_size_details" in self.screens[self.index]:
+            # Back closes the information screen and the first-run help view.
+            closable = ("text_view_desktop_size_details", "help_view")
+            if any(marker in self.screens[self.index] for marker in closable):
                 self.index = min(self.index + 1, len(self.screens) - 1)  # closes the screen
         elif tail[:3] == ["shell", "input", "text"]:
             self._typed(tail[3])
@@ -183,6 +185,32 @@ FULLSCREEN_HINT_XML = (
     '<node text="Got it" resource-id="" class="android.widget.Button"'
     ' bounds="[1375,455][1550,545]"/>'
 )
+
+
+HELP_VIEW_XML = (
+    '<node text="" resource-id="com.realvnc.viewer.android:id/help_view"'
+    ' class="android.widget.FrameLayout" bounds="[0,0][1920,1080]"/>'
+    '<node text="How to control" resource-id="" class="android.widget.TextView"'
+    ' bounds="[189,100][430,151]"/>'
+)
+
+
+def test_the_first_run_help_view_is_closed_with_back():
+    """The app opens a full-page help view over the desktop after the first
+    connection. Its close button carries no resource id; Back closes it."""
+    viewer, scripted = _viewer([AUTH_XML, HELP_VIEW_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "first-run-help" in outcome.steps
+    assert "input keyevent 4" in scripted.shells()
+
+
+def test_the_desktop_is_not_visible_under_the_help_view():
+    """The help view belongs to the desktop activity, so the activity check cannot
+    see it. Without this, a capture under it counts as a frame -- which is how a
+    fresh AVD produced a full set of screenshots of the help text."""
+    viewer, _scripted = _viewer([HELP_VIEW_XML])
+    assert viewer.desktop_visible(parse_ui(f"<hierarchy>{HELP_VIEW_XML}</hierarchy>")) is False
 
 
 def test_an_untouched_password_field_does_not_read_as_a_typed_one():
