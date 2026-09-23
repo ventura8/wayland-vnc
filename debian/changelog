@@ -1,3 +1,22 @@
+wayland-vnc (1.0.1) resolute; urgency=medium
+
+  * Quality release: no change to what the installed server does. The package
+    payload, the systemd user unit, the default 127.0.0.1:5900 bind and the
+    Local Network Access switch all behave exactly as in 1.0.0.
+  * Static analysis (SonarQube Cloud) now runs beside the pinned linters, locally
+    and in CI, over one shared configuration so a finding on a laptop is the
+    finding CI reports. Its quality gate blocks the build.
+  * Release tooling fix: the AppImage build chose its appimagetool checksum from a
+    case with no default, so an unexpected architecture reached sha256sum with an
+    empty checksum and the build reported a tampered tool it had never heard of.
+    It now fails naming the architecture.
+  * Two regular expressions in the Android qualification harness backtracked
+    super-linearly; both now match in linear time.
+  * The Ubuntu 26.04 base image digest every fixture and package smoke pins was
+    refreshed.
+
+ -- ventura8 <alexandrescu.sergiu@gmail.com>  Wed, 23 Sep 2026 00:00:00 +0300
+
 wayland-vnc (1.0.0) resolute; urgency=medium
 
   * Initial release of the Wayland VNC server toolkit for RealVNC viewers.
