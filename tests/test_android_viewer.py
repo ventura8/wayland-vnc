@@ -185,6 +185,22 @@ FULLSCREEN_HINT_XML = (
 )
 
 
+def test_an_untouched_password_field_does_not_read_as_a_typed_one():
+    """The hint "Password" is exactly eight characters, so a length alone made an
+    empty field look like a correctly typed eight-character password -- which is how
+    a total input failure was read as "only the username failed" for an afternoon."""
+    from wayland_vnc.android_viewer import _password_field_note
+
+    # The hint is eight characters, exactly like the password, and must not read as one.
+    assert _password_field_note("Password", "hunter2x") == (
+        "8 characters that are neither the password nor masked input"
+    )
+    assert _password_field_note("\u2022" * 8, "hunter2x") == "8/8 characters"
+    assert _password_field_note(None, "hunter2x") == "missing"
+    # A short run of bullets is masked input, just not enough of it.
+    assert _password_field_note("\u2022" * 5, "hunter2x") == "5/8 masked characters, short"
+
+
 def test_parse_ui_reads_the_checked_attribute():
     """The analytics checkbox is answered on this attribute, so it has to survive the
     parse; a node without it reads as unchecked rather than as missing."""

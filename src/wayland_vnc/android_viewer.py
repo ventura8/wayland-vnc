@@ -140,6 +140,23 @@ def _password_field_holds(shown: str, password: str) -> bool:
     return bool(shown) and set(shown) <= {"•", "*"} and len(shown) == len(password)
 
 
+def _password_field_note(shown: str | None, password: str) -> str:
+    """What a password field's dump shows, for the record, without printing the secret.
+
+    A field that was never typed into reads back its own hint, and "Password" happens
+    to be exactly eight characters: a note carrying only a length made an untouched
+    field look like a correctly typed eight-character password. The verdict comes from
+    `_password_field_holds`, so the note cannot disagree with the check.
+    """
+    if shown is None:
+        return "missing"
+    if _password_field_holds(shown, password):
+        return f"{len(shown)}/{len(password)} characters"
+    if shown and set(shown) <= {"\u2022", "*"}:
+        return f"{len(shown)}/{len(password)} masked characters, short"
+    return f"{len(shown)} characters that are neither the password nor masked input"
+
+
 def find(nodes: list[UiNode], *, text: str | None = None, rid: str | None = None) -> UiNode | None:
     for node in nodes:
         if text is not None and text not in node.text:
@@ -376,7 +393,7 @@ class AndroidViewer:
             notes.append(
                 f"credentials attempt {attempt}: username field "
                 f"{'missing' if user is None else repr(user.text)}, password field "
-                f"{'missing' if shown is None else f'{len(shown)}/{len(password)} characters'}"
+                f"{_password_field_note(shown, password)}"
             )
             if user is not None and user.text == username and shown is not None:
                 if _password_field_holds(shown, password):
