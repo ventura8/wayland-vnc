@@ -602,6 +602,32 @@ def test_lock_fails_when_the_desktop_leaks_or_unlock_fails(lab):
     assert ds.scenario_lock(run).status == "not-run"
 
 
+def test_lock_that_drops_the_session_is_not_a_lock(lab):
+    """GNOME Shell ends remote sessions when it locks; the viewer's closed-connection
+    message hides the desktop and, once dismissed, its last frame shows again. Neither
+    may pass for locked or for unlocked."""
+    run, driver, _root = lab
+    driver.supports_input = True
+    ended = set()
+    driver.alive = lambda session: session not in ended
+    driver.lock = lambda: (setattr(driver, "locked", True), ended.add(driver.sessions))
+    outcome = ds.scenario_lock(run)
+    assert outcome.status == "failed"
+    assert "ended the session" in outcome.detail
+
+    ended.clear()
+    driver.lock = lambda: setattr(driver, "locked", True)
+
+    def unlock_then_drop():
+        driver.locked = False
+        ended.add(driver.sessions)
+
+    driver.type_secret = unlock_then_drop
+    outcome = ds.scenario_lock(run)
+    assert outcome.status == "failed"
+    assert "did not restore" in outcome.detail
+
+
 def test_monitor_change_requires_a_hotplug_capable_fixture(lab):
     run, driver, _root = lab
     assert ds.scenario_monitor_change(run).status == "passed"

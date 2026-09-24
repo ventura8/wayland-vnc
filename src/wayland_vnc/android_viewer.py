@@ -123,6 +123,7 @@ SKIP_TUTORIAL = "SKIP TUTORIAL"
 # `unencrypted-accepted`, so the evidence says the session was not encrypted. The
 # app's "Warn me every time" is left as it is.
 UNENCRYPTED = "Unencrypted connection"
+CONNECTION_LOST = "connection closed unexpectedly"
 # The app's own views that can stand in front of the desktop while the desktop
 # activity is on top -- so the activity check cannot see them -- and that a capture
 # must never be taken under: a dialog, the first-run help and coach-mark, the
@@ -566,6 +567,11 @@ class AndroidViewer:
         activity = next((word for word in line.group(1).split() if "/" in word), None)
         return activity is not None and activity.endswith("/.app.DesktopActivity")
 
+    def connection_lost(self, nodes: list[UiNode] | None = None) -> bool:
+        """The app's own word that the server ended an established session."""
+        nodes = self.adb.ui() if nodes is None else nodes
+        return any(CONNECTION_LOST in node.text for node in nodes)
+
     def disconnect(self) -> None:
         self.adb.shell("am", "force-stop", PACKAGE)
 
@@ -645,7 +651,7 @@ class AndroidViewer:
         return any(
             "RSA decrypt/check error" in node.text
             or "bad length" in node.text
-            or "connection closed unexpectedly" in node.text
+            or CONNECTION_LOST in node.text
             for node in self.adb.ui()
         )
 

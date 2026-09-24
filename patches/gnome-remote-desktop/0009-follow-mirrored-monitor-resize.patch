@@ -1,0 +1,171 @@
+Subject: Private build: follow a mirrored monitor's resize instead of freezing
+Base: GNOME Remote Desktop 50.2 after the earlier private patches
+License: GPL-2.0-or-later (upstream-derived)
+Status: private build only; the distribution's daemon has the same defect
+
+When the monitor a mirror-primary VNC session records changes size (a mode or
+scale change), Mutter 50 ends that monitor's screen-cast stream: its logical
+monitor no longer matches, and a remote desktop session is not closed with it.
+Nothing reaches the daemon over D-Bus; only the PipeWire node disappears, and
+the daemon's pw_stream falls back to "paused". The session kept that dead
+stream, so the client stayed connected to a desktop that never updated again.
+Measured on 2026-09-24 in the GNOME KVM guest (Mutter 50.1) with RealVNC Viewer
+for Android: after a switch from 1920x1080 to 1280x720 the viewer kept showing
+the last 1920x1080 frame until it disconnected.
+
+The PipeWire stream now watches the registry and reports the source node's
+removal as "closed", the path a lost PipeWire connection already takes. For a
+mirrored monitor the session answers by recording the primary monitor again;
+the new stream's format negotiation resizes the framebuffer, and the client
+receives a DesktopSize update. A virtual-monitor session still closes the
+client, as before.
+diff --git a/src/grd-session-vnc.c b/src/grd-session-vnc.c
+index 934ea08..79d9643 100644
+--- a/src/grd-session-vnc.c
++++ b/src/grd-session-vnc.c
+@@ -58,6 +58,7 @@ struct _GrdSessionVnc
+ 
+   GMutex close_session_mutex;
+   guint close_session_idle_id;
++  guint restart_stream_idle_id;
+ 
+   GrdVncAuthMethod auth_method;
+ 
+@@ -875,6 +876,7 @@ grd_session_vnc_stop (GrdSession *session)
+   g_clear_object (&session_vnc->prompt);
+ 
+   g_clear_handle_id (&session_vnc->close_session_idle_id, g_source_remove);
++  g_clear_handle_id (&session_vnc->restart_stream_idle_id, g_source_remove);
+ }
+ 
+ static gboolean
+@@ -918,10 +920,50 @@ on_remote_desktop_session_started (GrdSession *session)
+     }
+ }
+ 
++/* wayland-vnc: Mutter ends a mirrored monitor's stream when that monitor
++ * changes size, and a new stream of the same monitor carries the new size;
++ * its format negotiation resizes the framebuffer and the client receives a
++ * DesktopSize update, as it would after a SetDesktopSize request. Done from an
++ * idle: the stream objects cannot be freed inside their own callback. */
++static gboolean
++restart_stream_idle (gpointer user_data)
++{
++  GrdSessionVnc *session_vnc = GRD_SESSION_VNC (user_data);
++  const char *connector;
++
++  session_vnc->restart_stream_idle_id = 0;
++
++  g_clear_object (&session_vnc->pipewire_stream);
++  if (session_vnc->stream)
++    {
++      /* Mutter has already removed the stream object; no Stop call. */
++      grd_stream_disconnect_proxy_signals (session_vnc->stream);
++      g_clear_object (&session_vnc->stream);
++    }
++
++  connector = session_vnc->monitor_config->connectors[0];
++  g_debug ("[VNC] Re-recording monitor %s after its stream ended", connector);
++  grd_session_record_monitor (GRD_SESSION (session_vnc), 0, connector,
++                              GRD_SCREEN_CAST_CURSOR_MODE_METADATA);
++
++  return G_SOURCE_REMOVE;
++}
++
+ static void
+ on_pipewire_stream_closed (GrdVncPipeWireStream *stream,
+                            GrdSessionVnc        *session_vnc)
+ {
++  if (!session_vnc->monitor_config->is_virtual)
++    {
++      if (!session_vnc->restart_stream_idle_id)
++        {
++          g_message ("[VNC] Mirrored monitor stream ended, recording it again");
++          session_vnc->restart_stream_idle_id =
++            g_idle_add (restart_stream_idle, session_vnc);
++        }
++      return;
++    }
++
+   g_warning ("PipeWire stream closed, closing client");
+ 
+   maybe_queue_close_session_idle (session_vnc);
+diff --git a/src/grd-vnc-pipewire-stream.c b/src/grd-vnc-pipewire-stream.c
+index cd8cb41..36bf2a7 100644
+--- a/src/grd-vnc-pipewire-stream.c
++++ b/src/grd-vnc-pipewire-stream.c
+@@ -111,6 +111,10 @@ struct _GrdVncPipeWireStream
+ 
+   struct spa_hook pipewire_core_listener;
+ 
++  /* wayland-vnc: watches for the source node's removal (see on_registry_global_remove) */
++  struct pw_registry *pipewire_registry;
++  struct spa_hook pipewire_registry_listener;
++
+   GMutex frame_mutex;
+   GrdVncFrame *pending_frame;
+   GSource *pending_frame_source;
+@@ -1195,6 +1199,29 @@ static const struct pw_core_events core_events = {
+   .error = on_core_error,
+ };
+ 
++/* wayland-vnc: Mutter drops a monitor stream whose monitor changed size (a mode
++ * or scale change of the mirrored monitor) without any D-Bus notice to a remote
++ * desktop session: it only destroys the PipeWire node. The pw_stream merely goes
++ * back to "paused", so without this the session kept a dead stream and the
++ * client froze on the last frame. The node going away is the signal. */
++static void
++on_registry_global_remove (void     *user_data,
++                           uint32_t  id)
++{
++  GrdVncPipeWireStream *stream = GRD_VNC_PIPEWIRE_STREAM (user_data);
++
++  if (id != stream->src_node_id)
++    return;
++
++  g_debug ("[VNC] Source node %u removed", id);
++  g_signal_emit (stream, signals[CLOSED], 0);
++}
++
++static const struct pw_registry_events registry_events = {
++  PW_VERSION_REGISTRY_EVENTS,
++  .global_remove = on_registry_global_remove,
++};
++
+ GrdVncPipeWireStream *
+ grd_vnc_pipewire_stream_new (GrdSessionVnc               *session_vnc,
+                              uint32_t                     src_node_id,
+@@ -1264,6 +1291,19 @@ grd_vnc_pipewire_stream_new (GrdSessionVnc               *session_vnc,
+                         &core_events,
+                         stream);
+ 
++  stream->pipewire_registry = pw_core_get_registry (stream->pipewire_core,
++                                                    PW_VERSION_REGISTRY, 0);
++  if (!stream->pipewire_registry)
++    {
++      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
++                   "Failed to get the PipeWire registry");
++      return NULL;
++    }
++  pw_registry_add_listener (stream->pipewire_registry,
++                            &stream->pipewire_registry_listener,
++                            &registry_events,
++                            stream);
++
+   if (!connect_to_stream (stream, virtual_monitor, error))
+     return NULL;
+ 
+@@ -1305,6 +1345,13 @@ grd_vnc_pipewire_stream_finalize (GObject *object)
+ 
+   g_clear_pointer (&stream->pipewire_stream, pw_stream_destroy);
+ 
++  if (stream->pipewire_registry)
++    {
++      spa_hook_remove (&stream->pipewire_registry_listener);
++      pw_proxy_destroy ((struct pw_proxy *) stream->pipewire_registry);
++      stream->pipewire_registry = NULL;
++    }
++
+   g_clear_pointer (&stream->pipewire_core, pw_core_disconnect);
+   g_clear_pointer (&stream->pipewire_context, pw_context_destroy);
+   g_clear_pointer (&stream->pending_pointer_source, g_source_destroy);

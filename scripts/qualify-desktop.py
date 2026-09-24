@@ -1000,6 +1000,10 @@ class AndroidViewerMixin:
         session.connected = False
 
     def alive(self, session):
+        # Sticky: once the app has said the connection closed, the session is over,
+        # even after that message is dismissed and the app shows its last frame again.
+        if session.connected and self.viewer.connection_lost():
+            session.connected = False
         return session.connected and self.viewer.desktop_visible()
 
     def transient_error(self, session):

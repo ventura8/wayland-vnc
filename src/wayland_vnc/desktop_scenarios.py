@@ -525,9 +525,18 @@ def scenario_lock(run: Session) -> Outcome:
         hidden = _scene_hidden(run, session, "lock-locked.png", FIRST_FRAME_BUDGET)
         if hidden is None:
             return Outcome("failed", "desktop pixels stayed visible after locking", [before])
+        # A dropped connection hides the desktop too -- behind the viewer's own
+        # "connection closed" message -- and once that is dismissed the viewer shows
+        # its last frame again, which a later check would take for an unlock. Only a
+        # session that is still up counts as locked, and as unlocked.
+        if not run.driver.alive(session):
+            detail = "the server ended the session when the desktop locked"
+            return Outcome("failed", detail, [hidden])
         _wake_lock_screen(run)
         run.driver.type_secret()
         restored = _scene_visible(run, session, "lock-unlocked.png", FIRST_FRAME_BUDGET)
+        if restored is not None and not run.driver.alive(session):
+            restored = None
     finally:
         run.driver.disconnect(session)
         # Never leave the fixture locked for later scenarios; this is cleanup, not a verdict.

@@ -632,6 +632,17 @@ def test_the_ra2_glitch_dialog_is_a_transient_error():
     assert viewer.transient_error() is False
 
 
+def test_the_closed_connection_message_means_the_session_is_lost():
+    closed = (
+        '<node text="The connection closed unexpectedly." resource-id="android:id/message"'
+        ' class="android.widget.TextView" bounds="[440,440][1480,540]"/>'
+    )
+    viewer, _scripted = _viewer([closed])
+    assert viewer.connection_lost() is True
+    viewer, _scripted = _viewer([DESKTOP_XML])
+    assert viewer.connection_lost() is False
+
+
 def test_desktop_size_waits_for_an_information_screen_that_opens_late():
     viewer, scripted = _viewer([DESKTOP_XML, DESKTOP_XML, INFO_XML, DESKTOP_XML])
     # Two dumps precede the tap; the screen shows up only on the second dump after it.

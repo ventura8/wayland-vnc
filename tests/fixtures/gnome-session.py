@@ -101,6 +101,21 @@ try:
     pipewire = start(["/usr/bin/pipewire"])
     wait_socket("pipewire-0", 20, pipewire)
     wireplumber = start(["/usr/bin/wireplumber"])
+    if drm:
+        # Ubuntu's GNOME locks on suspend, and a locked shell refuses new remote
+        # desktop sessions ("Session creation inhibited"), so suspend-resume saw no
+        # desktop after S3. Locking has its own scenario; this one measures the session.
+        subprocess.run(
+            [
+                "/usr/bin/gsettings",
+                "set",
+                "org.gnome.desktop.screensaver",
+                "ubuntu-lock-on-suspend",
+                "false",
+            ],
+            check=True,
+            timeout=20,
+        )
     shell_command = ["/usr/bin/gnome-shell", "--wayland", "--no-x11"]
     if not drm:
         shell_command += ["--headless", "--virtual-monitor", "1920x1080"]

@@ -1,9 +1,9 @@
 # Upstream reports
 
-Five defects in this project's two upstream dependencies, each found with the actual
-RealVNC Viewer (Android, and for the fifth the Windows viewer) against a real GNOME
-desktop and each reduced to a reproduction that needs neither this project nor a
-phone. Every file here is a complete issue body, ready to paste; nothing in it refers
+Seven defects in this project's upstream dependencies, each found with the actual
+RealVNC Viewer (Android or desktop) against a real desktop -- this laptop's GNOME, or a
+KVM guest in the qualification lab -- and each reduced to a reproduction that needs
+neither this project nor a phone. Every file here is a complete issue body, ready to paste; nothing in it refers
 to wayland-vnc except as the reporter.
 
 LibVNCServer:
@@ -30,6 +30,9 @@ GNOME Remote Desktop:
 - [gnome-remote-desktop-03-realtime-data-loop-killed.md](gnome-remote-desktop-03-realtime-data-loop-killed.md)
   — the daemon is SIGKILLed mid-stream when the realtime PipeWire data loop copies
   4K MemFd frames for 200 ms without sleeping (`RLIMIT_RTTIME`).
+- [gnome-remote-desktop-04-mirrored-monitor-resize-freezes.md](gnome-remote-desktop-04-mirrored-monitor-resize-freezes.md)
+  — a mirror-primary session keeps a stream Mutter has ended after the monitor
+  changed size, and the viewer freezes on its last frame.
 
 ## Where each one goes
 
