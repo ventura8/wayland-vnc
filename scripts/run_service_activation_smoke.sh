@@ -24,7 +24,8 @@ IMAGE="wayland-vnc-systemd-smoke:local"
 NAME="wayland-vnc-systemd-$$"
 
 echo "=== build a systemd-as-PID1 image (ubuntu:26.04) ==="
-docker build -q -t "$IMAGE" - <<'DOCKERFILE' >/dev/null
+dockerfile=$(
+  cat <<'DOCKERFILE'
 FROM ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -34,6 +35,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 STOPSIGNAL SIGRTMIN+3
 CMD ["/sbin/init"]
 DOCKERFILE
+)
+# Quiet on success. A failed build is repeated with plain progress after a pause, so
+# the log shows apt's own error and a briefly inconsistent Ubuntu archive (an index
+# naming a version its pool answered 404 for) gets time to settle.
+if ! docker build -q -t "$IMAGE" - <<<"$dockerfile" >/dev/null; then
+  echo "image build failed; repeating it with the full build output in 60 s" >&2
+  sleep 60
+  docker build --progress=plain -t "$IMAGE" - <<<"$dockerfile" >&2
+fi
 
 trap 'docker rm -f "$NAME" >/dev/null 2>&1 || true' EXIT
 
