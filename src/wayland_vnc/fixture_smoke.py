@@ -250,6 +250,12 @@ def _apply_screen_field(outputs: list[dict], key: str, value: str) -> None:
     elif key == "Geometry" and "x" in value:
         width, _, height = value.rsplit(",", 1)[-1].partition("x")
         outputs[-1]["width"], outputs[-1]["height"] = int(width), int(height)
+    elif key == "Scale" and "width" in outputs[-1]:
+        # Geometry is in logical pixels; the mode the output shows is that times Scale
+        # (3840x2160 at scale 2 reads "Geometry: 0,0,1920x1080").
+        scale = float(value)
+        outputs[-1]["width"] = round(outputs[-1]["width"] * scale)
+        outputs[-1]["height"] = round(outputs[-1]["height"] * scale)
 
 
 def parse_kwin_support(text: str) -> list[dict]:

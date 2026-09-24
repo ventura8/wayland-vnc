@@ -101,6 +101,12 @@ try:
     # logind session instead of its virtual backend, with its lock screen (the lock
     # scenario runs there; in a container it never does).
     if os.environ.get("FIXTURE_DRM") == "1":
+        # KDE locks the screen on resume by default, so after S3 the viewer saw only
+        # the lock screen and suspend-resume could not tell a live session from a dead
+        # one. Locking has its own scenario; suspend-resume measures the session alone.
+        config = Path.home() / ".config"
+        config.mkdir(parents=True, exist_ok=True)
+        (config / "kscreenlockerrc").write_text("[Daemon]\nLockOnResume=false\n", encoding="utf-8")
         kwin_command = ["/usr/bin/kwin_wayland", "--no-global-shortcuts"]
     else:
         kwin_command = [

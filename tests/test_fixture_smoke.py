@@ -478,3 +478,13 @@ def test_mutter_helper_runs_as_the_bus_owner_when_the_checker_is_root(monkeypatc
     monkeypatch.setattr(fixture_smoke.os, "geteuid", lambda: 1000)
     fixture_smoke.mutter_outputs(address)
     assert calls[-1][0] == "/usr/bin/python3"
+
+
+def test_kwin_geometry_is_scaled_to_the_output_mode():
+    support = (
+        "Screens\n=======\nName: Virtual-1\nEnabled: 1\nGeometry: 0,0,1920x1080\n"
+        "Scale: 2\nName: Virtual-2\nEnabled: 0\n"
+    )
+    outputs = fixture_smoke.parse_kwin_support(support)
+    assert (outputs[0]["width"], outputs[0]["height"]) == (3840, 2160)
+    assert not outputs[1]["captured"]

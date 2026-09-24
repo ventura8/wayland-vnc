@@ -76,7 +76,15 @@ case "$target" in
 # The desktop guests carry a custom EDID (720p + 1080p + 4K) their compositor's
 # DisplayConfig needs, loaded over the connector in the guest, and a second output
 # for the monitor-change scenario.
-gnome | plasma) gpu=(-device "virtio-gpu-pci,max_outputs=2,edid=on,max_hostmem=1G") ;;
+# Behind a PCIe root port with No_Soft_Reset set, the GPU keeps its state across S3:
+# on the root bus QEMU resets it on resume, the compositor's buffers vanish, and
+# KWin's page flips time out forever after ("Pageflip timed out!"), a black desktop.
+gnome | plasma)
+  gpu=(
+    -device "pcie-root-port,id=gpu-port,bus=pcie.0,chassis=1"
+    -device "virtio-gpu-pci,bus=gpu-port,x-pcie-pm-no-soft-reset=on,max_outputs=2,edid=on,max_hostmem=1G"
+  )
+  ;;
 *) gpu=(-device "virtio-gpu-pci,max_outputs=1,xres=3840,yres=2160,max_hostmem=1G") ;;
 esac
 # max_hostmem caps the total size of the guest's 2D framebuffer resources, 256 MiB by

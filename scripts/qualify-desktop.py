@@ -315,6 +315,22 @@ class DockerRealVncDriver:
             + ("" if attached else ' && sleep 1 && wayvncctl attach "$WAYLAND_DISPLAY"')
         )
 
+    def _plasma_mode_script(self, width, height, scale):
+        """kscreen-doctor needs a mode's exact refresh, and outputs differ: the KVM
+        guest's EDID offers 4K at 30 Hz only (60 Hz is pruned as too fast). Take the
+        refresh the output lists for that size, 60 when it lists none."""
+        output, size = self.primary_output, f"{width}x{height}"
+        listed = (
+            "kscreen-doctor -o | sed 's/\\x1b\\[[0-9;]*m//g'"
+            f" | awk '/^Output:/ {{o = $3}} o == \"{output}\"'"
+            f" | grep -oE '{size}@[0-9]+' | head -1"
+        )
+        return (
+            f'mode="$({listed})"'
+            f' && kscreen-doctor output.{output}.mode."${{mode:-{size}@60}}"'
+            f" output.{output}.scale.{scale}"
+        )
+
     def _wlroots_mode_script(self, width, height, scale):
         """wlr-randr only accepts a mode the output advertises; anything else is custom."""
         option = "--mode" if self._output_lists_mode(width, height) else "--custom-mode"
@@ -328,10 +344,7 @@ class DockerRealVncDriver:
                 f" {width}x{height} {scale}"
             )
         if self.fixture == "plasma":
-            return (
-                f"kscreen-doctor output.{self.primary_output}.mode.{width}x{height}@60"
-                f" output.{self.primary_output}.scale.{scale}"
-            )
+            return self._plasma_mode_script(width, height, scale)
         if self.fixture == "hyprland":
             return (
                 f"hyprctl --instance 0 keyword monitor"
