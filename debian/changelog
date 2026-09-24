@@ -1,8 +1,14 @@
 wayland-vnc (1.0.1) resolute; urgency=medium
 
-  * Quality release: no change to what the installed server does. The package
-    payload, the systemd user unit, the default 127.0.0.1:5900 bind and the
-    Local Network Access switch all behave exactly as in 1.0.0.
+  * Quality release. This package behaves exactly as in 1.0.0: the payload, the
+    systemd user unit, the default 127.0.0.1:5900 bind and the Local Network
+    Access switch. The GNOME backend wayland-vnc-grd gains one fix: a session now
+    follows a resize of the mirrored monitor instead of freezing on its last
+    frame (GNOME Remote Desktop patch 0009).
+  * A qualification campaign ran against the actual RealVNC viewers, desktop and
+    Android, in KVM guests; its fixes cover the Plasma portal, GNOME monitor
+    hot-plug, 4K and suspend in the guests, and a harness false pass on lock.
+    No desktop is release-qualified at this version.
   * Static analysis (SonarQube Cloud) now runs beside the pinned linters, locally
     and in CI, over one shared configuration so a finding on a laptop is the
     finding CI reports. Its quality gate blocks the build.
