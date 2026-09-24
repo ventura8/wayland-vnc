@@ -55,14 +55,13 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-if ((build)); then
-  # Quiet on success. A failed build is repeated with plain progress, so the log shows
-  # what the failing step printed (apt's own error, not just its exit status).
-  if ! docker build -q --platform "$platform" -f "docker/Dockerfile.$fixture" -t "$image" . >/dev/null; then
-    echo "image build failed; repeating it with the full build output" >&2
-    docker build --progress=plain --platform "$platform" -f "docker/Dockerfile.$fixture" \
-      -t "$image" . >&2
-  fi
+# Quiet on success. A failed build is repeated with plain progress, so the log shows
+# what the failing step printed (apt's own error, not just its exit status).
+if ((build)) &&
+  ! docker build -q --platform "$platform" -f "docker/Dockerfile.$fixture" -t "$image" . >/dev/null; then
+  echo "image build failed; repeating it with the full build output" >&2
+  docker build --progress=plain --platform "$platform" -f "docker/Dockerfile.$fixture" \
+    -t "$image" . >&2
 fi
 
 # KWin's PipeWire screencast needs OpenGL, which needs a DRM render node. Only the
