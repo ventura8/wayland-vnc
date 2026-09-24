@@ -36,18 +36,22 @@ import subprocess
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from functools import partial
 from pathlib import Path
 
 PACKAGE = "com.realvnc.viewer.android"
 SCREEN = (1920, 1080)
 # The touch surface that is neither a system gesture zone nor the app's toolbar.
 SAFE_LEFT, SAFE_TOP, SAFE_RIGHT, SAFE_BOTTOM = 160, 230, 1760, 900
+# Where a fresh install puts the floating toolbar's top edge; the safe zone above
+# assumes it is there.
+TOOLBAR_HOME_TOP = 58
 # IME action (Enter on the soft keyboard = Next/Done) and Back.
 KEY_ENTER, KEY_BACK = "66", "4"
 # Consecutive UI dumps with nothing to answer before a toolbar-less desktop counts.
 QUIET_DUMPS = 4
-# The information button on the app's floating toolbar (which the app shows again
-# on a tap while it is hidden; the second tap then opens the screen).
+# Where a fresh install puts the information button on the app's floating toolbar;
+# used only when the toolbar's own `menu_information` node is not in the dump.
 INFO_BUTTON = (457, 129)
 # How long the information screen may take to open or close on a loaded emulator
 # (a single uiautomator dump takes about two seconds there).
@@ -68,6 +72,9 @@ class UiNode:
     resource_id: str
     class_name: str
     bounds: tuple[int, int, int, int]
+    # Only the first-run analytics checkbox is read through this, but any node
+    # carries it, and a missing attribute reads as unchecked.
+    checked: bool = False
 
     @property
     def center(self) -> tuple[int, int]:
@@ -89,8 +96,55 @@ class ConnectOutcome:
     notes: list[str] = field(default_factory=list)
 
 
+UI_DUMP = "/sdcard/ui.xml"
+# The positive button of an Android system dialog.
+DIALOG_OK = "android:id/button1"
+# A freshly installed viewer shows a four-page tour, a final page whose analytics
+# checkbox is ticked by default, and -- on the first connection -- a full-screen hint
+# over the desktop. A lab AVD is built per campaign, so the suite meets all three; the
+# hint in particular covers the desktop, and a capture taken under it is not a frame.
+FIRST_RUN_NEXT = "next_button"
+FIRST_RUN_ACCEPT = "accept_button"
+ANALYTICS_CHECKBOX = "analytics_checkbox"
+FULLSCREEN_HINT = "Viewing full screen"
+FULLSCREEN_HINT_DISMISS = "Got it"
+# After the first successful connection the app opens a full-page "How to control"
+# help view over the desktop. Its close button carries no resource id, but Back closes
+# it. It is the desktop activity's own view, so nothing about the activity or an
+# alertTitle betrays it -- a capture taken under it is a picture of the help text.
+HELP_VIEW = "help_view"
+# And once the help view is closed, a coach-mark over the live desktop points at the
+# toolbar and dims everything behind it. The scene is on screen but not verifiable: the
+# colour bands are really there and the capture still is not a frame.
+SKIP_TUTORIAL = "SKIP TUTORIAL"
+# GNOME Remote Desktop offers only VncAuth, so the app asks before every session
+# whether to continue unencrypted. The desktop runner answers the same prompt with
+# -WarnUnencrypted=0 and records it; here each session accepts it and records
+# `unencrypted-accepted`, so the evidence says the session was not encrypted. The
+# app's "Warn me every time" is left as it is.
+UNENCRYPTED = "Unencrypted connection"
+CONNECTION_LOST = "connection closed unexpectedly"
+# The app's own views that can stand in front of the desktop while the desktop
+# activity is on top -- so the activity check cannot see them -- and that a capture
+# must never be taken under: a dialog, the first-run help and coach-mark, the
+# credentials sheet and the unencrypted-connection page. Each was, at some point, the
+# picture a whole run's worth of captures turned out to show. ("id", x) is a resource
+# id, ("text", x) a visible string.
+COVERS_DESKTOP = (
+    ("id", "alertTitle"),
+    ("id", HELP_VIEW),
+    ("text", SKIP_TUTORIAL),
+    ("id", "authentication_dialog"),
+    ("text", UNENCRYPTED),
+)
+# The event that ends one input report; every emulator gesture is framed by it.
+EV_SYN = "EV_SYN:0:0"
+# Pinches that reach the app's minimum zoom from its default 1:1 on a 4K desktop;
+# once at the minimum, more change nothing.
+PINCH_REPEATS = 3
+
 NODE_RE = re.compile(r"<node [^>]*>")
-ATTR_RE = re.compile(r'(\S+?)="([^"]*)"')
+ATTR_RE = re.compile(r'([^\s=]++)="([^"]*+)"')
 
 
 def parse_ui(xml: str) -> list[UiNode]:
@@ -107,6 +161,7 @@ def parse_ui(xml: str) -> list[UiNode]:
                 resource_id=attrs.get("resource-id", ""),
                 class_name=attrs.get("class", ""),
                 bounds=tuple(int(n) for n in numbers),  # type: ignore[arg-type]
+                checked=attrs.get("checked") == "true",
             )
         )
     return nodes
@@ -119,6 +174,38 @@ def _password_field_holds(shown: str, password: str) -> bool:
     if shown == password:
         return True
     return bool(shown) and set(shown) <= {"•", "*"} and len(shown) == len(password)
+
+
+def _password_field_note(shown: str | None, password: str) -> str:
+    """What a password field's dump shows, for the record, without printing the secret.
+
+    A field that was never typed into reads back its own hint, and "Password" happens
+    to be exactly eight characters: a note carrying only a length made an untouched
+    field look like a correctly typed eight-character password. The verdict comes from
+    `_password_field_holds`, so the note cannot disagree with the check.
+    """
+    if shown is None:
+        return "missing"
+    if _password_field_holds(shown, password):
+        return f"{len(shown)}/{len(password)} characters"
+    if shown and set(shown) <= {"\u2022", "*"}:
+        return f"{len(shown)}/{len(password)} masked characters, short"
+    return f"{len(shown)} characters that are neither the password nor masked input"
+
+
+def _between(
+    start: tuple[int, int], end: tuple[int, int], step: int, steps: int
+) -> tuple[int, int]:
+    """The point `step` of `steps` along the straight line from start to end."""
+    return (
+        start[0] + (end[0] - start[0]) * step // steps,
+        start[1] + (end[1] - start[1]) * step // steps,
+    )
+
+
+def _covers(nodes: list[UiNode], cover: tuple[str, str]) -> bool:
+    kind, value = cover
+    return (find(nodes, rid=value) if kind == "id" else find(nodes, text=value)) is not None
 
 
 def find(nodes: list[UiNode], *, text: str | None = None, rid: str | None = None) -> UiNode | None:
@@ -135,14 +222,14 @@ class Adb:
     """The isolated AVD's adb, with the project's own key directories exported."""
 
     def __init__(self, adb: str, serial: str, env: dict, run: Runner | None = None):
-        self.adb = adb
+        self.binary = adb
         self.serial = serial
         self.env = env
         self._run = subprocess.run if run is None else run
 
     def run(self, *args: str, timeout: float = 60, **kwargs) -> subprocess.CompletedProcess:
         return self._run(
-            [self.adb, "-s", self.serial, *args],
+            [self.binary, "-s", self.serial, *args],
             env=self.env,
             capture_output=True,
             text=True,
@@ -160,7 +247,7 @@ class Adb:
 
     def screencap(self, path: Path) -> bool:
         result = self._run(
-            [self.adb, "-s", self.serial, "exec-out", "screencap", "-p"],
+            [self.binary, "-s", self.serial, "exec-out", "screencap", "-p"],
             env=self.env,
             capture_output=True,
             timeout=30,
@@ -175,9 +262,9 @@ class Adb:
         """A fresh dump, or nothing: the previous dump file is removed first, because
         a dump that fails mid-transition would otherwise leave the old tree to be
         re-read as if it were current (which once declared a connection 'up')."""
-        self.shell("rm", "-f", "/sdcard/ui.xml")
-        self.shell("uiautomator", "dump", "/sdcard/ui.xml")
-        return parse_ui(self.shell("cat", "/sdcard/ui.xml"))
+        self.shell("rm", "-f", UI_DUMP)
+        self.shell("uiautomator", "dump", UI_DUMP)
+        return parse_ui(self.shell("cat", UI_DUMP))
 
 
 class AndroidViewer:
@@ -259,42 +346,99 @@ class AndroidViewer:
             if find(nodes, rid="menu_pin") is not None or (
                 quiet >= QUIET_DUMPS and self.desktop_visible(nodes)
             ):
-                if not self.ensure_landscape(sleep=sleep):
-                    outcome.error = "the emulator would not turn to landscape"
-                    return outcome
-                outcome.connected = True
-                outcome.steps.append("desktop")
-                return outcome
+                return self._settle_desktop(outcome, sleep)
         outcome.error = outcome.error or "the desktop did not appear in time"
         return outcome
+
+    def _settle_desktop(self, outcome: ConnectOutcome, sleep) -> ConnectOutcome:
+        """The desktop is up: turn to landscape and home the toolbar before it counts."""
+        if not self.ensure_landscape(sleep=sleep):
+            outcome.error = "the emulator would not turn to landscape"
+            return outcome
+        if self._home_toolbar(sleep):
+            outcome.steps.append("toolbar-homed")
+        outcome.connected = True
+        outcome.steps.append("desktop")
+        return outcome
+
+    def _home_toolbar(self, sleep) -> bool:
+        """Put the floating toolbar back at the top if it has been left anywhere else.
+
+        The app remembers where its toolbar was dragged, across connections. The
+        pointer swipes start inside a safe zone laid out around a toolbar at the top;
+        with the toolbar left at the bottom, a swipe that starts on it drags it
+        instead of moving the cursor, and every input scenario fails to place the
+        pointer -- on this and every later run. True when it had to be moved.
+        """
+        toolbar = find(self.adb.ui(), rid="fabTlbrGroup")
+        if toolbar is None or toolbar.bounds[3] <= SAFE_TOP:
+            return False
+        x_pos, y_pos = toolbar.center
+        home_y = (toolbar.bounds[3] - toolbar.bounds[1]) // 2 + TOOLBAR_HOME_TOP
+        self.adb.shell("input", "swipe", str(x_pos), str(y_pos), str(x_pos), str(home_y), "800")
+        sleep(1)
+        return True
+
+    def _answer_first_run(self, nodes) -> str | None:
+        """Answer whichever first-run screen is up, or None when none is.
+
+        Declining the analytics checkbox is deliberate: it ships ticked, so a lab
+        device that simply accepted the final page would start reporting usage data
+        from a qualification run.
+        """
+        skip = find(nodes, text=SKIP_TUTORIAL)
+        if skip is not None:
+            self._tap(skip)
+            return "first-run-tutorial-skipped"
+        if find(nodes, rid=HELP_VIEW) is not None:
+            self.adb.shell("input", "keyevent", KEY_BACK)
+            return "first-run-help"
+        if find(nodes, text=FULLSCREEN_HINT) is not None:
+            dismiss = find(nodes, text=FULLSCREEN_HINT_DISMISS)
+            if dismiss is not None:
+                self._tap(dismiss)
+                return "first-run-fullscreen-hint"
+        accept = find(nodes, rid=FIRST_RUN_ACCEPT)
+        if accept is not None:
+            analytics = find(nodes, rid=ANALYTICS_CHECKBOX)
+            step = "first-run-accepted"
+            if analytics is not None and analytics.checked:
+                self._tap(analytics)
+                step = "first-run-analytics-declined"
+            self._tap(accept)
+            return step
+        nxt = find(nodes, rid=FIRST_RUN_NEXT)
+        if nxt is not None:
+            self._tap(nxt)
+            return "first-run-tour"
+        return None
 
     def _answer_screen(self, nodes, outcome, username, password, sleep) -> str | None:
         """Answer whichever of the app's screens is up; the step's name, "refused"
         for a credential refusal, None when no screen needed an answer."""
+        first_run = self._answer_first_run(nodes)
+        if first_run is not None:
+            return self._step(outcome, first_run)
         simple = (
-            ("Continue connecting?", "android:id/button1", "continue-connecting"),
+            ("Continue connecting?", DIALOG_OK, "continue-connecting"),
             ("Identity check", "menu_done", "identity-check"),
-            ("Invalid username or password", "android:id/button1", "refused"),
+            (UNENCRYPTED, "menu_done", "unencrypted-accepted"),
+            ("Invalid username or password", DIALOG_OK, "refused"),
         )
         for text, button, step in simple:
             if find(nodes, text=text):
                 self._tap(find(nodes, rid=button))
                 return step if step == "refused" else self._step(outcome, step)
-        user_field = find(nodes, rid="UserEdit")
-        if user_field is not None:
-            if "credentials-entered" in outcome.steps:
-                return "waiting"
-            outcome.notes += self._enter_credentials(user_field, username, password, sleep)
-            self._tap(find(nodes, rid="menu_done"))
-            sleep(1)
-            return self._step(outcome, "credentials-entered")
+        credentials = self._answer_credentials(nodes, outcome, username, password, sleep)
+        if credentials is not None:
+            return credentials
         title = find(nodes, rid="alertTitle")
-        if title is not None and find(nodes, rid="android:id/button1"):
-            self._tap(find(nodes, rid="android:id/button1"))
+        if title is not None and find(nodes, rid=DIALOG_OK):
+            self._tap(find(nodes, rid=DIALOG_OK))
             return self._step(outcome, f"dialog:{title.text}")
         return None
 
-    def _enter_credentials(self, user_field, username, password, sleep) -> list[str]:
+    def _enter_credentials(self, username, password, sleep) -> list[str]:
         """Type both fields and read them back from the UI tree, retyping a field
         whose content is not what was typed: a freshly focused field drops its first
         keystroke now and then, and a truncated password is a refused connection.
@@ -305,12 +449,11 @@ class AndroidViewer:
             # the previous attempt hides them from the dump, and a tap at the field's
             # place would then hit a key. Close it first and look again.
             self._hide_ime(sleep)
-            fresh = find(self.adb.ui(), rid="UserEdit")
-            if fresh is None:
+            user_field = find(self.adb.ui(), rid="UserEdit")
+            if user_field is None:
                 notes.append(f"credentials attempt {attempt}: username field not in the tree")
                 sleep(1)
                 continue
-            user_field = fresh
             # The tap opens the full-screen IME; every key below goes to the focused
             # field; Back closes the IME again, and only then are the fields visible
             # to a UI dump (with the IME up a tap on the field's place hits a key).
@@ -328,11 +471,53 @@ class AndroidViewer:
             notes.append(
                 f"credentials attempt {attempt}: username field "
                 f"{'missing' if user is None else repr(user.text)}, password field "
-                f"{'missing' if shown is None else f'{len(shown)}/{len(password)} characters'}"
+                f"{_password_field_note(shown, password)}"
             )
             if user is not None and user.text == username and shown is not None:
                 if _password_field_holds(shown, password):
                     break
+        return notes
+
+    def _answer_credentials(self, nodes, outcome, username, password, sleep) -> str | None:
+        """The credentials sheet, with a username field or -- for a server that
+        authenticates by password alone, w0vncserver's RA2 and GNOME's VncAuth --
+        without one. None when no sheet is up."""
+        if find(nodes, rid="UserEdit") is not None:
+            notes = partial(self._enter_credentials, username, password, sleep)
+        elif find(nodes, rid="PassEdit") is not None:
+            notes = partial(self._enter_password_only, password, sleep)
+        else:
+            return None
+        if "credentials-entered" in outcome.steps:
+            return "waiting"
+        outcome.notes += notes()
+        self._tap(find(nodes, rid="menu_done"))
+        sleep(1)
+        return self._step(outcome, "credentials-entered")
+
+    def _enter_password_only(self, password, sleep) -> list[str]:
+        """Type the password into a sheet that has no username field, and read it
+        back, retyping when the field does not hold it; one note per attempt."""
+        notes = []
+        for attempt in range(1, 4):
+            self._hide_ime(sleep)
+            pass_field = find(self.adb.ui(), rid="PassEdit")
+            if pass_field is None:
+                notes.append(f"password-only attempt {attempt}: field not in the tree")
+                sleep(1)
+                continue
+            self._tap(pass_field)
+            sleep(0.3)
+            self._retype("PassEdit", password, secret=True, sleep=sleep)
+            self._hide_ime(sleep)
+            secret = find(self.adb.ui(), rid="PassEdit")
+            shown = None if secret is None else secret.text
+            notes.append(
+                f"password-only attempt {attempt}: password field "
+                f"{_password_field_note(shown, password)}"
+            )
+            if shown is not None and _password_field_holds(shown, password):
+                break
         return notes
 
     def _ime_up(self) -> bool:
@@ -377,14 +562,54 @@ class AndroidViewer:
         """The connected view: the app's desktop activity is in front and no dialog
         is up. (Its toolbar hides itself after a few seconds, so it is no signal.)"""
         nodes = self.adb.ui() if nodes is None else nodes
-        if find(nodes, rid="alertTitle") is not None:
+        if any(_covers(nodes, cover) for cover in COVERS_DESKTOP):
             return False
         activities = self.adb.shell("dumpsys", "activity", "activities")
-        match = re.search(r"topResumedActivity=.*?(\S+/\S+)", activities)
-        return match is not None and match.group(1).endswith("/.app.DesktopActivity")
+        line = re.search(r"topResumedActivity=([^\n]*)", activities)
+        if line is None:
+            return False
+        activity = next((word for word in line.group(1).split() if "/" in word), None)
+        return activity is not None and activity.endswith("/.app.DesktopActivity")
+
+    def connection_lost(self, nodes: list[UiNode] | None = None) -> bool:
+        """The app's own word that the server ended an established session."""
+        nodes = self.adb.ui() if nodes is None else nodes
+        return any(CONNECTION_LOST in node.text for node in nodes)
 
     def disconnect(self) -> None:
         self.adb.shell("am", "force-stop", PACKAGE)
+
+    def _open_info_screen(self, *, sleep, clock) -> tuple[object, bool, int, list[str]]:
+        """Poll until the information screen's size field is in the tree, tapping the
+        toolbar's information button once the toolbar itself has been seen in a dump.
+
+        Returns (field, tapped, dumps, ids): the field or None, whether the button was
+        ever tapped, how many dumps it took, and -- when it timed out -- the resource
+        ids of the last dump, which is what makes a timeout diagnosable afterwards.
+        """
+        deadline = clock() + INFO_SCREEN_TIMEOUT
+        tapped = False
+        dumps = 0
+        while True:
+            nodes = self.adb.ui()
+            dumps += 1
+            details = self._info_field(nodes)
+            if details is not None:
+                return details, tapped, dumps, []
+            if not tapped and find(nodes, rid="menu_pin") is not None:
+                # The toolbar can be dragged, and the app remembers where it was left,
+                # so its information button is found in the tree, not assumed to be
+                # where a fresh install puts it.
+                button = find(nodes, rid="menu_information")
+                if button is not None:
+                    self._tap(button)
+                else:
+                    self._tap_screen(*INFO_BUTTON)
+                tapped = True
+            if clock() >= deadline:
+                ids = sorted({node.resource_id.rsplit("/", 1)[-1] for node in nodes})[:12]
+                return None, tapped, dumps, ids
+            sleep(0.5)
 
     def desktop_size(self, *, sleep=time.sleep, clock=time.monotonic) -> tuple[int, int] | None:
         """The desktop size the app itself reports on its information screen, for a
@@ -399,24 +624,7 @@ class AndroidViewer:
         scenarios fail. Back closes the screen, and the field must be gone again before
         the caller captures the desktop.
         """
-        deadline = clock() + INFO_SCREEN_TIMEOUT
-        tapped = False
-        details = None
-        dumps = 0
-        ids: list[str] = []
-        while True:
-            nodes = self.adb.ui()
-            dumps += 1
-            details = self._info_field(nodes)
-            if details is not None:
-                break
-            if not tapped and find(nodes, rid="menu_pin") is not None:
-                self._tap_screen(*INFO_BUTTON)
-                tapped = True
-            if clock() >= deadline:
-                ids = sorted({node.resource_id.rsplit("/", 1)[-1] for node in nodes})[:12]
-                break
-            sleep(0.5)
+        details, tapped, dumps, ids = self._open_info_screen(sleep=sleep, clock=clock)
         size = None
         if details is not None:
             match = re.fullmatch(r"\s*(\d+)\s*x\s*(\d+)\s*", details.text)
@@ -428,8 +636,8 @@ class AndroidViewer:
             self.size_report_failure = (
                 f"{what} within {INFO_SCREEN_TIMEOUT:.0f}s ({dumps} dumps; last dump ids {ids})"
             )
-        if not tapped and details is None:
-            return None
+            if not tapped:
+                return None
         self.adb.shell("input", "keyevent", KEY_BACK)
         if self._await_info(present=False, sleep=sleep, clock=clock) is not None:
             self.adb.shell("input", "keyevent", KEY_BACK)
@@ -447,7 +655,7 @@ class AndroidViewer:
         return any(
             "RSA decrypt/check error" in node.text
             or "bad length" in node.text
-            or "connection closed unexpectedly" in node.text
+            or CONNECTION_LOST in node.text
             for node in self.adb.ui()
         )
 
@@ -530,8 +738,13 @@ class AndroidViewer:
             # Finer than one minimal swipe can move: go the minimal distance away
             # first, then come back by the minimal distance plus what was wanted.
             # Both swipes stay above the tap threshold; the net move is what was wanted.
-            away_x = -SLOW_MIN_PX if wanted_x > 0 else SLOW_MIN_PX if wanted_x < 0 else 0
-            away_y = -SLOW_MIN_PX if wanted_y > 0 else SLOW_MIN_PX if wanted_y < 0 else 0
+            def away(wanted: int) -> int:
+                """The minimal swipe pointing away from where the move is headed."""
+                if wanted == 0:
+                    return 0
+                return -SLOW_MIN_PX if wanted > 0 else SLOW_MIN_PX
+
+            away_x, away_y = away(wanted_x), away(wanted_y)
             self._swipe(away_x, away_y, "slow", sleep)
             wanted_x, wanted_y = wanted_x - away_x, wanted_y - away_y
             current = self.pointer_report() or current
@@ -573,11 +786,41 @@ class AndroidViewer:
         self.two_finger_swipe(0, -200, sleep=sleep)
 
     def two_finger_swipe(self, delta_x: int, delta_y: int, *, sleep=time.sleep) -> None:
-        """Two pointers 100 px apart moving together by (delta_x, delta_y), as raw
-        multi-touch slots through the emulator console."""
+        """Two pointers 100 px apart moving together by (delta_x, delta_y): the app's
+        scroll gesture."""
         x_start, y_start = 900, 600
-        fingers = ((x_start, y_start), (x_start + 100, y_start))
-        for slot, (x_pos, y_pos) in enumerate(fingers):
+        self._two_fingers(
+            ((x_start, y_start), (x_start + 100, y_start)),
+            ((x_start + delta_x, y_start + delta_y), (x_start + 100 + delta_x, y_start + delta_y)),
+            sleep=sleep,
+        )
+
+    def fit_desktop(self, *, sleep=time.sleep) -> None:
+        """Zoom the view out until the whole remote desktop is on screen.
+
+        The app shows the desktop 1:1, so a desktop larger than the phone's screen --
+        3840x2160 on a 1920x1080 display -- has only its top-left corner in view, and
+        a capture of that is not the scene. Pinching in, repeatedly, reaches the app's
+        minimum zoom, which is fit-to-screen; further pinches change nothing, so this
+        is safe to repeat and a no-op on a desktop that already fits.
+        """
+        # Right of and below the toolbar: it can be dragged, and a finger that starts
+        # on it moves it instead of zooming -- after which the information button is
+        # no longer where desktop_size() taps it. Clear of the screen edges as well,
+        # which the system keeps for its own gestures.
+        centre_x, centre_y = 1300, 600
+        for _ in range(PINCH_REPEATS):
+            self._two_fingers(
+                ((centre_x - 500, centre_y - 300), (centre_x + 500, centre_y + 300)),
+                ((centre_x - 40, centre_y - 24), (centre_x + 40, centre_y + 24)),
+                sleep=sleep,
+            )
+            sleep(0.5)
+
+    def _two_fingers(self, starts, ends, *, sleep) -> None:
+        """Two pointers from `starts` to `ends` in straight lines, as raw multi-touch
+        slots through the emulator console (the only route that injects both)."""
+        for slot, (x_pos, y_pos) in enumerate(starts):
             dev_x, dev_y = self._natural(x_pos, y_pos)
             self._emu_send(
                 f"EV_ABS:ABS_MT_SLOT:{slot}",
@@ -586,28 +829,26 @@ class AndroidViewer:
                 f"EV_ABS:ABS_MT_POSITION_Y:{dev_y}",
                 "EV_ABS:ABS_MT_PRESSURE:1024",
             )
-        self._emu_send("EV_SYN:0:0")
+        self._emu_send(EV_SYN)
         sleep(0.1)
         steps = 12
         for step in range(1, steps + 1):
             events = []
-            for slot, (x_pos, y_pos) in enumerate(fingers):
-                dev_x, dev_y = self._natural(
-                    x_pos + delta_x * step // steps, y_pos + delta_y * step // steps
-                )
+            for slot, (start, end) in enumerate(zip(starts, ends, strict=True)):
+                dev_x, dev_y = self._natural(*_between(start, end, step, steps))
                 events += [
                     f"EV_ABS:ABS_MT_SLOT:{slot}",
                     f"EV_ABS:ABS_MT_POSITION_X:{dev_x}",
                     f"EV_ABS:ABS_MT_POSITION_Y:{dev_y}",
                 ]
-            self._emu_send(*events, "EV_SYN:0:0")
+            self._emu_send(*events, EV_SYN)
             sleep(0.03)
         self._emu_send(
             "EV_ABS:ABS_MT_SLOT:0",
             "EV_ABS:ABS_MT_TRACKING_ID:4294967295",
             "EV_ABS:ABS_MT_SLOT:1",
             "EV_ABS:ABS_MT_TRACKING_ID:4294967295",
-            "EV_SYN:0:0",
+            EV_SYN,
         )
 
     @staticmethod

@@ -86,9 +86,10 @@ def _validate_identity(record: dict) -> list[str]:
     return errors
 
 
-def validate_record(record: dict, commit: str, evidence_root: Path) -> list[str]:
-    """Validate completeness and hashes, not the honesty of an untrusted producer."""
-    errors = _validate_identity(record)
+def _validate_run_state(record: dict, commit: str) -> list[str]:
+    """What the run claims about itself: the right commit, a known target and viewer,
+    a native Wayland session, a pass, and a fixture still healthy afterwards."""
+    errors = []
     if record.get("commit") != commit:
         errors.append("evidence belongs to a different commit")
     if record.get("target") not in TARGETS or record.get("viewer") not in VIEWERS:
@@ -102,25 +103,55 @@ def validate_record(record: dict, commit: str, evidence_root: Path) -> list[str]
     # rather than trusted through it.
     if record.get("post_run_smoke") != "passed":
         errors.append("post-run health check missing or failed")
+    return errors
+
+
+def _validate_versions(record: dict) -> list[str]:
+    """Every version field present and non-blank; a record that cannot say what it ran
+    against proves nothing about what it ran against."""
     versions = record.get("versions", {})
     if not isinstance(versions, dict) or any(
         not isinstance(versions.get(key), str) or not versions[key].strip()
         for key in VERSION_FIELDS
     ):
-        errors.append("missing exact environment versions")
+        return ["missing exact environment versions"]
+    return []
+
+
+def _validate_scenarios(record: dict) -> list[str]:
+    """Every scenario the target owes, passed. Plasma owes the portal ones as well."""
     required = set(SCENARIOS)
     if record.get("target") == "plasma":
         required.update(PORTAL_SCENARIOS)
     scenarios = record.get("scenarios", {})
     if not isinstance(scenarios, dict) or any(scenarios.get(key) != "passed" for key in required):
-        errors.append("missing, skipped, or failing scenarios")
+        return ["missing, skipped, or failing scenarios"]
+    return []
+
+
+def _validate_measurements(record: dict) -> list[str]:
+    """The two numbers the suite must have measured. `bool` is rejected explicitly
+    because it is an `int` in Python, and True would otherwise pass as a latency."""
+    errors = []
     latency = record.get("first_frame_seconds")
     if isinstance(latency, bool) or not isinstance(latency, (int, float)) or not 0 <= latency <= 10:
         errors.append("first rendered frame exceeds the 10-second budget")
     cycles = record.get("reconnect_cycles")
     if isinstance(cycles, bool) or not isinstance(cycles, int) or cycles < 20:
         errors.append("fewer than twenty reconnects")
-    return errors + validate_artifacts(record.get("artifacts"), evidence_root)
+    return errors
+
+
+def validate_record(record: dict, commit: str, evidence_root: Path) -> list[str]:
+    """Validate completeness and hashes, not the honesty of an untrusted producer."""
+    return (
+        _validate_identity(record)
+        + _validate_run_state(record, commit)
+        + _validate_versions(record)
+        + _validate_scenarios(record)
+        + _validate_measurements(record)
+        + validate_artifacts(record.get("artifacts"), evidence_root)
+    )
 
 
 def _artifact_integrity(item: object, root: Path) -> tuple[list[str], bool]:

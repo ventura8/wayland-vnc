@@ -17,8 +17,9 @@ def test_a_host_built_without_a_runner_is_intercepted():
 
 
 def test_actions_built_without_a_runner_are_intercepted(tmp_path):
+    actions = settings.Actions(tmp_path)
     with pytest.raises(AssertionError, match="on the real system"):
-        settings.Actions(tmp_path).status()
+        actions.status()
 
 
 def test_the_real_keyring_is_never_read(tmp_path):
@@ -33,9 +34,10 @@ def test_the_real_keyring_is_never_read(tmp_path):
         "screencast_portal": False,
         "interfaces": [],
     }
+    credentials = runtime.Credentials("vnc", "hunter2x")
     with pytest.raises(AssertionError, match="login keyring"):
         runtime.sync_backend_password(
-            runtime.Credentials("vnc", "hunter2x"),
+            credentials,
             which=lambda name: f"/usr/bin/{name}",
             run=lambda *_a: None,
             capabilities=gnome,
@@ -47,5 +49,6 @@ def test_the_module_helpers_default_to_the_guarded_runner():
         settings.service_state()
     with pytest.raises(AssertionError, match="on the real system"):
         settings.local_addresses()
+    config = settings.ServerConfig(False, None, None, False)
     with pytest.raises(AssertionError, match="on the real system"):
-        settings.connect_info(settings.ServerConfig(False, None, None, False))
+        settings.connect_info(config)

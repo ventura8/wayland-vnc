@@ -56,10 +56,9 @@ def record_fixture(tmp_path):
 
 def test_merge_requires_markers(record, tmp_path):
     rec, root = record
+    shot = screenshot(tmp_path / "s.png", inputs=False, gestures=False)
     with pytest.raises(ValueError, match="keyboard and pointer"):
-        merge_manual_input(
-            rec, screenshot(tmp_path / "s.png", inputs=False, gestures=False), root, gestures=False
-        )
+        merge_manual_input(rec, shot, root, gestures=False)
     assert rec["scenarios"]["keyboard"] == "not-run"
 
 
@@ -67,9 +66,8 @@ def test_merge_marks_input_and_gesture_scenarios(record, tmp_path):
     rec, root = record
     shot = screenshot(tmp_path / "s.png", inputs=True, gestures=False)
     merged = merge_manual_input(rec, shot, root, gestures=False)
-    assert (
-        merged["scenarios"]["keyboard"] == "passed" and merged["scenarios"]["scroll"] == "not-run"
-    )
+    assert merged["scenarios"]["keyboard"] == "passed"
+    assert merged["scenarios"]["scroll"] == "not-run"
     assert merged["status"] == "incomplete"
     kinds = {a["kind"] for a in merged["artifacts"]}
     assert "input-results" in kinds

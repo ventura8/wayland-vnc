@@ -399,6 +399,23 @@ def _on_next_idle(callback: Callable[[], None]) -> None:
     glib.idle_add(run)
 
 
+def _apply_lan_access(actions: Actions, key: str, report: Callable, on_done: Callable) -> None:
+    """The local-network switch: store and apply now, then confirm and redraw on the
+    next idle.
+
+    The redraw disposes the page the switch sits in, and this runs inside that
+    switch's own notify::active dispatch: rebuilding synchronously finalised the row
+    under libadwaita's slider callback and aborted the process. On failure the toast
+    says why and the deferred redraw puts the switch back where the stored bind is.
+    """
+    try:
+        actions.set_lan_access(key == "lan-on")
+    except (ValueError, OSError, RuntimeError) as error:
+        report(error)
+        return
+    _on_next_idle(on_done)
+
+
 def build_window(application, actions: Actions, *, on_choose: Callable | None = None):
     """Construct the settings window from real, freshly gathered state.
 
@@ -471,18 +488,7 @@ def build_window(application, actions: Actions, *, on_choose: Callable | None = 
             language_dialog(Toolkit(adw, gtk), actions, relanguage).present(window)
             return
         if key in ("lan-on", "lan-off"):
-            # The local-network switch: store and apply now, then confirm and
-            # redraw on the next idle. The redraw disposes the page the switch sits
-            # in, and this runs inside that switch's own notify::active dispatch:
-            # rebuilding synchronously finalised the row under libadwaita's slider
-            # callback and aborted the process. On failure the toast says why and
-            # the deferred redraw puts the switch back where the stored bind is.
-            try:
-                actions.set_lan_access(key == "lan-on")
-            except (ValueError, OSError, RuntimeError) as error:
-                report(error)
-                return
-            _on_next_idle(lambda: done(key))
+            _apply_lan_access(actions, key, report, lambda: done(key))
             return
         open_for(key, Toolkit(adw, gtk), actions, window, lambda: done(key))
 

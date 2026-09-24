@@ -1,8 +1,8 @@
 ---
 name: code-linter
 description: >-
-  Run ruff, pylint, shellcheck, shfmt, yamllint, markdownlint, hadolint, and actionlint over
-  wayland-vnc without suppressions or per-file ignores.
+  Run ruff, pylint, shellcheck, shfmt, yamllint, markdownlint, hadolint, actionlint, and the
+  SonarQube Cloud analysis over wayland-vnc without suppressions or per-file ignores.
 ---
 
 # Code Linter Skill
@@ -10,7 +10,8 @@ description: >-
 Lint every Python module, shell script, container file, YAML workflow, and Markdown
 document in this repository. **No suppressions of any kind are allowed** — never add
 `# noqa`, `# pylint: disable`, `# type: ignore`, `# shellcheck disable`, an
-`ignore` directive, or a `[tool.ruff.lint.per-file-ignores]` (or any other per-file
+`ignore` directive, a `NOSONAR` comment, a SonarQube issue resolved as "won't fix" or
+"false positive", or a `[tool.ruff.lint.per-file-ignores]` (or any other per-file
 ignore) section. Fix the code or restructure it instead; a rule that is noisy for a
 legitimate pattern is removed from the global rule set (as `ruff`'s bandit `S` rules
 were), never silenced on one line or one file.
@@ -51,7 +52,14 @@ finishing — run the matching tool directly (`ruff check` + `pylint` for Python
 6. **YAML + Markdown.** `yamllint .github .yamllint.yaml` and the markdownlint pass in
    `scripts/lint-containers.sh` (line length 100, artifacts and vendor excluded).
 
-7. **Live output + logs.** Stream with `tee` into `reports/lint/` so a reviewer can
+7. **Static analysis.** `scripts/run-sonar-scan.sh` analyses the tree with SonarQube
+   Cloud (project `ventura8_wayland-vnc`) and uploads the coverage from the same pinned
+   pytest run, using the settings in `sonar-project.properties` that CI's `sonar` job
+   also reads. It needs a user token in `SONAR_TOKEN`; generate one at
+   <https://sonarcloud.io/account/security> and never commit it. Findings are fixed in
+   the code — see the no-suppressions rule above, which covers the dashboard too.
+
+8. **Live output + logs.** Stream with `tee` into `reports/lint/` so a reviewer can
    watch and re-read:
 
    ```bash

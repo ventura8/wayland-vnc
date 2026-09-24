@@ -147,6 +147,27 @@ class Menu:
     read_secret: Callable[[str], str]
     transcript: list[str] = field(default_factory=list)
 
+    @staticmethod
+    def _chosen(items: list, selected: int, key: str):
+        """The item a keypress picks: Enter takes the highlighted one, any other key
+        takes the item that carries it. None when the key means nothing here."""
+        if key == "enter":
+            return items[selected]
+        return next((item for item in items if item.key == key), None)
+
+    @staticmethod
+    def _outcome(action) -> str:
+        """Run one menu action and say how it went. A refused password or a failed
+        systemctl is something to report and carry on from; quitting the launcher
+        would lose the menu with it."""
+        try:
+            return action() or "Done."
+        except EOFError:
+            # Ctrl-D at the password prompt: the action is cancelled, the menu stays.
+            return "Cancelled."
+        except (ValueError, OSError, RuntimeError, subprocess.SubprocessError) as error:
+            return f"Failed: {error}"
+
     def run(self, screen: Screen) -> list[str]:
         selected = 0
         status = "Select an action."
@@ -155,30 +176,16 @@ class Menu:
             selected = min(selected, len(items) - 1)
             screen.render("wayland-vnc setup", items, selected, status)
             key = screen.read_key()
-            if key == "up":
-                selected = (selected - 1) % len(items)
+            if key in ("up", "down"):
+                step = -1 if key == "up" else 1
+                selected = (selected + step) % len(items)
                 continue
-            if key == "down":
-                selected = (selected + 1) % len(items)
-                continue
-            chosen = None
-            if key == "enter":
-                chosen = items[selected]
-            else:
-                chosen = next((item for item in items if item.key == key), None)
+            chosen = self._chosen(items, selected, key)
             if chosen is None:
                 continue
             if chosen.key == "q":
                 return self.transcript
-            try:
-                status = chosen.action() or "Done."
-            except EOFError:
-                # Ctrl-D at the password prompt: the action is cancelled, the menu stays.
-                status = "Cancelled."
-            except (ValueError, OSError, RuntimeError, subprocess.SubprocessError) as error:
-                # A refused password or a failed systemctl is something to report and
-                # carry on from; quitting the launcher would lose the menu with it.
-                status = f"Failed: {error}"
+            status = self._outcome(chosen.action)
             self.transcript.append(status)
             screen.message(status)
 

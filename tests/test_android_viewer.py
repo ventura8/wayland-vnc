@@ -68,8 +68,18 @@ class ScriptedAdb:
     field, once per field."""
 
     # Taps that move the app to its next screen: the dialog's OK / the CONTINUE button
-    # / the toolbar's information button.
-    ADVANCING_TAPS = (["1425", "672"], ["1767", "126"], ["457", "129"])
+    # / the toolbar's information button / the first-run tour's Next, its final page's
+    # Get Started, and the full-screen hint's Got it. The analytics checkbox is
+    # deliberately absent: clearing it stays on the same page.
+    ADVANCING_TAPS = (
+        ["1425", "672"],
+        ["1767", "126"],
+        ["457", "129"],
+        ["539", "1308"],
+        ["540", "938"],
+        ["1462", "500"],
+        ["959", "639"],
+    )
 
     def __init__(self, screens, *, drop_first=False):
         self.screens = list(screens)
@@ -107,6 +117,8 @@ class ScriptedAdb:
             self.index = min(self.index + 1, len(self.screens) - 1)
         if tail[:3] == ["shell", "input", "tap"] and tail[3:5] == ["960", "464"]:
             self.focus = "UserEdit"
+        elif tail[:3] == ["shell", "input", "tap"] and tail[3:5] == ["960", "647"]:
+            self.focus = "PassEdit"  # a password-only sheet's field
         elif tail[:3] == ["shell", "input", "keyevent"] and tail[3] == "66" and self.focus:
             self.focus = "PassEdit"
         elif tail[:3] == ["shell", "input", "keyevent"] and tail[3] == "67" and self.focus:
@@ -116,7 +128,9 @@ class ScriptedAdb:
                 self.sticky_ime -= 1  # the keyboard stayed up this time
             else:
                 self.focus = None  # Back closes the keyboard: nothing is focused for typing
-            if "text_view_desktop_size_details" in self.screens[self.index]:
+            # Back closes the information screen and the first-run help view.
+            closable = ("text_view_desktop_size_details", "help_view")
+            if any(marker in self.screens[self.index] for marker in closable):
                 self.index = min(self.index + 1, len(self.screens) - 1)  # closes the screen
         elif tail[:3] == ["shell", "input", "text"]:
             self._typed(tail[3])
@@ -152,6 +166,144 @@ def _viewer(screens, pointer=lambda: None):
     return AndroidViewer(adb, pointer_report=pointer), scripted
 
 
+# A freshly installed viewer: the tour, then the final page whose analytics checkbox
+# ships ticked, then the full-screen hint the app lays over the desktop on first use.
+TOUR_XML = (
+    '<node text="Take control" resource-id="com.realvnc.viewer.android:id/textView"'
+    ' class="android.widget.TextView" bounds="[159,431][920,577]"/>'
+    '<node text="Next" resource-id="com.realvnc.viewer.android:id/next_button"'
+    ' class="android.widget.Button" bounds="[424,1245][655,1371]"/>'
+)
+FIRST_RUN_LAST_XML = (
+    '<node text="Get Started" resource-id="com.realvnc.viewer.android:id/accept_button"'
+    ' class="android.widget.Button" bounds="[358,875][722,1001]"/>'
+    '<node text="Send anonymous usage data to improve the app"'
+    ' resource-id="com.realvnc.viewer.android:id/analytics_checkbox"'
+    ' class="android.widget.CheckBox" checked="true" bounds="[63,1211][1017,1329]"/>'
+)
+FIRST_RUN_LAST_UNTICKED_XML = FIRST_RUN_LAST_XML.replace('checked="true"', 'checked="false"')
+FULLSCREEN_HINT_XML = (
+    '<node text="Viewing full screen" resource-id="" class="android.widget.TextView"'
+    ' bounds="[700,220][1220,300]"/>'
+    '<node text="Got it" resource-id="" class="android.widget.Button"'
+    ' bounds="[1375,455][1550,545]"/>'
+)
+
+
+HELP_VIEW_XML = (
+    '<node text="" resource-id="com.realvnc.viewer.android:id/help_view"'
+    ' class="android.widget.FrameLayout" bounds="[0,0][1920,1080]"/>'
+    '<node text="How to control" resource-id="" class="android.widget.TextView"'
+    ' bounds="[189,100][430,151]"/>'
+)
+
+
+TUTORIAL_XML = (
+    '<node text="This is your toolbar" resource-id="" class="android.widget.TextView"'
+    ' bounds="[736,390][1183,445]"/>'
+    '<node text="SKIP TUTORIAL" resource-id="" class="android.widget.Button"'
+    ' bounds="[777,586][1142,692]"/>'
+)
+
+
+def test_the_toolbar_coach_mark_is_skipped():
+    """The last first-run screen sits on the live desktop: the scene really is behind
+    it, which is why a capture taken under it looks almost right and is not a frame."""
+    viewer, _scripted = _viewer([AUTH_XML, TUTORIAL_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "first-run-tutorial-skipped" in outcome.steps
+
+
+def test_the_desktop_is_not_visible_under_the_coach_mark():
+    viewer, _scripted = _viewer([TUTORIAL_XML])
+    assert viewer.desktop_visible(parse_ui(f"<hierarchy>{TUTORIAL_XML}</hierarchy>")) is False
+
+
+def test_the_first_run_help_view_is_closed_with_back():
+    """The app opens a full-page help view over the desktop after the first
+    connection. Its close button carries no resource id; Back closes it."""
+    viewer, scripted = _viewer([AUTH_XML, HELP_VIEW_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "first-run-help" in outcome.steps
+    assert "input keyevent 4" in scripted.shells()
+
+
+def test_the_desktop_is_not_visible_under_the_help_view():
+    """The help view belongs to the desktop activity, so the activity check cannot
+    see it. Without this, a capture under it counts as a frame -- which is how a
+    fresh AVD produced a full set of screenshots of the help text."""
+    viewer, _scripted = _viewer([HELP_VIEW_XML])
+    assert viewer.desktop_visible(parse_ui(f"<hierarchy>{HELP_VIEW_XML}</hierarchy>")) is False
+
+
+def test_an_untouched_password_field_does_not_read_as_a_typed_one():
+    """The hint "Password" is exactly eight characters, so a length alone made an
+    empty field look like a correctly typed eight-character password -- which is how
+    a total input failure was read as "only the username failed" for an afternoon."""
+    from wayland_vnc.android_viewer import _password_field_note
+
+    # The hint is eight characters, exactly like the password, and must not read as one.
+    assert _password_field_note("Password", "hunter2x") == (
+        "8 characters that are neither the password nor masked input"
+    )
+    assert _password_field_note("\u2022" * 8, "hunter2x") == "8/8 characters"
+    assert _password_field_note(None, "hunter2x") == "missing"
+    # A short run of bullets is masked input, just not enough of it.
+    assert _password_field_note("\u2022" * 5, "hunter2x") == "5/8 masked characters, short"
+
+
+def test_parse_ui_reads_the_checked_attribute():
+    """The analytics checkbox is answered on this attribute, so it has to survive the
+    parse; a node without it reads as unchecked rather than as missing."""
+    nodes = parse_ui(f"<hierarchy>{FIRST_RUN_LAST_XML}</hierarchy>")
+    assert find(nodes, rid="analytics_checkbox").checked is True
+    assert find(nodes, rid="accept_button").checked is False
+
+
+def test_first_run_tour_is_walked_and_analytics_is_declined():
+    """A fresh install shows the tour before anything else. The suite must reach the
+    desktop through it, and must clear the analytics checkbox on the way: it ships
+    ticked, so accepting the page as-is would opt a qualification device into
+    reporting usage data."""
+    viewer, scripted = _viewer([TOUR_XML, TOUR_XML, FIRST_RUN_LAST_XML, AUTH_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert outcome.steps.count("first-run-tour") == 2
+    assert "first-run-analytics-declined" in outcome.steps
+    # The checkbox is tapped before the page is accepted, or the tap lands on a page
+    # that is already gone.
+    taps = [c for c in scripted.calls if "tap" in " ".join(c)]
+    assert len(taps) >= 2
+
+
+def test_an_already_ticked_off_analytics_box_is_left_alone():
+    """Declining twice would re-enable it."""
+    viewer, _scripted = _viewer([FIRST_RUN_LAST_UNTICKED_XML, AUTH_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "first-run-accepted" in outcome.steps
+    assert "first-run-analytics-declined" not in outcome.steps
+
+
+def test_the_full_screen_hint_is_dismissed_before_the_desktop_counts():
+    """The hint covers the desktop. A capture taken under it is a picture of a
+    tutorial card, which is how a fresh AVD produced fifteen failed scenarios."""
+    viewer, _scripted = _viewer([AUTH_XML, FULLSCREEN_HINT_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "first-run-fullscreen-hint" in outcome.steps
+
+
+def test_a_provisioned_viewer_shows_no_first_run_screens():
+    """An AVD that has already been through the tour must not pay for any of this."""
+    viewer, _scripted = _viewer([AUTH_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert not [s for s in outcome.steps if s.startswith("first-run")]
+
+
 def test_parse_ui_and_find_read_bounds_ids_and_text():
     nodes = parse_ui(f"<hierarchy>{AUTH_XML}</hierarchy>")
     assert [n.resource_id.rsplit("/", 1)[-1] for n in nodes] == [
@@ -181,7 +333,8 @@ def test_connect_answers_every_screen_in_order_and_keeps_the_secret_off_argv():
     assert "input tap 1425 672" in shells  # OK on "Continue connecting?"
     assert shells.count("input tap 1767 126") == 2  # identity CONTINUE, then auth CONTINUE
     assert "input text fixture" in shells
-    assert "input keyevent 66" in shells and "input keyevent 4" in shells
+    assert "input keyevent 66" in shells
+    assert "input keyevent 4" in shells
     # The password went over stdin, never as an argument of any process on the host.
     assert all("s3cr3tpw" not in " ".join(call) for call in scripted.calls)
     assert scripted.stdin == ["input text s3cr3tpw\n"]
@@ -207,17 +360,14 @@ def test_a_dropped_first_keystroke_is_noticed_and_the_field_retyped():
     assert all("s3cr3tpw" not in " ".join(call) for call in scripted.calls)
 
 
-def test_connect_times_out_when_the_desktop_never_comes():
+def test_connect_times_out_when_the_desktop_never_comes(monkeypatch):
     viewer, scripted = _viewer([AUTH_XML])
     scripted.activity = DESKTOP_ACTIVITY.replace("DesktopActivity", "ConnectionChooserActivity")
     clock = iter([0.0] * 3 + [1000.0] * 10)
-    original = android_viewer.time.monotonic
-    android_viewer.time.monotonic = lambda: next(clock)
-    try:
-        outcome = viewer.connect("fixture", "s3cr3tpw", timeout=5, sleep=lambda _s: None)
-    finally:
-        android_viewer.time.monotonic = original
-    assert not outcome.connected and "did not appear" in outcome.error
+    monkeypatch.setattr(android_viewer.time, "monotonic", lambda: next(clock))
+    outcome = viewer.connect("fixture", "s3cr3tpw", timeout=5, sleep=lambda _s: None)
+    assert not outcome.connected
+    assert "did not appear" in outcome.error
 
 
 def test_type_secret_refuses_characters_the_shell_would_interpret():
@@ -261,7 +411,8 @@ def test_move_cursor_converges_with_an_unknown_gain_and_swipes_only_inside_the_s
         if len(call) > 6 and call[4] == "input" and call[5] == "swipe":
             x0, y0, x1, y1, duration = (int(v) for v in call[6:11])
             for x_pos, y_pos in ((x0, y0), (x1, y1)):
-                assert SAFE_LEFT <= x_pos <= SAFE_RIGHT and SAFE_TOP <= y_pos <= SAFE_BOTTOM
+                assert SAFE_LEFT <= x_pos <= SAFE_RIGHT
+                assert SAFE_TOP <= y_pos <= SAFE_BOTTOM
             # Never short enough to be read as a tap (a tap would be a click).
             assert max(abs(x1 - x0), abs(y1 - y0)) >= min(SLOW_MIN_PX, 40) or duration >= 100
 
@@ -273,10 +424,10 @@ def test_click_places_the_pointer_then_taps_and_drag_is_one_double_tap_and_hold_
     assert "input tap 960 800" in scripted.shells()
     viewer.drag(960, 626, 1460, 626, sleep=lambda _s: None)
     script = scripted.shells()[-1]
-    assert script.startswith("input tap ") and "input motionevent DOWN" in script
-    assert "sleep 0.7" in script and script.rstrip().endswith(
-        "input motionevent UP 660 230".split()[-1]
-    )
+    assert script.startswith("input tap ")
+    assert "input motionevent DOWN" in script
+    assert "sleep 0.7" in script
+    assert script.rstrip().endswith("input motionevent UP 660 230".split()[-1])
     assert script.count("input motionevent MOVE") == 8
 
 
@@ -350,7 +501,8 @@ def test_connect_waits_for_the_toolbar_or_several_quiet_dumps():
     empty = '<node text="" resource-id="" class="android.view.View" bounds="[0,0][1920,1080]"/>'
     viewer, scripted = _viewer([empty])
     outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
-    assert outcome.connected and outcome.steps == ["desktop"]
+    assert outcome.connected
+    assert outcome.steps == ["desktop"]
     dumps = sum(1 for call in scripted.calls if call[3:5] == ["shell", "uiautomator"])
     assert dumps >= android_viewer.QUIET_DUMPS
 
@@ -464,7 +616,8 @@ def test_desktop_size_waits_for_a_toolbar_that_a_relayout_hid_from_the_dump():
     scripted.advance_after_dumps = 1  # the first dump is the empty one
     slept = []
     assert viewer.desktop_size(sleep=slept.append, clock=lambda: 0.0) == (1920, 1080)
-    assert slept and f"input tap {android_viewer.INFO_BUTTON[0]}" in " ".join(scripted.shells())
+    assert slept
+    assert f"input tap {android_viewer.INFO_BUTTON[0]}" in " ".join(scripted.shells())
 
 
 def test_the_ra2_glitch_dialog_is_a_transient_error():
@@ -477,6 +630,17 @@ def test_the_ra2_glitch_dialog_is_a_transient_error():
     assert viewer.transient_error() is True
     viewer, _scripted = _viewer([DESKTOP_XML])
     assert viewer.transient_error() is False
+
+
+def test_the_closed_connection_message_means_the_session_is_lost():
+    closed = (
+        '<node text="The connection closed unexpectedly." resource-id="android:id/message"'
+        ' class="android.widget.TextView" bounds="[440,440][1480,540]"/>'
+    )
+    viewer, _scripted = _viewer([closed])
+    assert viewer.connection_lost() is True
+    viewer, _scripted = _viewer([DESKTOP_XML])
+    assert viewer.connection_lost() is False
 
 
 def test_desktop_size_waits_for_an_information_screen_that_opens_late():
@@ -527,7 +691,8 @@ def test_each_credential_attempt_is_noted_without_the_secret():
     viewer, _scripted = _viewer([AUTH_XML, DESKTOP_XML])
     outcome = viewer.connect("fixture", "secret-pw", sleep=lambda _s: None)
     assert outcome.connected
-    assert outcome.notes and outcome.notes[0].startswith("credentials attempt 1: username field")
+    assert outcome.notes
+    assert outcome.notes[0].startswith("credentials attempt 1: username field")
     assert "9/9 characters" in outcome.notes[0]
     assert "secret-pw" not in " ".join(outcome.notes)
 
@@ -554,3 +719,83 @@ def test_the_keyboards_extract_view_in_the_tree_counts_as_keyboard_up():
     assert viewer._ime_up() is True
     viewer, _scripted = _viewer([DESKTOP_XML])
     assert viewer._ime_up() is False
+
+
+def test_the_information_button_is_found_where_the_toolbar_was_left():
+    """The app remembers where its toolbar was dragged; tapping the fresh-install
+    position then opens nothing, and the desktop size can never be read."""
+    moved = (
+        '<node text="" resource-id="com.realvnc.viewer.android:id/menu_pin"'
+        ' class="android.widget.ImageButton" bounds="[58,894][172,1009]"/>'
+        '<node text="" resource-id="com.realvnc.viewer.android:id/menu_information"'
+        ' class="android.widget.ImageButton" bounds="[400,894][514,1009]"/>'
+    )
+    viewer, scripted = _viewer([moved])
+    viewer._open_info_screen(sleep=lambda _s: None, clock=iter([0.0, 0.0, 999.0]).__next__)
+    assert "input tap 457 951" in scripted.shells()
+    assert "input tap 457 129" not in scripted.shells()
+
+
+def test_a_toolbar_left_at_the_bottom_is_dragged_home_on_connect():
+    """The app remembers where its toolbar was dragged. Left at the bottom, it sits
+    where pointer swipes start, and every input scenario fails to place the pointer."""
+    bottom_bar = (
+        '<node text="" resource-id="com.realvnc.viewer.android:id/fabTlbrGroup"'
+        ' class="android.widget.LinearLayout" bounds="[58,880][741,1022]"/>'
+    )
+    viewer, scripted = _viewer([AUTH_XML, DESKTOP_XML + bottom_bar])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "toolbar-homed" in outcome.steps
+    assert "input swipe 399 951 399 129 800" in scripted.shells()
+
+
+def test_a_toolbar_already_at_the_top_is_left_alone():
+    viewer, scripted = _viewer([AUTH_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert "toolbar-homed" not in outcome.steps
+    assert not [s for s in scripted.shells() if s.startswith("input swipe")]
+
+
+PASSWORD_ONLY_XML = (
+    '<node text="" resource-id="com.realvnc.viewer.android:id/authentication_dialog"'
+    ' class="android.widget.LinearLayout" bounds="[0,63][1920,1017]"/>'
+    '<node text="CONTINUE" resource-id="com.realvnc.viewer.android:id/menu_done"'
+    ' class="android.widget.Button" bounds="[1657,63][1878,189]"/>'
+    '<node text="Password" resource-id="com.realvnc.viewer.android:id/PassEdit"'
+    ' class="android.widget.EditText" bounds="[48,584][1872,710]"/>'
+)
+UNENCRYPTED_XML = (
+    '<node text="Unencrypted connection" resource-id="" class="android.widget.TextView"'
+    ' bounds="[189,100][591,151]"/>'
+    '<node text="OK" resource-id="com.realvnc.viewer.android:id/menu_done"'
+    ' class="android.widget.Button" bounds="[1657,63][1878,189]"/>'
+)
+
+
+def test_a_password_only_sheet_is_answered():
+    """w0vncserver's RA2 and GNOME's VncAuth ask for a password alone. The driver
+    answered only sheets with a username field, so Plasma never authenticated."""
+    viewer, scripted = _viewer([PASSWORD_ONLY_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "credentials-entered" in outcome.steps
+    assert scripted.fields["PassEdit"] == "s3cr3tpw"
+    assert outcome.notes[0] == "password-only attempt 1: password field 8/8 characters"
+    assert "s3cr3tpw" not in " ".join(outcome.notes)
+
+
+def test_the_unencrypted_warning_is_accepted_and_recorded():
+    """GNOME offers only VncAuth. The session is unencrypted, and the record says so."""
+    viewer, _scripted = _viewer([UNENCRYPTED_XML, DESKTOP_XML])
+    outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)
+    assert outcome.connected
+    assert "unencrypted-accepted" in outcome.steps
+
+
+def test_the_desktop_is_not_visible_under_a_form():
+    """Both belong to the desktop activity; unanswered, each read as the desktop and
+    every later capture was a picture of a form."""
+    for screen in (PASSWORD_ONLY_XML, UNENCRYPTED_XML):
+        viewer, _scripted = _viewer([screen])
+        assert viewer.desktop_visible(parse_ui(f"<hierarchy>{screen}</hierarchy>")) is False

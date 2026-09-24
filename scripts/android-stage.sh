@@ -24,7 +24,7 @@ export ANDROID_USER_HOME="$root/user"
 adb="$sdk/platform-tools/adb"
 emulator="$sdk/emulator/emulator"
 
-[ -d "$ANDROID_AVD_HOME/$avd_name.avd" ] || {
+[[ -d "$ANDROID_AVD_HOME/$avd_name.avd" ]] || {
   echo "Isolated AVD missing; run: python3 scripts/android-lab.py --sdk '$sdk'" >&2
   exit 2
 }
@@ -36,7 +36,7 @@ if "$adb" devices | grep -q "^$serial"; then
   # own accounts in it, is not a qualification device. The console answers the AVD
   # name on its first line; anything else, including no answer, stops here.
   attached=$("$adb" -s "$serial" emu avd name 2>/dev/null | tr -d '\r' | sed -n 1p || true)
-  if [ "$attached" != "$avd_name" ]; then
+  if [[ "$attached" != "$avd_name" ]]; then
     echo "the emulator at $serial is not the isolated AVD $avd_name" \
       "(it reports '${attached:-nothing}'); stop it, or pick another ANDROID_EMULATOR_PORT" >&2
     exit 1
@@ -62,26 +62,63 @@ timeout 180 "$adb" -s "$serial" wait-for-device || {
 # is accepted in the emulator window. That tap is the user's, like the Play sign-in.
 for _ in $(seq 1 60); do
   state=$("$adb" -s "$serial" get-state 2>/dev/null | tr -d '\r' || true)
-  [ "$state" = "device" ] && break
+  [[ "$state" = "device" ]] && break
   if "$adb" devices | grep -q "^${serial}[[:space:]]*unauthorized"; then
     echo "  waiting: accept 'Allow USB debugging' in the emulator window..."
   fi
   sleep 3
 done
-[ "$("$adb" -s "$serial" get-state 2>/dev/null | tr -d '\r')" = "device" ] || {
+[[ "$("$adb" -s "$serial" get-state 2>/dev/null | tr -d '\r')" = "device" ]] || {
   echo "adb is not authorized; accept the 'Allow USB debugging' prompt and re-run" >&2
   exit 1
 }
 echo "== wait for boot_completed =="
 for _ in $(seq 1 120); do
-  [ "$("$adb" -s "$serial" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ] && break
+  [[ "$("$adb" -s "$serial" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ]] && break
   sleep 2
 done
-[ "$("$adb" -s "$serial" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ] || {
+[[ "$("$adb" -s "$serial" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ]] || {
   echo "emulator did not finish booting" >&2
   exit 1
 }
 echo "  booted: $("$adb" -s "$serial" shell getprop ro.build.version.release | tr -d '\r') (API $("$adb" -s "$serial" shell getprop ro.build.version.sdk | tr -d '\r'))"
+
+echo "== quiet the device for automation =="
+# No soft keyboard in the input path. With the AVD's hardware keyboard present, Gboard
+# takes physical key events for itself and intermittently swallows the ones
+# `adb shell input` injects: the field is focused, the dispatcher delivers the event to
+# the right window, and no text ever appears -- after a fresh boot it works, a few
+# connections later it does not. The driver injects every key itself, so the lab device
+# needs no input method at all. Disabling is persistent and idempotent.
+# Taking an input method off the enabled list is not enough: a keyboard process
+# already bound to a field stays bound, and Gboard in that state logs "Ignore ... due
+# to stale request" and drops what it is given. The package itself is disabled, so
+# nothing can bind; the enabled list is then emptied for anything left.
+"$adb" -s "$serial" shell pm disable-user --user 0 com.google.android.inputmethod.latin >/dev/null 2>&1 || true
+# With Gboard gone Android falls back to the next input method it can find, Google
+# TTS's voice IME, and reports it shown: the driver then presses Back to hide a
+# keyboard that is not there, which cancels the Authentication screen.
+"$adb" -s "$serial" shell pm disable-user --user 0 com.google.android.tts >/dev/null 2>&1 || true
+while read -r ime; do
+  # adb shell forwards its stdin to the device; left attached here it would swallow
+  # the rest of the list this loop is reading.
+  [[ -n "$ime" ]] && "$adb" -s "$serial" shell ime disable "$ime" >/dev/null </dev/null
+done < <("$adb" -s "$serial" shell ime list -s 2>/dev/null | tr -d '\r')
+# Play services' autofill proxy registers as an input method but is not a keyboard,
+# cannot be disabled, and binds only when autofill asks; everything else must be gone.
+remaining=$("$adb" -s "$serial" shell ime list -s 2>/dev/null | tr -d '\r' |
+  grep -v '/.autofill.service.AutofillInputMethodServiceProxy$' || true)
+[[ -z "$remaining" ]] || {
+  echo "keyboards still enabled after disabling them all: $remaining" >&2
+  exit 1
+}
+echo "  no keyboard enabled: injected keys reach the focused field directly"
+# Sheets and dialogs that are still sliding in are tapped where the UI dump says they
+# will be, not where they are; with animations off they are there at once.
+for scale in window_animation_scale transition_animation_scale animator_duration_scale; do
+  "$adb" -s "$serial" shell settings put global "$scale" 0
+done
+echo "  animations off"
 
 echo "== wire the VNC path (emulator 127.0.0.1:5900 -> host :$wayvnc_port) =="
 "$adb" -s "$serial" reverse tcp:5900 "tcp:${wayvnc_port}" >/dev/null
@@ -91,7 +128,7 @@ echo "  adb reverse set: inside the app, connect to 127.0.0.1:5900"
 is_installed=$("$adb" -s "$serial" shell pm list packages com.realvnc.viewer.android 2>/dev/null | tr -d '\r')
 echo
 echo "=== STAGED — hand-off to you ==="
-if [ -n "$is_installed" ]; then
+if [[ -n "$is_installed" ]]; then
   echo "RealVNC Viewer is already installed ($is_installed)."
   echo "You can launch it and connect to 127.0.0.1:5900."
 else

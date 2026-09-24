@@ -77,7 +77,11 @@ with `viewer = realvnc-android` in the same schema. The driver
   safe zone clear of Android's edge gestures and the app's toolbar, and no positioning
   swipe is ever short enough to be read as a tap (a tap would be a click).
 - **Keyboard**: `input text`; the app forwards hardware key events without its own
-  keyboard open.
+  keyboard open. `scripts/android-stage.sh` disables every soft keyboard in the lab
+  AVD -- Gboard's package, and Google TTS's voice IME, which Android otherwise falls
+  back to and reports as shown -- so injected keys reach the focused field directly and
+  the driver never presses Back for a keyboard that is not there (Back on the
+  Authentication screen cancels the connection).
 - **Drag**: the app's double-tap-and-hold gesture, issued as one `adb shell` script so
   the double-tap window is met.
 - **Scroll**: the app's two-finger swipe, injected as raw multi-touch slots through the

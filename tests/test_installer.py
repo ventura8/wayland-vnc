@@ -36,8 +36,9 @@ def test_existing_file_is_backed_up_and_restored(tmp_path):
 
 def test_repeated_install_refuses_overwrite(tmp_path):
     install(tmp_path, get_backend("wayvnc"))
+    backend = get_backend("wayvnc")
     with pytest.raises(FileExistsError):
-        install(tmp_path, get_backend("wayvnc"))
+        install(tmp_path, backend)
 
 
 def test_changed_installed_file_blocks_uninstall(tmp_path):
@@ -77,8 +78,9 @@ def test_symlink_escape_rejected(tmp_path):
     outside = tmp_path.parent / "outside"
     outside.mkdir(exist_ok=True)
     (tmp_path / "usr").symlink_to(outside, target_is_directory=True)
+    backend = get_backend("wayvnc")
     with pytest.raises(ValueError, match="escapes"):
-        install(tmp_path, get_backend("wayvnc"))
+        install(tmp_path, backend)
     assert not (outside / "lib/systemd/user/wayland-vnc.service").exists()
 
 
@@ -97,8 +99,9 @@ def test_interrupted_install_restores_backup(tmp_path, monkeypatch):
         original(destination, contents, mode)
 
     monkeypatch.setattr(installer, "_atomic_write", fail_second)
+    backend = get_backend("grd")
     with pytest.raises(OSError, match="injected"):
-        install(tmp_path, get_backend("grd"))
+        install(tmp_path, backend)
     assert unit.read_text(encoding="utf-8") == "original\n"
     assert not (tmp_path / "usr/share/wayland-vnc/backend.conf").exists()
 

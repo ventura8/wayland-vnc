@@ -33,12 +33,19 @@ image="wayland-vnc-grd-build:dev-$arch"
 # image is told so, because one sanitizer check cannot run there (Dockerfile.gnome).
 emulated=0
 host_arch=$(env -u WAYLAND_VNC_ARCH -u DOCKER_DEFAULT_PLATFORM bash scripts/target-arch.sh deb)
-[ "$arch" = "$host_arch" ] || emulated=1
+[[ "$arch" = "$host_arch" ]] || emulated=1
 
 echo "== building the private daemon for $arch (docker/Dockerfile.gnome, stage grd-build) =="
-docker build -q --platform "$platform" --target grd-build \
-  --build-arg "WAYLAND_VNC_EMULATED=$emulated" \
-  -f docker/Dockerfile.gnome -t "$image" . >/dev/null
+build_args=(--platform "$platform" --target grd-build
+  --build-arg "WAYLAND_VNC_EMULATED=$emulated" -f docker/Dockerfile.gnome -t "$image" .)
+# Quiet on success. A failed build is repeated with plain progress after a pause, so
+# the log shows the failing step's own error and a briefly inconsistent Ubuntu archive
+# (an index naming a version its pool answered 404 for) gets time to settle.
+if ! docker build -q "${build_args[@]}" >/dev/null; then
+  echo "image build failed; repeating it with the full build output in 60 s" >&2
+  sleep 60
+  docker build --progress=plain "${build_args[@]}" >&2
+fi
 
 runner=$(mktemp)
 trap 'rm -f "$runner"' EXIT

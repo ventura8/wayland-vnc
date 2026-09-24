@@ -198,7 +198,8 @@ def test_a_failed_service_switch_is_reported_and_the_switch_falls_back(display, 
     shown = []
     next(_rows(window, "ToastOverlay")).add_toast = lambda toast: shown.append(toast.get_title())
     running = next(r for r in _rows(window, "SwitchRow") if r.get_title() == "Running Now")
-    assert running.get_sensitive() and not running.get_active()
+    assert running.get_sensitive()
+    assert not running.get_active()
     running.set_active(True)
     assert shown == ["unit refused to start"], "the failure reason is shown, not swallowed"
     _settle()
@@ -469,7 +470,8 @@ def test_the_local_network_switch_is_off_by_default_and_greys_the_addresses(
     monkeypatch.setattr(settings_app, "connect_info", lambda _config, run=None: info)
     window = _window_for(tmp_path, "LanOff", interfaces=WLR_INTERFACES)
     switch = _lan_switch(window)
-    assert switch.get_sensitive() and not switch.get_active()
+    assert switch.get_sensitive()
+    assert not switch.get_active()
     assert "this computer only" in switch.get_subtitle()
     address = next(r for r in _rows(window, "ActionRow") if r.get_title() == "192.168.1.33:5900")
     assert not address.get_sensitive()
@@ -597,11 +599,13 @@ def test_the_banner_offers_the_fix_when_the_blocker_is_a_missing_password(displa
     application.register(None)
     window = settings_app.build_window(application, _actions(tmp_path), on_choose=chosen.append)
     banner = next(_rows(window, "Banner"))
-    assert banner.get_revealed() and banner.get_button_label() == "Set Password"
+    assert banner.get_revealed()
+    assert banner.get_button_label() == "Set Password"
     banner.emit("button-clicked")
     assert chosen == ["credential"]
     x11 = next(_rows(_window_for(tmp_path, "BannerNoFix", session_type="x11"), "Banner"))
-    assert x11.get_revealed() and not x11.get_button_label(), "X11 has no in-app fix"
+    assert x11.get_revealed(), "X11 has no in-app fix"
+    assert not x11.get_button_label(), "X11 has no in-app fix"
 
 
 def test_keyboard_shortcuts_are_offered_where_libadwaita_has_the_dialog(display, tmp_path):
@@ -672,7 +676,8 @@ def test_the_language_row_shows_the_current_choice_and_opens_the_chooser(
     window = settings_app.build_window(application, _actions(tmp_path), on_choose=chosen.append)
     row = next(r for r in _rows(window, "ActionRow") if r.get_title() == "Language")
     assert row.get_subtitle().startswith("Automatic"), "a fresh install follows the desktop"
-    assert row.get_activatable() and row.get_sensitive()
+    assert row.get_activatable()
+    assert row.get_sensitive()
     row.emit("activated")
     assert chosen == ["language"]
 
@@ -684,7 +689,8 @@ def test_the_chooser_lists_automatic_first_marks_the_current_and_applies_on_acti
     monkeypatch.setenv("WAYLAND_VNC_LOCALEDIR", str(localedir))
     window, dialog, chosen = _language_chooser(tmp_path, "LangDlg")
     codes = list(dialog.rows)
-    assert codes[0] == i18n.AUTOMATIC and codes[1:] == ["ja", "ro"], "installed, by code"
+    assert codes[0] == i18n.AUTOMATIC, "installed, by code"
+    assert codes[1:] == ["ja", "ro"], "installed, by code"
     assert [dialog.rows[c].get_title() for c in codes[1:]] == ["日本語", "Română"], "endonyms"
     assert dialog.rows[i18n.AUTOMATIC].check.get_visible(), "the current choice is checked"
     assert not dialog.rows["ro"].check.get_visible()
@@ -718,10 +724,12 @@ def test_the_chooser_search_filters_by_endonym_or_code_with_an_empty_state(
     dialog.search_entry.emit("search-changed")
     assert not dialog.listbox.get_visible(), "nothing matches: the list yields to the empty state"
     empty = next(w for w in _rows(dialog.get_child(), "StatusPage"))
-    assert empty.get_visible() and empty.get_title() == "No Results Found"
+    assert empty.get_visible()
+    assert empty.get_title() == "No Results Found"
     dialog.search_entry.set_text("")
     dialog.search_entry.emit("search-changed")
-    assert dialog.listbox.get_visible() and not empty.get_visible()
+    assert dialog.listbox.get_visible()
+    assert not empty.get_visible()
 
 
 def test_language_row_is_insensitive_with_a_reason_when_nothing_is_installed(

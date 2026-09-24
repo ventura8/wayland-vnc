@@ -38,7 +38,7 @@ ok "status runs read-only"
 echo "== happy: provisioning =="
 printf 'smokepw1\nsmokepw1\n' | "$CLI" set-password --username vnc --stdin >/dev/null
 ok "set-password stored a credential"
-test "$(stat -c '%a' "$WAYLAND_VNC_CONFIG_DIR/credentials")" = 600 ||
+[[ $(stat -c '%a' "$WAYLAND_VNC_CONFIG_DIR/credentials") == 600 ]] ||
   fail "credentials file is not mode 600"
 ok "credentials file is mode 600"
 "$CLI" provision --json >/dev/null
@@ -48,7 +48,7 @@ grep -q '^address=127.0.0.1$' "$WAYLAND_VNC_CONFIG_DIR/wayvnc.conf" ||
   fail "provisioned config does not bind loopback by default"
 grep -q '^enable_auth=true$' "$WAYLAND_VNC_CONFIG_DIR/wayvnc.conf" ||
   fail "provisioned config did not enable auth"
-test "$(stat -c '%a' "$WAYLAND_VNC_CONFIG_DIR/wayvnc.conf")" = 600 ||
+[[ $(stat -c '%a' "$WAYLAND_VNC_CONFIG_DIR/wayvnc.conf") == 600 ]] ||
   fail "wayvnc.conf is not mode 600"
 ok "provision wrote a loopback-only, authenticated, 0600 config"
 "$CLI" provision --json --address 0.0.0.0 >/dev/null
@@ -106,8 +106,8 @@ FAKE
 chmod +x "$work/bin/wayland-info"
 PATH="$work/bin:$PATH" WAYLAND_VNC_CONFIG_DIR="$empty" XDG_SESSION_TYPE=wayland "$CLI" serve \
   >/dev/null 2>"$work/serve.err" || true
-test -f "$empty/credentials" || fail "serve did not generate a credential"
-test "$(stat -c '%a' "$empty/credentials")" = 600 || fail "generated credential is not 600"
+[[ -f $empty/credentials ]] || fail "serve did not generate a credential"
+[[ $(stat -c '%a' "$empty/credentials") == 600 ]] || fail "generated credential is not 600"
 grep -q '^password=.\{6,\}' "$empty/credentials" || fail "generated password is too short"
 grep -q '^enable_auth=true$' "$empty/wayvnc.conf" || fail "self-provisioned config lacks auth"
 grep -q -- "--config" "$empty/served" || fail "serve did not reach exec after self-provisioning"

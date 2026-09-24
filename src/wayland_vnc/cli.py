@@ -78,36 +78,44 @@ def _stdin_reader() -> Callable[[str], str]:
     return reader
 
 
+def _backend_sync_note(directory: Path) -> str:
+    """What reaching the running server took, said in the words the CLI reports.
+
+    WayVNC reads the password from the config file, not from the credentials file, so
+    without the refresh below the new password is stored and reported as set while the
+    running server keeps accepting the old one."""
+    if runtime.sync_backend_password(runtime.read_credentials(directory), which=shutil.which) == (
+        "grd"
+    ):
+        return " and updated GNOME Remote Desktop"
+    if runtime.refresh_config(directory) is None:
+        return ""
+    if runtime.restart_service(which=shutil.which):
+        return " and updated the WayVNC configuration; the running server was restarted to apply it"
+    return " and updated the WayVNC configuration"
+
+
+def _set_password(args: argparse.Namespace, directory: Path) -> dict:
+    read_secret = _stdin_reader() if args.stdin else getpass.getpass
+
+    def checked(prompt: str) -> str:
+        # Refuse a password the backend cannot accept BEFORE anything is written.
+        secret = read_secret(prompt)
+        runtime.check_password_for_backend(secret)
+        return secret
+
+    path = runtime.set_password(directory, read_secret=checked, username=args.username)
+    note = _backend_sync_note(directory)
+    return {"schema_version": 1, "message": f"Stored viewer credential at {path}{note}"}
+
+
 def _serving(args: argparse.Namespace) -> dict:
     directory = runtime.config_dir()
     if args.command == "serve":
         runtime.serve(host=runtime.Host(shutil.which, os.execv))
         return {"schema_version": 1, "message": "started"}  # pragma: no cover - serve execs
     if args.command == "set-password":
-        read_secret = _stdin_reader() if args.stdin else getpass.getpass
-
-        def checked(prompt: str) -> str:
-            # Refuse a password the backend cannot accept BEFORE anything is written.
-            secret = read_secret(prompt)
-            runtime.check_password_for_backend(secret)
-            return secret
-
-        path = runtime.set_password(directory, read_secret=checked, username=args.username)
-        synced = runtime.sync_backend_password(
-            runtime.read_credentials(directory), which=shutil.which
-        )
-        if synced == "grd":
-            note = " and updated GNOME Remote Desktop"
-        else:
-            # WayVNC reads the password from the config file, not from the credentials
-            # file, so without this the new password is stored and reported as set
-            # while the running server keeps accepting the old one.
-            note = ""
-            if runtime.refresh_config(directory) is not None:
-                note = " and updated the WayVNC configuration"
-                if runtime.restart_service(which=shutil.which):
-                    note += "; the running server was restarted to apply it"
-        return {"schema_version": 1, "message": f"Stored viewer credential at {path}{note}"}
+        return _set_password(args, directory)
     if args.command == "provision":
         path = runtime.provision(
             directory,
@@ -154,9 +162,9 @@ def main(argv: list[str] | None = None) -> int:
         result = handler(args)
     except (
         OSError,
+        # ValueError also covers json.JSONDecodeError, which derives from it.
         ValueError,
         RuntimeError,
-        json.JSONDecodeError,
         # default_key_generator shells out to openssl: a non-zero exit or a
         # timeout raises SubprocessError, which is not an OSError.
         subprocess.SubprocessError,

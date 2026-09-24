@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: wayland-vnc 1.0.0\n"
+"Project-Id-Version: wayland-vnc 1.0.1\n"
 "Report-Msgid-Bugs-To: https://github.com/ventura8/wayland-vnc/issues\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"

@@ -35,6 +35,45 @@ qualify a release. Source dependencies and images must be pinned before publicat
 Every change carries its documentation: the `docs/` page, the skill, the README line
 or the release note it affects is updated in the same change set (AGENTS.md).
 
+## Static analysis (SonarQube Cloud)
+
+The pinned linters in `build-and-test.sh` are the gate; SonarQube Cloud runs on top of
+them and looks at what a line-oriented linter cannot see -- duplication across files,
+cognitive complexity, unreachable state, and security hotspots -- for the project
+`ventura8_wayland-vnc` under the `ventura8` organization.
+
+The analysis settings live in [`sonar-project.properties`](../sonar-project.properties)
+and are read by both the local run and CI, so a finding on a laptop is the finding CI
+reports. Only per-run values (token, project version, branch) are passed on the command
+line.
+
+Locally, generate a user token at <https://sonarcloud.io/account/security> and keep it
+out of the repository and out of your shell history:
+
+```bash
+read -rs SONAR_TOKEN && export SONAR_TOKEN   # paste; nothing is echoed
+scripts/run-sonar-scan.sh                    # runs the suite, uploads coverage.xml, analyses
+scripts/run-sonar-scan.sh --no-coverage      # reuse an existing coverage.xml
+```
+
+The script runs pytest from the project venv and hands Sonar the `coverage.xml` from
+that same run, so the dashboard's coverage and the per-file >=90 % gate can never
+disagree. The scanner itself runs from a digest-pinned container, like every other tool
+image the project uses; it is the one linter container with network access, because it
+has to reach SonarQube Cloud. `SONAR_HOST_URL` points the run at a self-hosted server
+instead.
+
+In CI, the `sonar` job in [`ci.yml`](../.github/workflows/ci.yml) does the same and then
+waits for the quality gate, so a red gate fails the build rather than only colouring a
+dashboard. It needs a `SONAR_TOKEN` repository secret, and it is skipped for pull
+requests from forks -- GitHub withholds secrets there, and public PR CI must never
+receive credentials.
+
+Sonar findings are fixed in the code, never dismissed: the project's no-suppressions
+rule (AGENTS.md) covers marking an issue "won't fix" or "false positive" on the
+dashboard exactly as it covers a `# noqa`. If a whole rule is wrong for this project,
+turn that rule off in the quality profile and say why, rather than silencing instances.
+
 ## Safety and evidence
 
 Do not attach fixtures to the personal session, restart its services, or reuse its

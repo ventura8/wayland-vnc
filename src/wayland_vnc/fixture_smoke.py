@@ -238,6 +238,26 @@ def mutter_outputs(bus_address: str) -> list[dict]:
     return outputs
 
 
+def _apply_screen_field(outputs: list[dict], key: str, value: str) -> None:
+    """Fold one `key: value` of KWin's Screens section into the outputs collected so
+    far. A Name starts a new output; the rest describe the one it started."""
+    if key == "Name":
+        outputs.append({"name": value, "captured": True})
+    elif not outputs:
+        return
+    elif key == "Enabled":
+        outputs[-1]["captured"] = value == "1"
+    elif key == "Geometry" and "x" in value:
+        width, _, height = value.rsplit(",", 1)[-1].partition("x")
+        outputs[-1]["width"], outputs[-1]["height"] = int(width), int(height)
+    elif key == "Scale" and "width" in outputs[-1]:
+        # Geometry is in logical pixels; the mode the output shows is that times Scale
+        # (3840x2160 at scale 2 reads "Geometry: 0,0,1920x1080").
+        scale = float(value)
+        outputs[-1]["width"] = round(outputs[-1]["width"] * scale)
+        outputs[-1]["height"] = round(outputs[-1]["height"] * scale)
+
+
 def parse_kwin_support(text: str) -> list[dict]:
     """Extract the Screens and Compositing sections of KWin's supportInformation."""
     outputs: list[dict] = []
@@ -245,7 +265,7 @@ def parse_kwin_support(text: str) -> list[dict]:
     section = None
     lines = text.splitlines()
     for index, line in enumerate(lines):
-        if index + 1 < len(lines) and lines[index + 1][:3] == "===":
+        if index + 1 < len(lines) and lines[index + 1].startswith("==="):
             section = line.strip()
             continue
         key, separator, value = line.partition(":")
@@ -253,13 +273,7 @@ def parse_kwin_support(text: str) -> list[dict]:
         if not separator:
             continue
         if section == "Screens":
-            if key == "Name":
-                outputs.append({"name": value, "captured": True})
-            elif key == "Enabled" and outputs:
-                outputs[-1]["captured"] = value == "1"
-            elif key == "Geometry" and outputs and "x" in value:
-                width, _, height = value.rsplit(",", 1)[-1].partition("x")
-                outputs[-1]["width"], outputs[-1]["height"] = int(width), int(height)
+            _apply_screen_field(outputs, key, value)
         elif section == "Compositing" and key == "Compositing Type":
             compositing = value
     for output in outputs:

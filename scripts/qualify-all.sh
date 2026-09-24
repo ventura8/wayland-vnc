@@ -56,6 +56,15 @@ for missing in "${required[@]}"; do
     exit 2
   }
 done
+# A run that is killed -- a closed terminal, a torn-down session -- never reaches its
+# own cleanup, and the fixture container it started keeps the lab port bound. Every
+# later run then dies on "port is already allocated" before a single scenario. Only
+# this runner's own fixtures carry the -qualify- name, and one campaign runs at a time.
+mapfile -t stale < <(docker ps -aq --filter "name=^wayland-vnc-.*-qualify-")
+if ((${#stale[@]})); then
+  echo "removing ${#stale[@]} fixture container(s) left behind by an interrupted run" >&2
+  docker rm -f "${stale[@]}" >/dev/null
+fi
 viewer_args=(--harness --identities "$identities" --viewer-config "$viewer_config" --connection "$connection")
 [[ "$viewer" == desktop ]] || viewer_args=(--viewer android)
 
@@ -64,14 +73,15 @@ viewer_args=(--harness --identities "$identities" --viewer-config "$viewer_confi
 # harness reaches the guest on the lab network; the Android app reaches it through
 # `adb reverse` to host loopback, so its guest is forwarded there instead.
 boot_guest() {
-  local work="artifacts/kvm/$1"
+  local target=$1
+  local work="artifacts/kvm/$target"
   local bind=(--harness)
   [[ "$viewer" == desktop ]] || bind=()
   if [[ -f "$work/qemu.pid" ]] && kill -0 "$(cat "$work/qemu.pid")" 2>/dev/null; then
     kill "$(cat "$work/qemu.pid")"
     sleep 3
   fi
-  bash scripts/kvm/build-guest.sh "$1" "${bind[@]}" >&2 || return 1
+  bash scripts/kvm/build-guest.sh "$target" "${bind[@]}" >&2 || return 1
   # Wait through the guest agent for the readiness marker, not the serial console:
   # a desktop guest reboots once to load its custom EDID, so the console's "Cloud-init
   # finished" line appears before the fixture exists.

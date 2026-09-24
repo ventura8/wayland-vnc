@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wayland-vnc"
-version = "1.0.0"
+version = "1.0.1"
 description = "Evidence-gated Wayland VNC compatibility toolkit"
 requires-python = ">=3.11"
 license = "GPL-2.0-or-later"

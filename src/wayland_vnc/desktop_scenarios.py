@@ -18,6 +18,9 @@ from typing import Protocol
 from wayland_vnc.image_evidence import detect_markers, verify_scene
 from wayland_vnc.qualification import PORTAL_SCENARIOS, SCENARIOS, artifact_entry
 
+# Every scenario that restarts the fixture reports the same refusal when the smoke
+# checks do not come back; the wording is the contract the records are read against.
+SMOKE_FAILED_AFTER_RESTART = "fixture did not pass smoke checks after restart"
 FIRST_FRAME_BUDGET = 10.0
 RECONNECT_CYCLES = 20
 # The RealVNC RA2 handshake occasionally returns a bad-length RSA on a rapid
@@ -161,7 +164,9 @@ def _framebuffer_size(run: Session, session: object, capture: Path) -> tuple[int
     return _dimensions(capture)
 
 
-def connect_and_capture(run: Session, name: str) -> tuple[object, Path | None, float]:
+def connect_and_capture(
+    run: Session, name: str, *, fit: bool = False
+) -> tuple[object, Path | None, float]:
     """Connect and wait for the first valid frame; one bounded retry when the viewer
     reports a transport-level transient (a connection dropped before any RFB byte, or
     the RA2 handshake glitch) -- noted in the run log, never silent. A server that
@@ -174,6 +179,15 @@ def connect_and_capture(run: Session, name: str) -> tuple[object, Path | None, f
         # clock; the first-frame budget is the server's to meet from that moment, not
         # from the automation's typing. Drivers without it are timed from the call.
         started = getattr(session, "started_at", None) or started
+        # A viewer that shows the desktop 1:1 on a smaller screen (the Android app) has
+        # only part of a large desktop in view; one that can zoom to fit is asked to,
+        # so the capture is of the whole scene. Viewers that always fit need nothing.
+        fit_desktop = getattr(run.driver, "fit_desktop", None)
+        if fit and fit_desktop is not None:
+            fit_started = run.clock()
+            fit_desktop(session)
+            # The pinch is the harness's own time, not the server's first-frame budget.
+            started += run.clock() - fit_started
         capture = run.capture_valid(session, name, started + FIRST_FRAME_BUDGET)
         if capture is not None or attempt == 2 or not run.driver.transient_error(session):
             return session, capture, run.clock() - started
@@ -267,7 +281,7 @@ def scenario_network_interruption(run: Session) -> Outcome:
 def scenario_server_restart(run: Session) -> Outcome:
     run.driver.restart()
     if not run.driver.smoke(BASE_MODE[0], BASE_MODE[1]):
-        return Outcome("failed", "fixture did not pass smoke checks after restart")
+        return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
     session, capture, elapsed = connect_and_capture(run, "server-restart.png")
     run.driver.disconnect(session)
     if capture is None:
@@ -348,7 +362,7 @@ def scenario_high_dpi(run: Session) -> Outcome:
     run.current_mode = HIGH_DPI_MODE
     if not run.driver.smoke(width, height):
         return Outcome("failed", f"fixture rejected {width}x{height}@{scale}")
-    session, capture, _ = connect_and_capture(run, "4k-200.png")
+    session, capture, _ = connect_and_capture(run, "4k-200.png", fit=True)
     # Asked while still connected: a viewer that reports its desktop size can only
     # do so for a live session.
     size = _framebuffer_size(run, session, capture) if capture is not None else None
@@ -375,7 +389,7 @@ def _fresh_portal_state(run: Session, *, forget: bool = True) -> bool:
 def scenario_portal_approve(run: Session) -> Outcome:
     """The real consent dialog is approved and the session then renders."""
     if not _fresh_portal_state(run):
-        return Outcome("failed", "fixture did not pass smoke checks after restart")
+        return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
     run.driver.portal_mode("approve")
     seen = len(run.driver.portal_events())
     session, capture, _ = connect_and_capture(run, "portal-approve.png")
@@ -391,7 +405,7 @@ def scenario_portal_approve(run: Session) -> Outcome:
 def scenario_portal_deny(run: Session) -> Outcome:
     """Denying the dialog must leave the viewer without any desktop pixels."""
     if not _fresh_portal_state(run):
-        return Outcome("failed", "fixture did not pass smoke checks after restart")
+        return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
     run.driver.portal_mode("deny")
     seen = len(run.driver.portal_events())
     try:
@@ -405,7 +419,7 @@ def scenario_portal_deny(run: Session) -> Outcome:
     if capture is not None:
         return Outcome("failed", "desktop pixels reached the viewer after Deny", [capture])
     if not _fresh_portal_state(run):
-        return Outcome("failed", "fixture did not pass smoke checks after restart")
+        return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
     session, recovered, _ = connect_and_capture(run, "portal-deny-recovery.png")
     run.driver.disconnect(session)
     if recovered is None:
@@ -416,7 +430,7 @@ def scenario_portal_deny(run: Session) -> Outcome:
 def scenario_portal_restore(run: Session) -> Outcome:
     """A persisted approval must survive a restart without raising the dialog."""
     if not _fresh_portal_state(run):
-        return Outcome("failed", "fixture did not pass smoke checks after restart")
+        return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
     run.driver.portal_mode("approve-persist")
     seen = len(run.driver.portal_events())
     try:
@@ -426,7 +440,7 @@ def scenario_portal_restore(run: Session) -> Outcome:
         if capture is None or not any(e.get("persist") for e in granted):
             return Outcome("failed", "persistent approval was not granted")
         if not _fresh_portal_state(run, forget=False):
-            return Outcome("failed", "fixture did not pass smoke checks after restart")
+            return Outcome("failed", SMOKE_FAILED_AFTER_RESTART)
         run.driver.portal_mode("none")
         seen = len(run.driver.portal_events())
         session, restored, _ = connect_and_capture(run, "portal-restore.png")
@@ -514,9 +528,18 @@ def scenario_lock(run: Session) -> Outcome:
         hidden = _scene_hidden(run, session, "lock-locked.png", FIRST_FRAME_BUDGET)
         if hidden is None:
             return Outcome("failed", "desktop pixels stayed visible after locking", [before])
+        # A dropped connection hides the desktop too -- behind the viewer's own
+        # "connection closed" message -- and once that is dismissed the viewer shows
+        # its last frame again, which a later check would take for an unlock. Only a
+        # session that is still up counts as locked, and as unlocked.
+        if not run.driver.alive(session):
+            detail = "the server ended the session when the desktop locked"
+            return Outcome("failed", detail, [hidden])
         _wake_lock_screen(run)
         run.driver.type_secret()
         restored = _scene_visible(run, session, "lock-unlocked.png", FIRST_FRAME_BUDGET)
+        if restored is not None and not run.driver.alive(session):
+            restored = None
     finally:
         run.driver.disconnect(session)
         # Never leave the fixture locked for later scenarios; this is cleanup, not a verdict.
@@ -703,8 +726,13 @@ def run_scenarios(run: Session) -> dict[str, Outcome]:
 def fill_record(record: dict, run: Session, outcomes: dict[str, Outcome], root: Path) -> dict:
     """Complete a partial record; it becomes 'passed' only if nothing is missing."""
     required = list(SCENARIOS) + (list(PORTAL_SCENARIOS) if run.fixture == "plasma" else [])
-    record["scenarios"] = {name: outcomes[name].status for name in required}
-    record["scenario_details"] = {name: outcomes[name].detail for name in required}
+    # A targeted re-run (--scenario) runs only what it names; the rest are recorded as
+    # not-run with that reason, which the gate rejects -- so a partial re-run can
+    # never be mistaken for a qualifying record, and it no longer crashes on the gap.
+    skipped = Outcome("not-run", "not selected: a targeted re-run (--scenario)")
+    verdicts = {name: outcomes.get(name, skipped) for name in required}
+    record["scenarios"] = {name: verdict.status for name, verdict in verdicts.items()}
+    record["scenario_details"] = {name: verdict.detail for name, verdict in verdicts.items()}
     record["first_frame_seconds"] = run.first_frame_seconds
     record["reconnect_cycles"] = run.reconnect_cycles
     captures = []

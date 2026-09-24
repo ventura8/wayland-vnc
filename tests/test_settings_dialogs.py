@@ -88,7 +88,8 @@ def test_credential_dialog_refuses_a_mismatch_and_writes_nothing(kit, tmp_path):
     form.rows["password"].set_text("hunter2x")
     form.rows["confirm"].set_text("different")
     assert form.submit() is False
-    assert form.error.get_visible() and "did not match" in form.error.get_text()
+    assert form.error.get_visible()
+    assert "did not match" in form.error.get_text()
     assert not (tmp_path / runtime.CREDENTIALS_NAME).exists()
     assert done == []
 
@@ -111,7 +112,8 @@ def test_network_dialog_provisions_a_loopback_config(kit, tmp_path):
     form.rows["port"].set_value(5901)
     assert form.submit() is True
     body = (tmp_path / runtime.CONFIG_NAME).read_text(encoding="utf-8")
-    assert "address=127.0.0.1" in body and "port=5901" in body
+    assert "address=127.0.0.1" in body
+    assert "port=5901" in body
     assert done == [True]
 
 
@@ -217,7 +219,8 @@ def test_about_dialog_reports_real_installed_state(kit, tmp_path):
 def test_about_never_claims_the_desktop_is_qualified(kit, tmp_path):
     """A working connection is not a qualified desktop; About must not imply it is."""
     blurb = settings_dialogs.about_dialog(kit, _actions(tmp_path)).comments.lower()
-    assert "qualified" not in blurb and "supported" not in blurb
+    assert "qualified" not in blurb
+    assert "supported" not in blurb
 
 
 def test_about_labels_come_from_our_catalogue_not_the_toolkit(kit, tmp_path, monkeypatch):
@@ -284,7 +287,8 @@ def test_search_folding_ignores_accents_case_and_undecomposable_letters():
     accented query finds it too, because both sides are folded the same way."""
     fold = settings_dialogs.fold
     assert fold("Română") == "romana" == fold("ROMÂNĂ") == fold("romana")
-    assert fold("Français") == "francais" and fold("Español") == "espanol"
+    assert fold("Français") == "francais"
+    assert fold("Español") == "espanol"
     assert fold("Tiếng Việt") == "tieng viet"
     assert fold("Łódź Straße Øresund Đakovo İstanbul ırmak") == (
         "lodz strasse oresund dakovo istanbul irmak"
@@ -327,7 +331,8 @@ def test_diagnostics_search_filters_rows_expands_hits_and_shows_an_empty_state(k
     assert shown > 0
     verdict = next(e for e, title, _rows in dialog.sections if title == "verdict")
     protocols = next(e for e, title, _rows in dialog.sections if title == "wayland protocols")
-    assert protocols.get_visible() and protocols.get_expanded(), "a hit is opened on screen"
+    assert protocols.get_visible(), "a hit is opened on screen"
+    assert protocols.get_expanded(), "a hit is opened on screen"
     assert settings_dialogs.diagnostic_filter(dialog.sections, "no-such-thing-xyz") == 0
     assert not any(e.get_visible() for e, _t, _r in dialog.sections)
     assert settings_dialogs.diagnostic_filter(dialog.sections, "") > 0, "empty query restores"
@@ -339,7 +344,8 @@ def test_diagnostics_search_filters_rows_expands_hits_and_shows_an_empty_state(k
     dialog.search_entry.emit("search-changed")
     # An unpresented Adw.Dialog has no first child; its content is what it holds.
     empty = next(w for w in _walk(dialog.get_child()) if type(w).__name__ == "StatusPage")
-    assert empty.get_visible() and empty.get_title() == "No Results Found"
+    assert empty.get_visible()
+    assert empty.get_title() == "No Results Found"
     dialog.search_entry.set_text("")
     dialog.search_entry.emit("search-changed")
     assert not empty.get_visible()

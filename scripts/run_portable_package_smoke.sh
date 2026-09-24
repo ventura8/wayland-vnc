@@ -20,12 +20,12 @@ PATH="$(bash scripts/ensure-venv.sh):$PATH"
 export PATH
 
 formats=("${@:-}")
-if [ -z "${formats[0]:-}" ]; then
+if [[ -z "${formats[0]:-}" ]]; then
   formats=(appimage snap flatpak)
 fi
 mkdir -p reports/distro-logs artifacts/portable
 
-UBUNTU="ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367"
+UBUNTU="ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78"
 
 run_appimage() {
   local runner
@@ -33,9 +33,18 @@ run_appimage() {
   cat >"$runner" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
-apt-get install -y --no-install-recommends \
-  python3 wget file binutils ca-certificates zsync squashfs-tools openssl >/dev/null 2>&1
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
+quiet_apt apt-get install -y --no-install-recommends \
+  python3 wget file binutils ca-certificates zsync squashfs-tools openssl
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 
 echo "== build AppImage =="
@@ -122,8 +131,17 @@ run_snap() {
   cat >"$runner" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
-apt-get install -y --no-install-recommends python3 python3-yaml squashfs-tools openssl >/dev/null 2>&1
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
+quiet_apt apt-get install -y --no-install-recommends python3 python3-yaml squashfs-tools openssl
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 version=$(tr -d '[:space:]' < VERSION)
 
@@ -230,8 +248,17 @@ run_flatpak() {
   cat >"$runner" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
-apt-get install -y --no-install-recommends python3 python3-yaml openssl >/dev/null 2>&1
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
+quiet_apt apt-get install -y --no-install-recommends python3 python3-yaml openssl
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 
 echo "== assert the flatpak manifest is well-formed =="

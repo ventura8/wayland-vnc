@@ -24,8 +24,9 @@ IMAGE="wayland-vnc-systemd-smoke:local"
 NAME="wayland-vnc-systemd-$$"
 
 echo "=== build a systemd-as-PID1 image (ubuntu:26.04) ==="
-docker build -q -t "$IMAGE" - <<'DOCKERFILE' >/dev/null
-FROM ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367
+dockerfile=$(
+  cat <<'DOCKERFILE'
+FROM ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
     systemd systemd-sysv dbus-user-session dbus-daemon \
@@ -34,6 +35,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 STOPSIGNAL SIGRTMIN+3
 CMD ["/sbin/init"]
 DOCKERFILE
+)
+# Quiet on success. A failed build is repeated with plain progress after a pause, so
+# the log shows apt's own error and a briefly inconsistent Ubuntu archive (an index
+# naming a version its pool answered 404 for) gets time to settle.
+if ! docker build -q -t "$IMAGE" - <<<"$dockerfile" >/dev/null; then
+  echo "image build failed; repeating it with the full build output in 60 s" >&2
+  sleep 60
+  docker build --progress=plain -t "$IMAGE" - <<<"$dockerfile" >&2
+fi
 
 trap 'docker rm -f "$NAME" >/dev/null 2>&1 || true' EXIT
 
@@ -43,7 +53,10 @@ docker run -d --rm --name "$NAME" --privileged --cgroupns=host \
   -v "$PWD:/src:ro" "$IMAGE" >/dev/null
 for _ in $(seq 1 30); do
   state=$(docker exec "$NAME" systemctl is-system-running 2>/dev/null || true)
-  case "$state" in running | degraded) break ;; esac
+  case "$state" in
+  running | degraded) break ;;
+  *) ;; # not up yet; keep waiting
+  esac
   sleep 1
 done
 echo "  systemd state: ${state:-unknown}"
@@ -61,6 +74,15 @@ runner=$(mktemp)
 cat >"$runner" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 rm -rf debian/wayland-vnc debian/.debhelper debian/files ../wayland-vnc_*.deb 2>/dev/null || true
 
@@ -128,7 +150,7 @@ printf 'smokepw1\nsmokepw1\n' | runuser -u ready -- env PYTHONPATH=/build/src \
 echo "  ok: 'ready' stored a credential; 'bare' has none"
 
 echo "== install the real .deb: the real postinst must enable AND activate =="
-apt-get install -y "$deb" >/dev/null 2>&1
+quiet_apt apt-get install -y "$deb"
 ustate() {
   uid=$(id -u "$1")
   runuser -u "$1" -- env XDG_RUNTIME_DIR="/run/user/$uid" \

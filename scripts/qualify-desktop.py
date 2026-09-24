@@ -35,6 +35,7 @@ VIEWERS = {"desktop": "realvnc-desktop", "android": "realvnc-android"}
 ANDROID_AVD_ROOT = Path("artifacts/android")
 ANDROID_SERIAL = "emulator-5554"
 RENDER_NODE_FIXTURES = ("plasma",)
+AUTH_OK = "Authentication successful"
 LAB_NETWORK = "wayland-vnc-lab"
 HARNESS_IMAGE = "wayland-vnc-viewer-harness:dev"
 VERSION_COMMANDS = {
@@ -231,7 +232,7 @@ class DockerRealVncDriver:
         # A screenshot request during the RA2 handshake can stall the viewer before it
         # sends credentials, so wait for the viewer's own authentication verdict first.
         log = session.log_path.read_text(errors="replace")
-        if "Authentication successful" not in log:
+        if AUTH_OK not in log:
             return False
         result = sh([VNCVIEWER, "-screenshot", str(session.pid), str(path)], timeout=15)
         return result.returncode == 0 and path.exists() and path.stat().st_size > 0
@@ -261,7 +262,7 @@ class DockerRealVncDriver:
         log = session.log_path.read_text(errors="replace")
         if "RSA decrypt/check error" in log or "bad length" in log:
             return True
-        return "close: [EndOfStream]" in log and "Authentication successful" not in log
+        return "close: [EndOfStream]" in log and AUTH_OK not in log
 
     def pause(self, seconds):
         sh([DOCKER, "pause", self.container])
@@ -298,46 +299,65 @@ class DockerRealVncDriver:
     # gives the desktops real DRM outputs and their own lock screens); none here.
     machine_capabilities = ()
 
-    def set_mode(self, width, height, scale):
-        if self.fixture not in RESIZABLE_FIXTURES and "resize" not in self.machine_capabilities:
-            raise ValueError("fixture output mode is not runner-controlled")
+    def _sway_mode_script(self, width, height, scale):
+        """Sway 1.11 segfaults on headless mode changes while WayVNC holds capture
+        state (wlr-randr and IPC alike). Detach WayVNC around the change; the live
+        resize scenario still changes the mode with the client attached."""
+        attached = self.live_resize
+        custom = "" if self._output_lists_mode(width, height) else "--custom "
+        return (
+            'export SWAYSOCK="$(ls "$XDG_RUNTIME_DIR"/sway-ipc.*.sock | head -1)"'
+            ' WAYLAND_DISPLAY="$(ls "$XDG_RUNTIME_DIR" | grep -E "^wayland-[0-9]+$" | head -1)"'
+            + ("" if attached else " && wayvncctl detach && sleep 1")
+            # Quoted as one command, or swaymsg reads --custom as an option of its own.
+            + f" && swaymsg 'output {self.primary_output} mode {custom}{width}x{height}"
+            + f" scale {scale}'"
+            + ("" if attached else ' && sleep 1 && wayvncctl attach "$WAYLAND_DISPLAY"')
+        )
+
+    def _plasma_mode_script(self, width, height, scale):
+        """kscreen-doctor needs a mode's exact refresh, and outputs differ: the KVM
+        guest's EDID offers 4K at 30 Hz only (60 Hz is pruned as too fast). Take the
+        refresh the output lists for that size, 60 when it lists none."""
+        output, size = self.primary_output, f"{width}x{height}"
+        listed = (
+            "kscreen-doctor -o | sed 's/\\x1b\\[[0-9;]*m//g'"
+            f" | awk '/^Output:/ {{o = $3}} o == \"{output}\"'"
+            f" | grep -oE '{size}@[0-9]+' | head -1"
+        )
+        return (
+            f'mode="$({listed})"'
+            f' && kscreen-doctor output.{output}.mode."${{mode:-{size}@60}}"'
+            f" output.{output}.scale.{scale}"
+        )
+
+    def _wlroots_mode_script(self, width, height, scale):
+        """wlr-randr only accepts a mode the output advertises; anything else is custom."""
+        option = "--mode" if self._output_lists_mode(width, height) else "--custom-mode"
+        return f"wlr-randr --output {self.primary_output} {option} {width}x{height} --scale {scale}"
+
+    def _mode_script(self, width, height, scale):
+        """The command that sets the output mode, in this fixture's own dialect."""
         if self.fixture == "gnome":
-            script = (
+            return (
                 f"python3 /fixture/gnome/mutter-monitors.py mode {self.primary_output}"
                 f" {width}x{height} {scale}"
             )
-        elif self.fixture == "plasma":
-            script = (
-                f"kscreen-doctor output.{self.primary_output}.mode.{width}x{height}@60"
-                f" output.{self.primary_output}.scale.{scale}"
-            )
-        elif self.fixture == "hyprland":
-            script = (
+        if self.fixture == "plasma":
+            return self._plasma_mode_script(width, height, scale)
+        if self.fixture == "hyprland":
+            return (
                 f"hyprctl --instance 0 keyword monitor"
                 f" {self.primary_output},{width}x{height}@60,0x0,{scale}"
             )
-        elif self.fixture == "sway":
-            # Sway 1.11 segfaults on headless mode changes while WayVNC holds capture
-            # state (wlr-randr and IPC alike). Detach WayVNC around the change; the
-            # live resize scenario still changes the mode with the client attached.
-            attached = self.live_resize
-            custom = "" if self._output_lists_mode(width, height) else "--custom "
-            script = (
-                'export SWAYSOCK="$(ls "$XDG_RUNTIME_DIR"/sway-ipc.*.sock | head -1)"'
-                ' WAYLAND_DISPLAY="$(ls "$XDG_RUNTIME_DIR" | grep -E "^wayland-[0-9]+$" | head -1)"'
-                + ("" if attached else " && wayvncctl detach && sleep 1")
-                # Quoted as one command, or swaymsg reads --custom as an option of its own.
-                + f" && swaymsg 'output {self.primary_output} mode {custom}{width}x{height}"
-                + f" scale {scale}'"
-                + ("" if attached else ' && sleep 1 && wayvncctl attach "$WAYLAND_DISPLAY"')
-            )
-        else:
-            option = "--mode" if self._output_lists_mode(width, height) else "--custom-mode"
-            script = (
-                f"wlr-randr --output {self.primary_output} {option} {width}x{height}"
-                f" --scale {scale}"
-            )
-        result = self._fixture_exec(script, timeout=30)
+        if self.fixture == "sway":
+            return self._sway_mode_script(width, height, scale)
+        return self._wlroots_mode_script(width, height, scale)
+
+    def set_mode(self, width, height, scale):
+        if self.fixture not in RESIZABLE_FIXTURES and "resize" not in self.machine_capabilities:
+            raise ValueError("fixture output mode is not runner-controlled")
+        result = self._fixture_exec(self._mode_script(width, height, scale), timeout=30)
         if result.returncode != 0:
             raise OSError(f"mode change failed: {result.stderr.strip()}")
         time.sleep(3)
@@ -361,22 +381,21 @@ class DockerRealVncDriver:
         if mode not in ("approve", "approve-persist", "deny", "none"):
             raise ValueError(f"unknown portal consent mode {mode!r}")
         script = f'printf "%s\\n" "{mode}" > "$XDG_RUNTIME_DIR/portal-consent-mode"'
-        result = sh([DOCKER, "exec", self.container, "sh", "-c", script], timeout=30)
+        # Through the fixture hook like every other fixture operation, so a KVM guest
+        # runs it too -- a bare `docker exec` had no container to exec into there.
+        result = self._fixture_exec(script, timeout=30)
         if result.returncode != 0:
             raise OSError(f"could not set the consent mode: {result.stderr.strip()}")
 
     def portal_forget(self):
         """Delete w0vncserver's stored restore token with the server's own tool."""
-        result = sh(
-            [DOCKER, "exec", self.container, "/opt/wayland-vnc/tigervnc/bin/w0vncserver-forget"],
-            timeout=30,
-        )
+        result = self._fixture_exec("/opt/wayland-vnc/tigervnc/bin/w0vncserver-forget", timeout=30)
         if result.returncode != 0 and "No such file" not in result.stderr:
             raise OSError(f"w0vncserver-forget failed: {(result.stderr or result.stdout).strip()}")
 
     def portal_events(self):
         script = 'cat "$XDG_RUNTIME_DIR/portal-consent.jsonl" 2>/dev/null || true'
-        result = sh([DOCKER, "exec", self.container, "sh", "-c", script], timeout=30)
+        result = self._fixture_exec(script, timeout=30)
         events = []
         for line in result.stdout.splitlines():
             try:
@@ -427,33 +446,36 @@ class DockerRealVncDriver:
         else:
             self._fixture_exec("pkill -x swaylock || true")
 
-    def hotplug(self, attach):
-        if self.fixture not in HOTPLUG_FIXTURES and "hotplug" not in self.machine_capabilities:
-            raise ValueError("this fixture cannot hot-plug outputs")
+    def _hotplug_command(self, attach):
+        """The command that plugs or unplugs the spare output, in this fixture's own
+        dialect. sway and Hyprland create the output on demand; the rest switch the
+        spare one the session script already made."""
         if self.fixture == "gnome":
             state = "on" if attach else "off"
             helper = "python3 /fixture/gnome/mutter-monitors.py"
-            result = self._fixture_exec(f"{helper} enable {self.spare_output} {state}")
-        elif self.fixture == "plasma":
+            return f"{helper} enable {self.spare_output} {state}"
+        if self.fixture == "plasma":
             state = "enable" if attach else "disable"
-            result = self._fixture_exec(f"kscreen-doctor output.{self.spare_output}.{state}")
-        elif self.fixture == "sway":
+            return f"kscreen-doctor output.{self.spare_output}.{state}"
+        if self.fixture == "sway":
             swaysock = 'export SWAYSOCK="$(ls "$XDG_RUNTIME_DIR"/sway-ipc.*.sock | head -1)" && '
             command = (
                 "swaymsg create_output" if attach else f"swaymsg output {self.spare_output} unplug"
             )
-            result = self._fixture_exec(swaysock + command)
-        elif self.fixture == "hyprland":
-            command = (
+            return swaysock + command
+        if self.fixture == "hyprland":
+            return (
                 "hyprctl --instance 0 output create headless"
                 if attach
                 else f"hyprctl --instance 0 output remove {self.spare_output}"
             )
-            result = self._fixture_exec(command)
-        else:
-            # The spare headless output the session script created and switched off.
-            state = "--on" if attach else "--off"
-            result = self._fixture_exec(f"wlr-randr --output {self.spare_output} {state}")
+        # The spare headless output the session script created and switched off.
+        return f"wlr-randr --output {self.spare_output} {'--on' if attach else '--off'}"
+
+    def hotplug(self, attach):
+        if self.fixture not in HOTPLUG_FIXTURES and "hotplug" not in self.machine_capabilities:
+            raise ValueError("this fixture cannot hot-plug outputs")
+        result = self._fixture_exec(self._hotplug_command(attach))
         if result.returncode != 0:
             raise OSError(f"output hot-plug failed: {result.stderr.strip()}")
 
@@ -601,7 +623,7 @@ class HarnessViewerMixin:
         return session
 
     def screenshot(self, session, path):
-        if "Authentication successful" not in session.log_path.read_text(errors="replace"):
+        if AUTH_OK not in session.log_path.read_text(errors="replace"):
             return False
         result = self._exec(f"vncviewer -screenshot {session.pid} /out/{path.name}", timeout=20)
         return result.returncode == 0 and path.exists() and path.stat().st_size > 0
@@ -683,10 +705,12 @@ class HarnessDriver(HarnessViewerMixin, DockerRealVncDriver):
         super().__init__(**kwargs)
         self._harness_init(identities, viewer_config)
 
-    def start(self):
+    def start(self, network=LAB_NETWORK):
+        """The viewer lives in a container of its own, so both ends join the internal
+        lab network; a caller that names another one is honoured."""
         _ensure_lab_network()
-        DockerRealVncDriver.start(self, network=LAB_NETWORK)
-        self.start_harness(self.container, 5900, network=LAB_NETWORK)
+        DockerRealVncDriver.start(self, network=network)
+        self.start_harness(self.container, 5900, network=network)
 
     def stop(self):
         DockerRealVncDriver.stop(self)
@@ -728,7 +752,10 @@ class KvmDriver(DockerRealVncDriver):
             self.machine_capabilities = ("resize", "hotplug", "lock")
             self.spare_output = "Virtual-2"
 
-    def start(self):
+    def start(self, network=None):
+        # The fixture is a virtual machine, not a container: there is no Docker network
+        # to join, and the parameter exists only to keep the base class's contract.
+        del network
         pid_file = self.work / "qemu.pid"
         if not pid_file.is_file():
             raise SystemExit(f"no running guest under {self.work} (scripts/kvm/build-*.sh first)")
@@ -841,12 +868,18 @@ class KvmDriver(DockerRealVncDriver):
 
     def versions(self):
         def inside(command):
-            result = self._fixture(" ".join(command), timeout=30)
+            # One string for the guest's shell: quoted, or a probe such as GNOME's
+            # `sh -c "echo ..."` reaches it as a bare `echo` and records "unknown".
+            result = self._fixture(shlex.join(command), timeout=30)
             return " ".join((result.stdout + result.stderr).split()) or "unknown"
 
         compositor = inside(VERSION_COMMANDS[self.fixture])
-        backend = inside(["wayvnc", "--version"])
-        distribution = inside(['. /etc/os-release && echo "$PRETTY_NAME"'])
+        # Per fixture, like the container driver: GNOME is served by the patched
+        # gnome-remote-desktop and Plasma by w0vncserver, so probing for wayvnc there
+        # recorded the shell's "not found" as the backend version -- a non-blank string
+        # the gate accepts while the evidence says nothing true about what served.
+        backend = inside(BACKEND_COMMANDS.get(self.fixture, ["wayvnc", "--version"]))
+        distribution = inside(["sh", "-c", '. /etc/os-release && echo "$PRETTY_NAME"'])
         return self._versions(compositor, backend, distribution + " (KVM guest)")
 
 
@@ -862,8 +895,8 @@ class KvmHarnessDriver(HarnessViewerMixin, KvmDriver):
         super().__init__(**kwargs)
         self._harness_init(identities, viewer_config)
 
-    def start(self):
-        KvmDriver.start(self)
+    def start(self, network=None):
+        KvmDriver.start(self, network)
         listening = sh(["ss", "-ltnH", f"( sport = :{self.port} )"], timeout=15)
         if f"127.0.0.1:{self.port}" not in listening.stdout:
             raise SystemExit(
@@ -950,7 +983,7 @@ class AndroidViewerMixin:
             f"{self.viewer.version()}\nsteps: {' > '.join(outcome.steps)}\n"
             f"app dialogs answered in {submitted - started:.1f}s before the server was asked\n"
             + "".join(f"{note}\n" for note in outcome.notes)
-            + (f"error: {outcome.error}\n" if outcome.error else "Authentication successful\n"),
+            + (f"error: {outcome.error}\n" if outcome.error else AUTH_OK + "\n"),
             encoding="utf-8",
         )
         return AndroidSession(self.viewers, log_path, outcome.connected, submitted)
@@ -967,11 +1000,24 @@ class AndroidViewerMixin:
         session.connected = False
 
     def alive(self, session):
-        return session.connected and self.viewer.desktop_visible()
+        # Sticky: once the app has said the connection closed, the session is over,
+        # even after that message is dismissed and the app shows its last frame again.
+        if not session.connected:
+            return False
+        # One UI dump for both questions: capture_valid asks this on every poll.
+        nodes = self.viewer.adb.ui()
+        if self.viewer.connection_lost(nodes):
+            session.connected = False
+            return False
+        return self.viewer.desktop_visible(nodes)
 
     def transient_error(self, session):
         del session
         return self.viewer.transient_error()
+
+    def fit_desktop(self, session):
+        if session.connected:
+            self.viewer.fit_desktop()
 
     def type_text(self, text):
         self.viewer.type_text(text)
@@ -1038,7 +1084,7 @@ def android_viewer(sdk):
     return AndroidViewer(adb, pointer_report=lambda: None)
 
 
-def main():
+def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--fixture", choices=TARGETS, required=True)
     parser.add_argument("--port", type=int, required=True, help="loopback port for the fixture")
@@ -1086,8 +1132,12 @@ def main():
     )
     parser.add_argument("--identities", type=Path, default=None, help="private pinned identities")
     parser.add_argument("--viewer-config", type=Path, default=None, help="private viewer config")
-    args = parser.parse_args()
-    viewer_name = VIEWERS[args.viewer]
+    return parser
+
+
+def _validate(parser: argparse.ArgumentParser, args) -> None:
+    """Refuse a combination of options the run cannot honour, and refuse any private
+    file that is not mode 600 -- a credential others can read is not a private one."""
     if args.harness and (args.identities is None or args.viewer_config is None):
         parser.error("--harness needs --identities and --viewer-config")
     if args.viewer == "desktop" and args.connection is None:
@@ -1101,6 +1151,13 @@ def main():
             parser.error(f"{private} must be a private file with mode 600")
     if not (1024 < args.port < 65536):
         parser.error("port must be an unprivileged loopback port")
+
+
+def main():
+    parser = _parser()
+    args = parser.parse_args()
+    _validate(parser, args)
+    viewer_name = VIEWERS[args.viewer]
     os.umask(0o077)
     # The native fixture image; scripts/fixture-smoke.sh tags an emulated build
     # for another architecture separately, so this is always the host's.

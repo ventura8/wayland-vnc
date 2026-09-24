@@ -74,7 +74,13 @@ write_files:
       # Software rendering: virtio-gpu without virgl is llvmpipe.
       Environment=LIBGL_ALWAYS_SOFTWARE=1
 __DESKTOP_ENVIRONMENT__
-      ExecStart=/usr/bin/dbus-run-session -- /usr/bin/python3 /fixture/__SESSION_SCRIPT__
+      # pam_systemd (systemd 258+) gives the session an ambient CAP_WAKE_ALARM that
+      # every process inherits except kwin_wayland, whose file capability resets it.
+      # The kernel then refuses KWin a look at its clients' /proc/<pid>/exe, KWin
+      # cannot identify xdg-desktop-portal-kde, withholds zkde_screencast_unstable_v1,
+      # and every Plasma RemoteDesktop session fails. The fixture needs no capability,
+      # so it is dropped above dbus-run-session, which D-Bus-activated services inherit.
+      ExecStart=/usr/bin/setpriv --inh-caps=-all --ambient-caps=-all /usr/bin/dbus-run-session -- /usr/bin/python3 /fixture/__SESSION_SCRIPT__
       KillMode=control-group
       TimeoutStopSec=20
       Restart=no
@@ -108,11 +114,20 @@ __SERVER_KEY__
       [Install]
       WantedBy=multi-user.target
   # The custom EDID (a sacrificial timing the connector always prunes, then 4K + 1080p +
-  # 720p) loaded over BOTH virtio-gpu connectors by the kernel, and the cmdline that
-  # points at them. Virtual-2 gets it too so it is a connected, mode-capable second
-  # output the hot-plug scenario can enable and disable (a firmware EDID also forces the
-  # connector's status to connected). Read at DRM module load, so it needs the reboot
-  # cloud-init performs after provisioning.
+  # 720p) loaded over both virtio-gpu connectors by the kernel, and the cmdline that
+  # points at them. Read at DRM module load, so it needs the reboot cloud-init performs
+  # after provisioning.
+  #
+  # Virtual-2 is the spare the hot-plug scenario enables and disables, and a firmware
+  # EDID does NOT make it connected: headless QEMU reports only the first virtio-gpu
+  # head as live, so the kernel lists Virtual-2 "disconnected" with no modes, Mutter
+  # never offers it, and monitor-change failed with "no connector 'Virtual-2'".
+  # `video=Virtual-2:e` forces the connector on from boot; Mutter then sees it as a
+  # connected output that is not in the logical layout -- exactly a spare. (Proved on a
+  # live guest: forced on and with the session restarted, `mutter-monitors.py enable
+  # Virtual-2 on` added it at x=1920 and `off` removed it.) Forced on, it carries the
+  # kernel's generic mode list rather than the firmware EDID's, which a spare that is
+  # only plugged in and out does not need.
   - path: /lib/firmware/edid/wayland-vnc.bin
     permissions: "0644"
     encoding: b64
@@ -120,7 +135,7 @@ __SERVER_KEY__
   - path: /etc/default/grub.d/99-wayland-vnc-edid.cfg
     permissions: "0644"
     content: |
-      GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT drm.edid_firmware=Virtual-1:edid/wayland-vnc.bin,Virtual-2:edid/wayland-vnc.bin"
+      GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT drm.edid_firmware=Virtual-1:edid/wayland-vnc.bin,Virtual-2:edid/wayland-vnc.bin video=Virtual-2:e"
   # The runtime-directory markers and the readiness marker the runner waits for, as a
   # service so they are recreated on the second (post-reboot) boot, after the fixture.
   - path: /etc/systemd/system/wayland-vnc-guest-ready.service

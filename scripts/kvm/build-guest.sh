@@ -41,11 +41,11 @@ gnome | plasma) template=tests/kvm/desktop.user-data.template ;;
 esac
 shift
 harness=0
-if [ "${1:-}" = "--harness" ]; then
+if [[ "${1:-}" = "--harness" ]]; then
   harness=1
   shift
 fi
-[ $# -eq 0 ] || {
+[[ $# -eq 0 ]] || {
   echo "unexpected arguments: $*" >&2
   exit 2
 }
@@ -59,6 +59,10 @@ xfce-labwc) default_port=5923 ;;
 lxqt-labwc) default_port=5924 ;;
 gnome) default_port=5925 ;;
 plasma) default_port=5926 ;;
+*)
+  echo "no port assigned for target '$target'" >&2
+  exit 2
+  ;;
 esac
 port=${WAYLAND_VNC_KVM_PORT:-$default_port}
 work="artifacts/kvm/$target"
@@ -72,17 +76,38 @@ case "$target" in
 # The desktop guests carry a custom EDID (720p + 1080p + 4K) their compositor's
 # DisplayConfig needs, loaded over the connector in the guest, and a second output
 # for the monitor-change scenario.
-gnome | plasma) gpu=(-device "virtio-gpu-pci,max_outputs=2,edid=on") ;;
-*) gpu=(-device "virtio-gpu-pci,max_outputs=1,xres=3840,yres=2160") ;;
+# Behind a PCIe root port with No_Soft_Reset set, the GPU keeps its state across S3:
+# on the root bus QEMU resets it on resume, the compositor's buffers vanish, and
+# KWin's page flips time out forever after ("Pageflip timed out!"), a black desktop.
+gnome | plasma)
+  gpu=(
+    -device "pcie-root-port,id=gpu-port,bus=pcie.0,chassis=1"
+    -device "virtio-gpu-pci,bus=gpu-port,x-pcie-pm-no-soft-reset=on,max_outputs=2,edid=on,max_hostmem=1G"
+  )
+  ;;
+*) gpu=(-device "virtio-gpu-pci,max_outputs=1,xres=3840,yres=2160,max_hostmem=1G") ;;
 esac
+# max_hostmem caps the total size of the guest's 2D framebuffer resources, 256 MiB by
+# default: eight 3840x2160 buffers. Hyprland keeps more than that alive through a mode
+# change -- the old 1080p swapchain, the new 4K one, WayVNC's capture pool and the
+# cursor -- and the device refused RESOURCE_CREATE_2D with OUT_OF_MEMORY (0x1201),
+# the output fell back to 800x600 and WayVNC crashed. The other compositors fitted
+# under the default by chance, not by design.
 # The guest's VNC port is forwarded to host loopback in every mode. With --harness the
 # viewer runs in a container on the host network namespace, which reaches 127.0.0.1;
 # for the Android viewer adb reverse points the emulator at the same loopback port.
 # Loopback keeps the guest reachable only from the host, never the LAN.
 bind=${WAYLAND_VNC_KVM_BIND:-127.0.0.1}
-[ "$harness" -eq 1 ] && echo "== harness mode: guest VNC on $bind (host-network viewer) =="
+[[ "$harness" -eq 1 ]] && echo "== harness mode: guest VNC on $bind (host-network viewer) =="
 image_url="https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img"
-image_sha256=8196be9d7958059cb56c6c75c80fdf6cee8a8885bc149ea791d7db1c7ef93035
+# `current/` is a mutable path Ubuntu republishes, so the digest is pinned and checked
+# below. This one was taken from that day's SHA256SUMS after verifying its detached
+# signature against Ubuntu's UEC image signing key, fingerprint
+# D2EB 4462 6FDD C30B 513D  5BB7 1A5D 6C4C 7DB8 7C81 -- never from the image alone,
+# which would only prove the download matched itself:
+#   curl -fsSLO .../SHA256SUMS -O .../SHA256SUMS.gpg
+#   gpg --verify SHA256SUMS.gpg SHA256SUMS && grep amd64.img SHA256SUMS
+image_sha256=2d3b9b1f76fc204f684a2313113b1d7c2b35eabba19cfcbcec5eae2aed3cc853
 base="artifacts/kvm/resolute-cloudimg-amd64.img"
 overlay="$work/guest.qcow2"
 seed="$work/seed.iso"
@@ -90,17 +115,17 @@ vars="$work/OVMF_VARS.fd"
 credential=${WAYLAND_VNC_CREDENTIAL:-artifacts/desktop-viewer/fixture.conf}
 server_key=${WAYLAND_VNC_SERVER_KEY:-artifacts/desktop-viewer/fixture-rsa.pem}
 
-[ -f "$credential" ] || {
+[[ -f "$credential" ]] || {
   echo "Missing private credential file: $credential" >&2
   exit 2
 }
 # Everything after the FIRST "=" is the password: it may contain "=" itself.
 password=$(sed -n 's/^password=//p' "$credential" | head -1)
-[ -n "$password" ] || {
+[[ -n "$password" ]] || {
   echo "No password in $credential" >&2
   exit 2
 }
-[ -f "$server_key" ] || {
+[[ -f "$server_key" ]] || {
   echo "Missing private server key: $server_key (the harness pins this identity)" >&2
   exit 2
 }
@@ -115,7 +140,7 @@ gnome)
 plasma)
   # The project's TigerVNC w0vncserver, taken out of the Plasma fixture image once
   # (a copy brought from another lab machine is kept as it is).
-  if [ ! -x artifacts/kvm/tigervnc/bin/w0vncserver ]; then
+  if [[ ! -x artifacts/kvm/tigervnc/bin/w0vncserver ]]; then
     echo "== TigerVNC w0vncserver from the Plasma fixture image =="
     docker image inspect wayland-vnc-plasma:dev >/dev/null 2>&1 ||
       docker build -q -f docker/Dockerfile.plasma -t wayland-vnc-plasma:dev . >/dev/null
@@ -125,6 +150,7 @@ plasma)
     docker rm -f "$staging" >/dev/null
   fi
   ;;
+*) ;; # the wlroots guests install everything from the archive
 esac
 
 echo "== base cloud image =="
@@ -132,7 +158,7 @@ echo "== base cloud image =="
 # whenever it republishes the image, so without this two runs could use different
 # guest contents while both claiming to be the same evidence environment. Refresh
 # image_sha256 deliberately when moving to a newer image, and re-record the evidence.
-if [ ! -f "$base" ]; then
+if [[ ! -f "$base" ]]; then
   curl -fSL -o "$base.part" "$image_url"
   if ! printf '%s  %s\n' "$image_sha256" "$base.part" | sha256sum -c - >/dev/null 2>&1; then
     echo "Cloud image does not match the pinned digest $image_sha256." >&2
@@ -148,7 +174,7 @@ fi
 # and starting a second QEMU on the same forwarded port would break both. Refuse
 # while its pid is alive; otherwise clear what it left (the pid file and the two
 # control sockets), so this QEMU binds fresh ones.
-if [ -f "$work/qemu.pid" ] && kill -0 "$(cat "$work/qemu.pid")" 2>/dev/null; then
+if [[ -f "$work/qemu.pid" ]] && kill -0 "$(cat "$work/qemu.pid")" 2>/dev/null; then
   echo "a $target guest is already running (pid $(cat "$work/qemu.pid")); stop it first:" >&2
   echo "  kill \$(cat $work/qemu.pid)" >&2
   exit 2
@@ -170,6 +196,7 @@ gnome | plasma)
   python3 scripts/kvm/make-edid.py "$tmp/edid.bin"
   edid_b64=$(base64 -w0 "$tmp/edid.bin")
   ;;
+*) ;; # the wlroots guests set their own modes and need no EDID
 esac
 export WAYLAND_VNC_TEMPLATE_EDID_B64="$edid_b64"
 # Substituted literally, and through the environment rather than argv. sed would

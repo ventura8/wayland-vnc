@@ -26,11 +26,11 @@ want=$(sha256sum "$requirements" | cut -c1-64)
 
 # A venv whose base interpreter was upgraded away has a bin/python that no longer runs;
 # rebuild it rather than fail on the first import.
-if [ -e "$venv/bin/python" ] && ! "$venv/bin/python" -c 'import sys' >/dev/null 2>&1; then
+if [[ -e "$venv/bin/python" ]] && ! "$venv/bin/python" -c 'import sys' >/dev/null 2>&1; then
   echo "rebuilding $venv: its interpreter no longer runs" >&2
   rm -rf "$venv"
 fi
-if [ ! -x "$venv/bin/python" ]; then
+if [[ ! -x "$venv/bin/python" ]]; then
   python3 -m venv --system-site-packages "$venv"
 fi
 # Debian and Ubuntu ship the interpreter without ensurepip unless python3-venv is
@@ -44,7 +44,7 @@ if ! "$venv/bin/python" -m pip --version >/dev/null 2>&1; then
     exit 1
   }
 fi
-if [ "$(cat "$stamp" 2>/dev/null || true)" != "$want" ]; then
+if [[ "$(cat "$stamp" 2>/dev/null || true)" != "$want" ]]; then
   "$venv/bin/python" -m pip install --quiet --require-virtualenv -r "$requirements" >&2
   printf '%s\n' "$want" >"$stamp"
 fi

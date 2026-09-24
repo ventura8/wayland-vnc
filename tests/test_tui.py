@@ -178,7 +178,8 @@ def test_uninstall_masks_the_unit_so_a_global_enable_cannot_revive_it(tmp_path):
     (tmp_path / runtime.CREDENTIALS_NAME).write_text("username=vnc\npassword=hunter2x\n")
     message = tui._uninstall(install)
     assert ["systemctl", "--user", "mask", tui.SERVICE] in calls
-    assert "Masked" in message and not (tmp_path / runtime.CREDENTIALS_NAME).exists()
+    assert "Masked" in message
+    assert not (tmp_path / runtime.CREDENTIALS_NAME).exists()
     calls.clear()
     tui._install(install, lambda _p: "hunter2x")
     assert calls.index(["systemctl", "--user", "unmask", tui.SERVICE]) < calls.index(

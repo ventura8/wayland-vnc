@@ -625,6 +625,24 @@ Three findings from driving the actual viewer against a real desktop.
       The installed private daemon picks this up with `scripts/install-private-grd.sh`
       after `scripts/fixture-smoke.sh gnome` rebuilt the image.
 
+- [x] **A live resize froze the GNOME session.** RealVNC Viewer for Android against
+      the GNOME KVM guest (Mutter 50.1), 2026-09-24: after a switch from 1920x1080 to
+      1280x720 the viewer kept the last 1920x1080 frame until it disconnected. Mutter
+      ends a mirrored monitor's screen-cast stream when the monitor changes size and,
+      for a remote desktop session, says nothing on D-Bus; the daemon kept the dead
+      stream. `patches/gnome-remote-desktop/0009-follow-mirrored-monitor-resize.patch`
+      watches the PipeWire registry for the source node's removal and records the
+      primary monitor again, so the framebuffer follows and the client gets a
+      DesktopSize update; `resize` then passed. Report:
+      `docs/upstream/gnome-remote-desktop-04-mirrored-monitor-resize-freezes.md`.
+- [ ] **GNOME cannot be unlocked remotely, by design.** GNOME Shell inhibits remote
+      access in its unlock-dialog session mode (`allowScreencast: false`), which ends
+      every remote desktop session and refuses new ones until a local unlock. The
+      `lock` scenario therefore fails on GNOME; whether the GNOME target keeps owing it
+      is an open decision. Earlier GNOME `lock` passes were harness false positives (a
+      dropped connection read as locked, the viewer's stale frame as unlocked), fixed
+      by requiring a live session on both sides of the unlock.
+
 ## 17. Qualification run against the actual RealVNC Viewer
 
 Ran the unattended scenario suite through the isolated viewer harness on every

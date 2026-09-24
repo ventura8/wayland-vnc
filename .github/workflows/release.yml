@@ -20,7 +20,7 @@ env:
   MAINTAINER_EMAIL: "alexandrescu.sergiu@gmail.com"
   # Bump when re-uploading the same VERSION (Launchpad rejects duplicate source
   # versions). Reset to 1 when VERSION itself bumps.
-  PPA_UPLOAD_REVISION: "7"
+  PPA_UPLOAD_REVISION: "1"
 
 permissions:
   contents: read

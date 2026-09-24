@@ -14,7 +14,7 @@ PATH="$(bash scripts/ensure-venv.sh):$PATH"
 export PATH
 mkdir -p reports/distro-logs
 
-UBUNTU="ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367"
+UBUNTU="ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78"
 
 # image|package-manager install command for python3 + GTK4 + libadwaita + Xvfb + openssl
 PLATFORMS=(
@@ -27,12 +27,22 @@ PLATFORMS=(
 )
 
 deps_for() {
-  case "$1" in
+  local manager=$1
+  case "$manager" in
   apt)
     echo 'export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
-apt-get install -y --no-install-recommends python3 python3-gi python3-gi-cairo \
-  gir1.2-gtk-4.0 gir1.2-adw-1 xvfb xauth librsvg2-common fonts-dejavu-core iproute2 openssl >/dev/null 2>&1'
+# Quiet on success; on failure show the apt output, refresh the index and try once
+# more. The Ubuntu archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
+quiet_apt apt-get install -y --no-install-recommends python3 python3-gi python3-gi-cairo \
+  gir1.2-gtk-4.0 gir1.2-adw-1 xvfb xauth librsvg2-common fonts-dejavu-core iproute2 openssl'
     ;;
   dnf)
     # RHEL 10 rebuilds ship no Xvfb and no broadway backend, so Xvfb is optional here;
@@ -53,6 +63,10 @@ zypper --non-interactive install python3 python3-gobject python3-gobject-Gdk \
     echo 'pacman -Sy --noconfirm >/dev/null 2>&1
 pacman -S --noconfirm --needed python python-gobject gtk4 libadwaita xorg-server-xvfb \
   xorg-xauth librsvg ttf-dejavu iproute2 openssl >/dev/null 2>&1'
+    ;;
+  *)
+    echo "no dependency step for package manager '$manager'" >&2
+    return 1
     ;;
   esac
 }
@@ -197,8 +211,17 @@ without_gtk=$(mktemp)
 cat >"$without_gtk" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
-apt-get install -y --no-install-recommends python3 openssl >/dev/null 2>&1
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
+quiet_apt apt-get install -y --no-install-recommends python3 openssl
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 python3 -c "import gi" 2>/dev/null && { echo "GTK unexpectedly present" >&2; exit 1; }
 

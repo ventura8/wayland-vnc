@@ -232,15 +232,19 @@ def test_healthy_run_passes_every_automated_scenario_but_stays_incomplete(lab):
     statuses = {name: outcome.status for name, outcome in outcomes.items()}
     for name in ds.AUTOMATED:
         assert statuses[name] == "passed", (name, outcomes[name].detail)
-    assert statuses["colors"] == "passed" and statuses["1080p-100"] == "passed"
+    assert statuses["colors"] == "passed"
+    assert statuses["1080p-100"] == "passed"
     # Without an input-capable driver, input and lock stay not-run; sway still hot-plugs.
     for name in ds.MANUAL_SCENARIOS:
         expected = "passed" if name == "monitor-change" else "not-run"
         assert statuses[name] == expected, name
     assert "portal-approve" not in statuses
-    assert run.reconnect_cycles == 20 and run.first_frame_seconds is not None
-    assert driver.restarts == 1 and driver.paused == [ds.INTERRUPTION_SECONDS]
-    assert driver.modes[-1] == (3840, 2160, 2) and run.current_mode == (3840, 2160, 2)
+    assert run.reconnect_cycles == 20
+    assert run.first_frame_seconds is not None
+    assert driver.restarts == 1
+    assert driver.paused == [ds.INTERRUPTION_SECONDS]
+    assert driver.modes[-1] == (3840, 2160, 2)
+    assert run.current_mode == (3840, 2160, 2)
     assert True in driver.disconnects  # viewer-killed used SIGKILL
     record = new_partial_record(
         commit="c", target="sway", viewer="realvnc-desktop", versions=VERSIONS
@@ -284,7 +288,8 @@ def test_smoke_failure_fails_closed(lab):
     driver.smoke_ok = False
     outcomes = ds.run_scenarios(run)
     assert outcomes["first-frame"].status == "failed"
-    assert outcomes["colors"].status == "failed" and outcomes["1080p-100"].status == "failed"
+    assert outcomes["colors"].status == "failed"
+    assert outcomes["1080p-100"].status == "failed"
     assert outcomes["server-restart"].status == "failed"
     assert outcomes["4k-200"].status == "failed"
     assert run.post_run_healthy is False
@@ -294,7 +299,8 @@ def test_first_frame_waits_past_an_invalid_capture(lab):
     run, driver, _root = lab
     driver.blank_first = True
     outcome = ds.scenario_first_frame(run)
-    assert outcome.status == "passed" and driver.frame >= 2
+    assert outcome.status == "passed"
+    assert driver.frame >= 2
 
 
 def test_first_frame_times_out_without_a_scene(lab):
@@ -304,14 +310,16 @@ def test_first_frame_times_out_without_a_scene(lab):
     driver.mode = (400, 200, 1)
     driver.screenshot = lambda _session, path: Image.new("RGB", (400, 200)).save(path) or True
     outcome = ds.scenario_first_frame(run)
-    assert outcome.status == "failed" and "no valid frame" in outcome.detail
+    assert outcome.status == "failed"
+    assert "no valid frame" in outcome.detail
 
 
 def test_interruption_recovers_through_reconnect_when_the_session_died(lab):
     run, driver, _root = lab
     driver.die_on_pause = True
     outcome = ds.scenario_network_interruption(run)
-    assert outcome.status == "passed" and "reconnect" in outcome.detail
+    assert outcome.status == "passed"
+    assert "reconnect" in outcome.detail
 
 
 def test_interruption_with_frozen_frames_fails_when_reconnect_fails(lab):
@@ -335,23 +343,27 @@ def test_changing_frames_detects_a_static_framebuffer(lab):
     run, driver, _root = lab
     driver.freeze_after_pause = True
     outcome = ds.scenario_changing_frames(run)
-    assert outcome.status == "failed" and "did not change" in outcome.detail
+    assert outcome.status == "failed"
+    assert "did not change" in outcome.detail
 
 
 def test_mode_scenarios_check_the_viewer_framebuffer_size(lab):
     run, driver, _root = lab
     driver.set_mode = lambda width, height, scale: None  # compositor ignores the request
     outcome = ds.scenario_resize(run)
-    assert outcome.status == "failed" and "did not become" in outcome.detail
+    assert outcome.status == "failed"
+    assert "did not become" in outcome.detail
     outcome = ds.scenario_high_dpi(run)
-    assert outcome.status == "failed" and "rejected" in outcome.detail
+    assert outcome.status == "failed"
+    assert "rejected" in outcome.detail
 
 
 def test_live_resize_fails_when_the_server_drops_the_session(lab):
     run, driver, _root = lab
     driver.drop_on_resize = True
     outcome = ds.scenario_resize(run)
-    assert outcome.status == "failed" and "dropped" in outcome.detail
+    assert outcome.status == "failed"
+    assert "dropped" in outcome.detail
     assert driver.modes[-1] == ds.BASE_MODE
 
 
@@ -359,7 +371,8 @@ def test_high_dpi_requires_an_idle_server(lab):
     run, driver, _root = lab
     driver.idle_ok = False
     outcome = ds.scenario_high_dpi(run)
-    assert outcome.status == "failed" and "idle" in outcome.detail
+    assert outcome.status == "failed"
+    assert "idle" in outcome.detail
     assert driver.idle_waits == 1
 
 
@@ -375,7 +388,8 @@ def test_reconnect_stops_at_the_first_failed_cycle(lab):
 
     driver.connect = flaky
     outcome = ds.scenario_reconnect(run)
-    assert outcome.status == "failed" and "cycle 3" in outcome.detail
+    assert outcome.status == "failed"
+    assert "cycle 3" in outcome.detail
     assert run.reconnect_cycles == 0
 
 
@@ -406,7 +420,8 @@ def test_scenario_exceptions_become_failures(lab):
 
     driver.set_mode = broken
     outcomes = ds.run_scenarios(run)
-    assert outcomes["resize"].status == "failed" and "OSError" in outcomes["resize"].detail
+    assert outcomes["resize"].status == "failed"
+    assert "OSError" in outcomes["resize"].detail
 
 
 def test_early_capture_failures_in_each_scenario(lab):
@@ -436,7 +451,8 @@ def test_record_passes_only_when_every_scenario_passed(lab):
     assert errors == []
     run.post_run_healthy = False
     record = ds.fill_record(dict(record, status="incomplete"), run, outcomes, root)
-    assert record["status"] == "incomplete" and record["post_run_smoke"] == "failed"
+    assert record["status"] == "incomplete"
+    assert record["post_run_smoke"] == "failed"
 
 
 def test_high_dpi_runs_last_and_health_is_checked_at_that_mode(lab):
@@ -475,7 +491,8 @@ def test_portal_scenarios_fail_closed(lab):
     # No consent event at all while frames arrive is also a failure for approve.
     driver.portal_decide = lambda: True
     outcome = ds.scenario_portal_approve(run)
-    assert outcome.status == "failed" and "without an approval" in outcome.detail
+    assert outcome.status == "failed"
+    assert "without an approval" in outcome.detail
     # Persist never granted.
     driver.portal_decide = lambda: (
         driver.events.append({"action": "Approve", "persist": False}) or True
@@ -493,7 +510,8 @@ def test_portal_scenarios_fail_closed(lab):
 
     driver.portal_decide = deny_then_dead
     outcome = ds.scenario_portal_deny(run)
-    assert outcome.status == "failed" and "re-approving" in outcome.detail
+    assert outcome.status == "failed"
+    assert "re-approving" in outcome.detail
 
 
 def test_input_scenarios_run_only_with_an_input_capable_driver(lab):
@@ -508,14 +526,16 @@ def test_input_scenarios_run_only_with_an_input_capable_driver(lab):
         "scroll": "passed",
         "drag": "passed",
     }
-    assert driver.typed == ["nonce-2026"] and ds.SCENE_ENTRY in driver.clicks
+    assert driver.typed == ["nonce-2026"]
+    assert ds.SCENE_ENTRY in driver.clicks
     driver.markers.clear()
     driver.typed_focus = False
     driver.click = lambda x_pos, y_pos: None  # clicks never reach the scene
     ticks = iter(range(0, 100000))
     run.clock = lambda: next(ticks) * 2.0
     outcomes = ds.scenario_input(run)
-    assert outcomes["keyboard"].status == "failed" and outcomes["pointer"].status == "failed"
+    assert outcomes["keyboard"].status == "failed"
+    assert outcomes["pointer"].status == "failed"
     assert outcomes["scroll"].status == "passed"
     driver.screenshot = lambda _session, _path: False
     outcomes = ds.scenario_input(run)
@@ -529,7 +549,8 @@ def test_full_run_with_input_driver_can_produce_a_passing_wlroots_record(lab):
     statuses = {name: o.status for name, o in outcomes.items()}
     remaining = {name for name, status in statuses.items() if status != "passed"}
     assert remaining == {"suspend-resume"}, "a container driver cannot suspend"
-    assert driver.hotplugs == [True, False] and driver.secret_typed
+    assert driver.hotplugs == [True, False]
+    assert driver.secret_typed
     driver.supports_suspend = True
     driver.mode = ds.BASE_MODE  # the first run deliberately leaves the fixture at 4K
     run.current_mode = ds.BASE_MODE
@@ -547,17 +568,20 @@ def test_suspend_resume_needs_a_machine_that_can_and_proves_it_did(lab):
     assert ds.scenario_suspend_resume(run).status == "not-run"
     driver.supports_suspend = True
     outcome = ds.scenario_suspend_resume(run)
-    assert outcome.status == "passed" and "same session" in outcome.detail
+    assert outcome.status == "passed"
+    assert "same session" in outcome.detail
     assert (run.evidence_dir / "suspend-transcript.json").is_file()
     # The session died over S3: a clean reconnect still passes.
     driver.die_on_suspend = True
     outcome = ds.scenario_suspend_resume(run)
-    assert outcome.status == "passed" and "again after S3" in outcome.detail
+    assert outcome.status == "passed"
+    assert "again after S3" in outcome.detail
     # A machine that never reported suspended is not a pass, whatever the frames say.
     driver.die_on_suspend = False
     driver.suspend_transcript["after_suspend"] = {"status": "running", "running": True}
     outcome = ds.scenario_suspend_resume(run)
-    assert outcome.status == "failed" and "did not suspend" in outcome.detail
+    assert outcome.status == "failed"
+    assert "did not suspend" in outcome.detail
 
 
 def test_lock_fails_when_the_desktop_leaks_or_unlock_fails(lab):
@@ -565,15 +589,43 @@ def test_lock_fails_when_the_desktop_leaks_or_unlock_fails(lab):
     driver.supports_input = True
     driver.lock = lambda: None  # lock never engages: desktop stays visible
     outcome = ds.scenario_lock(run)
-    assert outcome.status == "failed" and "stayed visible" in outcome.detail
+    assert outcome.status == "failed"
+    assert "stayed visible" in outcome.detail
     driver.lock = lambda: setattr(driver, "locked", True)
     driver.type_secret = lambda: None  # wrong password: secret typed but stays locked
     ticks = iter(range(0, 100000))
     run.clock = lambda: next(ticks) * 2.0
     outcome = ds.scenario_lock(run)
-    assert outcome.status == "failed" and "did not restore" in outcome.detail
+    assert outcome.status == "failed"
+    assert "did not restore" in outcome.detail
     run.fixture = "gnome"
     assert ds.scenario_lock(run).status == "not-run"
+
+
+def test_lock_that_drops_the_session_is_not_a_lock(lab):
+    """GNOME Shell ends remote sessions when it locks; the viewer's closed-connection
+    message hides the desktop and, once dismissed, its last frame shows again. Neither
+    may pass for locked or for unlocked."""
+    run, driver, _root = lab
+    driver.supports_input = True
+    ended = set()
+    driver.alive = lambda session: session not in ended
+    driver.lock = lambda: (setattr(driver, "locked", True), ended.add(driver.sessions))
+    outcome = ds.scenario_lock(run)
+    assert outcome.status == "failed"
+    assert "ended the session" in outcome.detail
+
+    ended.clear()
+    driver.lock = lambda: setattr(driver, "locked", True)
+
+    def unlock_then_drop():
+        driver.locked = False
+        ended.add(driver.sessions)
+
+    driver.type_secret = unlock_then_drop
+    outcome = ds.scenario_lock(run)
+    assert outcome.status == "failed"
+    assert "did not restore" in outcome.detail
 
 
 def test_monitor_change_requires_a_hotplug_capable_fixture(lab):
@@ -589,7 +641,8 @@ def test_monitor_change_requires_a_hotplug_capable_fixture(lab):
     run.fixture = "sway"
     driver.freeze_after_pause = True
     outcome = ds.scenario_monitor_change(run)
-    assert outcome.status == "failed" and "stopped changing" in outcome.detail
+    assert outcome.status == "failed"
+    assert "stopped changing" in outcome.detail
 
 
 def test_reconnect_retries_a_transient_handshake_glitch(lab):
@@ -611,7 +664,8 @@ def test_reconnect_retries_a_transient_handshake_glitch(lab):
     # One glitch is absorbed by the connection itself (every scenario's first
     # connection gets that bounded retry) and noted in the run log; the scenario still
     # counts twenty clean cycles.
-    assert outcome.status == "passed" and "20 clean reconnects" in outcome.detail
+    assert outcome.status == "passed"
+    assert "20 clean reconnects" in outcome.detail
     assert any("transient viewer handshake glitch, one retry" in note for note in run.log)
     assert run.reconnect_cycles == 20
 
@@ -657,7 +711,8 @@ def test_reconnect_gives_up_after_too_many_transient_glitches(lab):
 
     driver.connect = connect
     outcome = ds.scenario_reconnect(run)
-    assert outcome.status == "failed" and run.reconnect_cycles == 0
+    assert outcome.status == "failed"
+    assert run.reconnect_cycles == 0
 
 
 def test_an_unattended_record_carries_an_input_results_artifact(tmp_path):
@@ -691,9 +746,11 @@ def test_scenario_filter_runs_only_the_named_scenarios(lab):
     outcomes = ds.run_scenarios(run)
     assert outcomes["first-frame"].status == "passed"
     # first-frame ran, so its derived colours/1080p come with it.
-    assert "colors" in outcomes and "1080p-100" in outcomes
+    assert "colors" in outcomes
+    assert "1080p-100" in outcomes
     # A sibling automated scenario was skipped entirely (not run, not listed).
-    assert "reconnect-20" not in outcomes and "changing-frames" not in outcomes
+    assert "reconnect-20" not in outcomes
+    assert "changing-frames" not in outcomes
     # The input group did not run; those scenarios only carry their not-run reason.
     for name in ds.INPUT_SCENARIOS:
         assert outcomes[name].status == "not-run"
@@ -706,4 +763,49 @@ def test_scenario_filter_without_first_frame_skips_the_derived_rows(lab):
     outcomes = ds.run_scenarios(run)
     assert outcomes["changing-frames"].status == "passed"
     assert "first-frame" not in outcomes
-    assert "colors" not in outcomes and "1080p-100" not in outcomes
+    assert "colors" not in outcomes
+    assert "1080p-100" not in outcomes
+
+
+def test_a_targeted_rerun_records_what_it_skipped_as_not_run(lab):
+    """--scenario used to crash fill_record with a KeyError on the first scenario it
+    had not run. The skipped ones are recorded as not-run, so the record cannot pass."""
+    run, _driver, root = lab
+    outcomes = {"colors": ds.Outcome("passed", "ok")}
+    record = new_partial_record(
+        commit="c", target="sway", viewer="realvnc-desktop", versions=VERSIONS
+    )
+    record = ds.fill_record(record, run, outcomes, root)
+    assert record["status"] != "passed"
+    assert record["scenarios"]["colors"] == "passed"
+    assert record["scenarios"]["first-frame"] == "not-run"
+    assert "targeted re-run" in record["scenario_details"]["first-frame"]
+
+
+def test_high_dpi_asks_a_viewer_that_can_zoom_to_fit_before_capturing(lab):
+    """A viewer showing the desktop 1:1 on a smaller screen has only a corner of a 4K
+    desktop in view. One that can fit is asked to, and only for the 4K capture: the
+    base-resolution scenarios must not pay for a pinch they do not need."""
+    run, driver, _root = lab
+    fitted = []
+    driver.fit_desktop = fitted.append
+    assert ds.scenario_high_dpi(run).status == "passed"
+    assert len(fitted) == 1
+    ds.scenario_first_frame(run)
+    assert len(fitted) == 1
+
+
+def test_the_fit_gesture_is_not_charged_to_the_first_frame_budget(lab):
+    """Zooming to fit takes seconds of the harness's own gestures; a capture that only
+    becomes valid after them must still count, since the server had its frame ready."""
+    run, driver, _root = lab
+    now = [0.0]
+    run.clock = lambda: now[0]
+
+    def slow_fit(_session):
+        now[0] += ds.FIRST_FRAME_BUDGET + 5  # the gestures alone outlast the budget
+
+    driver.fit_desktop = slow_fit
+    driver.blank_first = True  # the first poll misses, so the deadline decides
+    _session, capture, _elapsed = ds.connect_and_capture(run, "fit.png", fit=True)
+    assert capture is not None

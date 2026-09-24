@@ -42,11 +42,10 @@ if [[ $(stat -c '%u' -- "$connection") != "$(id -u)" ]]; then
   echo "Refusing a connection file not owned by the current user." >&2
   exit 2
 fi
-if [[ $(realpath -- "$connection") == "$PWD"/* ]]; then
-  if ! git check-ignore --no-index --quiet -- "$connection"; then
-    echo "Refusing a repository-local connection file that is not ignored by Git." >&2
-    exit 2
-  fi
+if [[ $(realpath -- "$connection") == "$PWD"/* ]] &&
+  ! git check-ignore --no-index --quiet -- "$connection"; then
+  echo "Refusing a repository-local connection file that is not ignored by Git." >&2
+  exit 2
 fi
 
 install -d -m 700 -- "$output"

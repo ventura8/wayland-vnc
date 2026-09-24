@@ -15,7 +15,8 @@
         "0005-advertised-depth.patch",
         "0006-queued-dead-connections.patch",
         "0007-listen-address.patch",
-        "0008-pipewire-data-loop-not-realtime.patch"
+        "0008-pipewire-data-loop-not-realtime.patch",
+        "0009-follow-mirrored-monitor-resize.patch"
       ]
     },
     {

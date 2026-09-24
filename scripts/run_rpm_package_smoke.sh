@@ -9,7 +9,7 @@ PATH="$(bash scripts/ensure-venv.sh):$PATH"
 export PATH
 
 images=("${@:-}")
-if [ -z "${images[0]:-}" ]; then
+if [[ -z "${images[0]:-}" ]]; then
   images=(fedora:44 almalinux:10 opensuse/tumbleweed:latest)
 fi
 mkdir -p artifacts/rpm reports/distro-logs

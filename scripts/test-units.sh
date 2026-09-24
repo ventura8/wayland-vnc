@@ -30,7 +30,7 @@ for backend in grd w0vncserver wayvnc; do
 done
 # -print -quit: the first leftover is enough, and nothing downstream of find can be
 # closed early under pipefail.
-if [ -n "$(find "$unit_root" \( -type f -o -type l \) -print -quit)" ]; then
+if [[ -n $(find "$unit_root" \( -type f -o -type l \) -print -quit) ]]; then
   echo "Staging round trip left files behind" >&2
   exit 1
 fi

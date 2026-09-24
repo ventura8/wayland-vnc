@@ -105,7 +105,7 @@ install -m 644 "$repo_root/packaging/icons/io.github.ventura8.wayland_vnc-symbol
 # own location, so the same payload works from /usr, $SNAP/usr, /app or an AppDir.
 "$repo_root/scripts/build-translations.sh" compile >/dev/null
 for mo in "$repo_root"/build/locale/*/LC_MESSAGES/wayland-vnc.mo; do
-  [ -e "$mo" ] || continue
+  [[ -e "$mo" ]] || continue
   lang=$(basename "$(dirname "$(dirname "$mo")")")
   install -d -m 755 "$destdir$prefix/share/locale/$lang/LC_MESSAGES"
   install -m 644 "$mo" "$destdir$prefix/share/locale/$lang/LC_MESSAGES/wayland-vnc.mo"
@@ -126,7 +126,7 @@ install -m 644 "$repo_root/packaging/systemd/wayland-vnc.service" \
 install -m 644 "$repo_root/README.md" "$docdir/README.md"
 install -m 644 "$repo_root/SECURITY.md" "$docdir/SECURITY.md"
 for doc in development testing implementation-status; do
-  [ -f "$repo_root/docs/$doc.md" ] && install -m 644 "$repo_root/docs/$doc.md" "$docdir/$doc.md"
+  [[ -f "$repo_root/docs/$doc.md" ]] && install -m 644 "$repo_root/docs/$doc.md" "$docdir/$doc.md"
 done
 
 echo "staged wayland-vnc payload into $destdir$prefix"

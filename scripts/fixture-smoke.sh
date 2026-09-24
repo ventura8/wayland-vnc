@@ -47,7 +47,7 @@ arch=$(bash scripts/target-arch.sh deb)
 platform=$(bash scripts/target-arch.sh platform)
 host_arch=$(env -u WAYLAND_VNC_ARCH -u DOCKER_DEFAULT_PLATFORM bash scripts/target-arch.sh deb)
 image="wayland-vnc-$fixture:dev"
-[ "$arch" = "$host_arch" ] || image="wayland-vnc-$fixture:dev-$arch"
+[[ "$arch" = "$host_arch" ]] || image="wayland-vnc-$fixture:dev-$arch"
 container="wayland-vnc-$fixture-smoke-$$"
 
 cleanup() {
@@ -55,8 +55,16 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-if ((build)); then
-  docker build -q --platform "$platform" -f "docker/Dockerfile.$fixture" -t "$image" . >/dev/null
+# Quiet on success. A failed build is repeated with plain progress, so the log shows
+# what the failing step printed (apt's own error, not just its exit status). The pause
+# gives Ubuntu's archive time to settle: it has briefly served an index naming a
+# package version its pool answered 404 for, and an immediate retry saw the same.
+if ((build)) &&
+  ! docker build -q --platform "$platform" -f "docker/Dockerfile.$fixture" -t "$image" . >/dev/null; then
+  echo "image build failed; repeating it with the full build output in 60 s" >&2
+  sleep 60
+  docker build --progress=plain --platform "$platform" -f "docker/Dockerfile.$fixture" \
+    -t "$image" . >&2
 fi
 
 # KWin's PipeWire screencast needs OpenGL, which needs a DRM render node. Only the

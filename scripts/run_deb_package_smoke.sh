@@ -9,7 +9,7 @@ PATH="$(bash scripts/ensure-venv.sh):$PATH"
 export PATH
 
 images=("${@:-}")
-if [ -z "${images[0]:-}" ]; then
+if [[ -z "${images[0]:-}" ]]; then
   images=(ubuntu:26.04 debian:trixie)
 fi
 artifacts_dir=${WAYLAND_VNC_DEB_ARTIFACTS_DIR:-artifacts/deb}
@@ -23,9 +23,18 @@ trap 'rm -f "$runner"' EXIT
 cat >"$runner" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
-apt-get install -y --no-install-recommends \
-  build-essential debhelper dpkg-dev python3 python3-pil systemd >/dev/null 2>&1
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
+quiet_apt apt-get install -y --no-install-recommends \
+  build-essential debhelper dpkg-dev python3 python3-pil systemd
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 rm -rf debian/wayland-vnc debian/.debhelper debian/files ../wayland-vnc_*.deb obj-* 2>/dev/null || true
 echo "== build =="
@@ -35,14 +44,14 @@ cp "$deb" /out/ 2>/dev/null || true
 echo "built $(basename "$deb")"
 
 echo "== happy: install (pulls wayvnc/openssl deps) =="
-apt-get install -y "$deb" >/dev/null 2>&1
+quiet_apt apt-get install -y "$deb"
 command -v wayland-vnc >/dev/null || { echo "CLI missing after install" >&2; exit 1; }
 test -f /usr/lib/systemd/user/wayland-vnc.service || { echo "user unit missing" >&2; exit 1; }
 echo "== scenarios =="
 WAYLAND_VNC_CLI=wayland-vnc bash /build/scripts/package_smoke_scenarios.sh
 
 echo "== reinstall is idempotent =="
-apt-get install -y --reinstall "$deb" >/dev/null 2>&1
+quiet_apt apt-get install -y --reinstall "$deb"
 command -v wayland-vnc >/dev/null || { echo "CLI missing after reinstall" >&2; exit 1; }
 
 echo "== bad: dpkg refuses a truncated package =="
@@ -67,8 +76,8 @@ for image in "${images[@]}"; do
   slug=${image//[:\/]/-}
   echo "=== deb smoke: $image ==="
   digest_image="$image"
-  if [ "$image" = "ubuntu:26.04" ]; then
-    digest_image="ubuntu:26.04@sha256:cd21a4f68a617580279d4b091cb18e3af9fa8a87500665f0ae5f7f757d17d367"
+  if [[ "$image" = "ubuntu:26.04" ]]; then
+    digest_image="ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78"
   fi
   if ! docker run --rm --network bridge \
     -v "$PWD:/src:ro" -v "$runner:/runner.sh:ro" \

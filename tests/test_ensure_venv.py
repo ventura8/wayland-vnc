@@ -57,7 +57,8 @@ def test_a_venv_whose_interpreter_is_gone_is_rebuilt_rather_than_trusted(tmp_pat
     stamp = target / ".requirements-dev.sha256"
     assert not stamp.exists(), "a failed install must not be stamped"
     rebuilt = target / "bin" / "python"
-    assert rebuilt.exists() and "exit 1" not in rebuilt.read_bytes()[:64].decode("latin-1")
+    assert rebuilt.exists()
+    assert "exit 1" not in rebuilt.read_bytes()[:64].decode("latin-1")
 
 
 def test_the_script_is_wired_into_every_host_side_entry_point():
@@ -85,6 +86,7 @@ def test_the_script_is_wired_into_every_host_side_entry_point():
         "run_deb_package_smoke.sh",
         "run_rpm_package_smoke.sh",
         "run_ppa_source_smoke.sh",
+        "run-sonar-scan.sh",
         "test-units.sh",
         "build_release_package.sh",
         "prepare-grd-ppa-source.sh",

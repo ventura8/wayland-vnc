@@ -41,7 +41,7 @@ record = {
     "backend": args.backend,
     "viewer": args.viewer,
     "output_mode": args.mode,
-    "checks": {name: "passed" for name in args.passed},
+    "checks": dict.fromkeys(args.passed, "passed"),
     "artifacts": artifacts,
 }
 target = args.directory / "partial-evidence.json"

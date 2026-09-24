@@ -110,8 +110,12 @@ build_appimage() {
   case "$arch" in
   x86_64) tool_sha256=ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0 ;;
   aarch64) tool_sha256=f0837e7448a0c1e4e650a93bb3e85802546e60654ef287576f46c71c126a9158 ;;
+  *)
+    echo "no pinned appimagetool checksum for architecture '$arch'" >&2
+    return 1
+    ;;
   esac
-  if [ ! -x "$tool" ]; then
+  if [[ ! -x "$tool" ]]; then
     wget -qO "$tool.download" \
       "https://github.com/AppImage/appimagetool/releases/download/${tool_version}/appimagetool-${arch}.AppImage"
     mv -- "$tool.download" "$tool"
