@@ -346,15 +346,19 @@ class AndroidViewer:
             if find(nodes, rid="menu_pin") is not None or (
                 quiet >= QUIET_DUMPS and self.desktop_visible(nodes)
             ):
-                if not self.ensure_landscape(sleep=sleep):
-                    outcome.error = "the emulator would not turn to landscape"
-                    return outcome
-                if self._home_toolbar(sleep):
-                    outcome.steps.append("toolbar-homed")
-                outcome.connected = True
-                outcome.steps.append("desktop")
-                return outcome
+                return self._settle_desktop(outcome, sleep)
         outcome.error = outcome.error or "the desktop did not appear in time"
+        return outcome
+
+    def _settle_desktop(self, outcome: ConnectOutcome, sleep) -> ConnectOutcome:
+        """The desktop is up: turn to landscape and home the toolbar before it counts."""
+        if not self.ensure_landscape(sleep=sleep):
+            outcome.error = "the emulator would not turn to landscape"
+            return outcome
+        if self._home_toolbar(sleep):
+            outcome.steps.append("toolbar-homed")
+        outcome.connected = True
+        outcome.steps.append("desktop")
         return outcome
 
     def _home_toolbar(self, sleep) -> bool:
