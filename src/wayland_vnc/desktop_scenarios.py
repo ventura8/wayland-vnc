@@ -184,7 +184,10 @@ def connect_and_capture(
         # so the capture is of the whole scene. Viewers that always fit need nothing.
         fit_desktop = getattr(run.driver, "fit_desktop", None)
         if fit and fit_desktop is not None:
+            fit_started = run.clock()
             fit_desktop(session)
+            # The pinch is the harness's own time, not the server's first-frame budget.
+            started += run.clock() - fit_started
         capture = run.capture_valid(session, name, started + FIRST_FRAME_BUDGET)
         if capture is not None or attempt == 2 or not run.driver.transient_error(session):
             return session, capture, run.clock() - started

@@ -879,7 +879,7 @@ class KvmDriver(DockerRealVncDriver):
         # recorded the shell's "not found" as the backend version -- a non-blank string
         # the gate accepts while the evidence says nothing true about what served.
         backend = inside(BACKEND_COMMANDS.get(self.fixture, ["wayvnc", "--version"]))
-        distribution = inside(['. /etc/os-release && echo "$PRETTY_NAME"'])
+        distribution = inside(["sh", "-c", '. /etc/os-release && echo "$PRETTY_NAME"'])
         return self._versions(compositor, backend, distribution + " (KVM guest)")
 
 
@@ -1002,9 +1002,14 @@ class AndroidViewerMixin:
     def alive(self, session):
         # Sticky: once the app has said the connection closed, the session is over,
         # even after that message is dismissed and the app shows its last frame again.
-        if session.connected and self.viewer.connection_lost():
+        if not session.connected:
+            return False
+        # One UI dump for both questions: capture_valid asks this on every poll.
+        nodes = self.viewer.adb.ui()
+        if self.viewer.connection_lost(nodes):
             session.connected = False
-        return session.connected and self.viewer.desktop_visible()
+            return False
+        return self.viewer.desktop_visible(nodes)
 
     def transient_error(self, session):
         del session

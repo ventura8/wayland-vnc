@@ -793,3 +793,19 @@ def test_high_dpi_asks_a_viewer_that_can_zoom_to_fit_before_capturing(lab):
     assert len(fitted) == 1
     ds.scenario_first_frame(run)
     assert len(fitted) == 1
+
+
+def test_the_fit_gesture_is_not_charged_to_the_first_frame_budget(lab):
+    """Zooming to fit takes seconds of the harness's own gestures; a capture that only
+    becomes valid after them must still count, since the server had its frame ready."""
+    run, driver, _root = lab
+    now = [0.0]
+    run.clock = lambda: now[0]
+
+    def slow_fit(_session):
+        now[0] += ds.FIRST_FRAME_BUDGET + 5  # the gestures alone outlast the budget
+
+    driver.fit_desktop = slow_fit
+    driver.blank_first = True  # the first poll misses, so the deadline decides
+    _session, capture, _elapsed = ds.connect_and_capture(run, "fit.png", fit=True)
+    assert capture is not None

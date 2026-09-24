@@ -14,13 +14,14 @@ for Android: after a switch from 1920x1080 to 1280x720 the viewer kept showing
 the last 1920x1080 frame until it disconnected.
 
 The PipeWire stream now watches the registry and reports the source node's
-removal as "closed", the path a lost PipeWire connection already takes. For a
-mirrored monitor the session answers by recording the primary monitor again;
-the new stream's format negotiation resizes the framebuffer, and the client
-receives a DesktopSize update. A virtual-monitor session still closes the
-client, as before.
+removal as "source-removed", kept apart from "closed", which still means the
+PipeWire connection itself failed and still closes the client. For a mirrored
+monitor the session answers a removed source by recording the primary monitor
+again; the new stream's format negotiation resizes the framebuffer, and the
+client receives a DesktopSize update. A virtual-monitor session still closes
+the client, as before.
 diff --git a/src/grd-session-vnc.c b/src/grd-session-vnc.c
-index 934ea08..79d9643 100644
+index 934ea08..1f1cad6 100644
 --- a/src/grd-session-vnc.c
 +++ b/src/grd-session-vnc.c
 @@ -58,6 +58,7 @@ struct _GrdSessionVnc
@@ -39,7 +40,7 @@ index 934ea08..79d9643 100644
  }
  
  static gboolean
-@@ -918,10 +920,50 @@ on_remote_desktop_session_started (GrdSession *session)
+@@ -918,6 +920,35 @@ on_remote_desktop_session_started (GrdSession *session)
      }
  }
  
@@ -75,26 +76,57 @@ index 934ea08..79d9643 100644
  static void
  on_pipewire_stream_closed (GrdVncPipeWireStream *stream,
                             GrdSessionVnc        *session_vnc)
- {
-+  if (!session_vnc->monitor_config->is_virtual)
+@@ -927,6 +958,27 @@ on_pipewire_stream_closed (GrdVncPipeWireStream *stream,
+   maybe_queue_close_session_idle (session_vnc);
+ }
+ 
++/* Only the source node's removal is answered by recording again; a failed
++ * PipeWire connection ("closed") still closes the client, as upstream does. */
++static void
++on_pipewire_stream_source_removed (GrdVncPipeWireStream *stream,
++                                   GrdSessionVnc        *session_vnc)
++{
++  if (session_vnc->monitor_config->is_virtual)
 +    {
-+      if (!session_vnc->restart_stream_idle_id)
-+        {
-+          g_message ("[VNC] Mirrored monitor stream ended, recording it again");
-+          session_vnc->restart_stream_idle_id =
-+            g_idle_add (restart_stream_idle, session_vnc);
-+        }
++      g_warning ("PipeWire source removed, closing client");
++      maybe_queue_close_session_idle (session_vnc);
 +      return;
 +    }
 +
-   g_warning ("PipeWire stream closed, closing client");
++  if (!session_vnc->restart_stream_idle_id)
++    {
++      g_message ("[VNC] Mirrored monitor stream ended, recording it again");
++      session_vnc->restart_stream_idle_id =
++        g_idle_add (restart_stream_idle, session_vnc);
++    }
++}
++
+ static void
+ on_stream_ready (GrdStream     *stream,
+                  GrdSessionVnc *session_vnc)
+@@ -950,6 +1002,9 @@ on_stream_ready (GrdStream     *stream,
+   g_signal_connect (session_vnc->pipewire_stream, "closed",
+                     G_CALLBACK (on_pipewire_stream_closed),
+                     session_vnc);
++  g_signal_connect (session_vnc->pipewire_stream, "source-removed",
++                    G_CALLBACK (on_pipewire_stream_source_removed),
++                    session_vnc);
  
-   maybe_queue_close_session_idle (session_vnc);
+   if (!session_vnc->source)
+     grd_session_vnc_attach_source (session_vnc);
 diff --git a/src/grd-vnc-pipewire-stream.c b/src/grd-vnc-pipewire-stream.c
-index cd8cb41..36bf2a7 100644
+index cd8cb41..3fe330c 100644
 --- a/src/grd-vnc-pipewire-stream.c
 +++ b/src/grd-vnc-pipewire-stream.c
-@@ -111,6 +111,10 @@ struct _GrdVncPipeWireStream
+@@ -46,6 +46,7 @@
+ enum
+ {
+   CLOSED,
++  SOURCE_REMOVED,
+ 
+   N_SIGNALS
+ };
+@@ -111,6 +112,10 @@ struct _GrdVncPipeWireStream
  
    struct spa_hook pipewire_core_listener;
  
@@ -105,7 +137,7 @@ index cd8cb41..36bf2a7 100644
    GMutex frame_mutex;
    GrdVncFrame *pending_frame;
    GSource *pending_frame_source;
-@@ -1195,6 +1199,29 @@ static const struct pw_core_events core_events = {
+@@ -1195,6 +1200,30 @@ static const struct pw_core_events core_events = {
    .error = on_core_error,
  };
  
@@ -113,7 +145,8 @@ index cd8cb41..36bf2a7 100644
 + * or scale change of the mirrored monitor) without any D-Bus notice to a remote
 + * desktop session: it only destroys the PipeWire node. The pw_stream merely goes
 + * back to "paused", so without this the session kept a dead stream and the
-+ * client froze on the last frame. The node going away is the signal. */
++ * client froze on the last frame. The node going away is the signal; it is
++ * kept apart from "closed", which still means the PipeWire connection failed. */
 +static void
 +on_registry_global_remove (void     *user_data,
 +                           uint32_t  id)
@@ -124,7 +157,7 @@ index cd8cb41..36bf2a7 100644
 +    return;
 +
 +  g_debug ("[VNC] Source node %u removed", id);
-+  g_signal_emit (stream, signals[CLOSED], 0);
++  g_signal_emit (stream, signals[SOURCE_REMOVED], 0);
 +}
 +
 +static const struct pw_registry_events registry_events = {
@@ -135,7 +168,7 @@ index cd8cb41..36bf2a7 100644
  GrdVncPipeWireStream *
  grd_vnc_pipewire_stream_new (GrdSessionVnc               *session_vnc,
                               uint32_t                     src_node_id,
-@@ -1264,6 +1291,19 @@ grd_vnc_pipewire_stream_new (GrdSessionVnc               *session_vnc,
+@@ -1264,6 +1293,19 @@ grd_vnc_pipewire_stream_new (GrdSessionVnc               *session_vnc,
                          &core_events,
                          stream);
  
@@ -155,7 +188,7 @@ index cd8cb41..36bf2a7 100644
    if (!connect_to_stream (stream, virtual_monitor, error))
      return NULL;
  
-@@ -1305,6 +1345,13 @@ grd_vnc_pipewire_stream_finalize (GObject *object)
+@@ -1305,6 +1347,13 @@ grd_vnc_pipewire_stream_finalize (GObject *object)
  
    g_clear_pointer (&stream->pipewire_stream, pw_stream_destroy);
  
@@ -169,3 +202,14 @@ index cd8cb41..36bf2a7 100644
    g_clear_pointer (&stream->pipewire_core, pw_core_disconnect);
    g_clear_pointer (&stream->pipewire_context, pw_context_destroy);
    g_clear_pointer (&stream->pending_pointer_source, g_source_destroy);
+@@ -1357,4 +1406,10 @@ grd_vnc_pipewire_stream_class_init (GrdVncPipeWireStreamClass *klass)
+                                   0,
+                                   NULL, NULL, NULL,
+                                   G_TYPE_NONE, 0);
++  signals[SOURCE_REMOVED] = g_signal_new ("source-removed",
++                                          G_TYPE_FROM_CLASS (klass),
++                                          G_SIGNAL_RUN_LAST,
++                                          0,
++                                          NULL, NULL, NULL,
++                                          G_TYPE_NONE, 0);
+ }

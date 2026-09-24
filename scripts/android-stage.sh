@@ -95,8 +95,14 @@ echo "== quiet the device for automation =="
 # to stale request" and drops what it is given. The package itself is disabled, so
 # nothing can bind; the enabled list is then emptied for anything left.
 "$adb" -s "$serial" shell pm disable-user --user 0 com.google.android.inputmethod.latin >/dev/null 2>&1 || true
+# With Gboard gone Android falls back to the next input method it can find, Google
+# TTS's voice IME, and reports it shown: the driver then presses Back to hide a
+# keyboard that is not there, which cancels the Authentication screen.
+"$adb" -s "$serial" shell pm disable-user --user 0 com.google.android.tts >/dev/null 2>&1 || true
 while read -r ime; do
-  [[ -n "$ime" ]] && "$adb" -s "$serial" shell ime disable "$ime" >/dev/null
+  # adb shell forwards its stdin to the device; left attached here it would swallow
+  # the rest of the list this loop is reading.
+  [[ -n "$ime" ]] && "$adb" -s "$serial" shell ime disable "$ime" >/dev/null </dev/null
 done < <("$adb" -s "$serial" shell ime list -s 2>/dev/null | tr -d '\r')
 # Play services' autofill proxy registers as an input method but is not a keyboard,
 # cannot be disabled, and binds only when autofill asks; everything else must be gone.

@@ -69,17 +69,18 @@ and nothing after it -- no `Stream parameters changed`, no `PipeWire stream clos
 Two parts, both in the VNC backend:
 
 - `GrdVncPipeWireStream` gets the registry from its core and, in `global_remove`,
-  emits `closed` when the removed global is its source node. That makes the removal
-  reach the session through the path a lost PipeWire connection already takes.
-- In mirror-primary mode, `on_pipewire_stream_closed` records the primary monitor
-  again (from an idle: the stream objects cannot be freed inside their own callback)
-  instead of closing the client. The old `GrdStream` is dropped without calling `Stop`,
-  since Mutter has already removed it; `grd_session_record_monitor` starts the new one,
-  whose format negotiation calls `grd_session_vnc_queue_resize_framebuffer` with the new
-  size, and the client receives a DesktopSize update. A virtual-monitor session keeps
-  the current behaviour.
+  emits a new `source-removed` signal when the removed global is its source node. It is
+  kept apart from `closed`, which still means the PipeWire connection itself failed and
+  still closes the client.
+- In mirror-primary mode, the session answers `source-removed` by recording the
+  primary monitor again (from an idle: the stream objects cannot be freed inside their
+  own callback); a virtual-monitor session closes the client. The old `GrdStream` is
+  dropped without calling `Stop`, since Mutter has already removed it;
+  `grd_session_record_monitor` starts the new one, whose format negotiation calls
+  `grd_session_vnc_queue_resize_framebuffer` with the new size, and the client receives
+  a DesktopSize update.
 
-A patch against 50.2 that does exactly this, about 90 lines:
+A patch against 50.2 that does exactly this, about 110 lines:
 `patches/gnome-remote-desktop/0009-follow-mirrored-monitor-resize.patch` in the
 reporter's repository. With it, the same switch to 1280x720 continues the session at the
 new size (daemon log: `[VNC] Source node 51 removed`, `Mirrored monitor stream ended,

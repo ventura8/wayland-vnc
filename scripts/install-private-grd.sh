@@ -150,6 +150,7 @@ off)
   rm -f "$debug_dropin"
   echo "== daemon debug logging off =="
   ;;
+keep) ;;
 *)
   echo "internal error: unknown debug setting '$debug'" >&2
   exit 2

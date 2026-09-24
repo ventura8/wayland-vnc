@@ -55,7 +55,8 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 # server never analyses -- a scan that looks like it worked and reports nothing. A
 # local run is a pre-merge check of the working tree, so it is sent as the main branch
 # unless WAYLAND_VNC_SONAR_BRANCH names another, and says which it used.
-main_branch=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
+# origin/HEAD is optional in a clone; without it the fallback below names main.
+main_branch=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)
 main_branch=${main_branch#origin/}
 analysed=${WAYLAND_VNC_SONAR_BRANCH:-${main_branch:-main}}
 if [[ "$analysed" != "$branch" ]]; then
