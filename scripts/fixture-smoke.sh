@@ -56,10 +56,13 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 # Quiet on success. A failed build is repeated with plain progress, so the log shows
-# what the failing step printed (apt's own error, not just its exit status).
+# what the failing step printed (apt's own error, not just its exit status). The pause
+# gives Ubuntu's archive time to settle: it has briefly served an index naming a
+# package version its pool answered 404 for, and an immediate retry saw the same.
 if ((build)) &&
   ! docker build -q --platform "$platform" -f "docker/Dockerfile.$fixture" -t "$image" . >/dev/null; then
-  echo "image build failed; repeating it with the full build output" >&2
+  echo "image build failed; repeating it with the full build output in 60 s" >&2
+  sleep 60
   docker build --progress=plain --platform "$platform" -f "docker/Dockerfile.$fixture" \
     -t "$image" . >&2
 fi
