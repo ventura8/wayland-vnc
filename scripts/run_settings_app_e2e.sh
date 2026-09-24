@@ -31,9 +31,18 @@ deps_for() {
   case "$manager" in
   apt)
     echo 'export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
-apt-get install -y --no-install-recommends python3 python3-gi python3-gi-cairo \
-  gir1.2-gtk-4.0 gir1.2-adw-1 xvfb xauth librsvg2-common fonts-dejavu-core iproute2 openssl >/dev/null 2>&1'
+# Quiet on success; on failure show the apt output, refresh the index and try once
+# more. The Ubuntu archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
+quiet_apt apt-get install -y --no-install-recommends python3 python3-gi python3-gi-cairo \
+  gir1.2-gtk-4.0 gir1.2-adw-1 xvfb xauth librsvg2-common fonts-dejavu-core iproute2 openssl'
     ;;
   dnf)
     # RHEL 10 rebuilds ship no Xvfb and no broadway backend, so Xvfb is optional here;
@@ -202,8 +211,17 @@ without_gtk=$(mktemp)
 cat >"$without_gtk" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
-apt-get install -y --no-install-recommends python3 openssl >/dev/null 2>&1
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
+quiet_apt apt-get install -y --no-install-recommends python3 openssl
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 python3 -c "import gi" 2>/dev/null && { echo "GTK unexpectedly present" >&2; exit 1; }
 

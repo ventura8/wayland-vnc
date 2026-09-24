@@ -17,10 +17,19 @@ trap 'rm -f "$runner"' EXIT
 cat >"$runner" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
 deb=$(ls /pkg/wayland-vnc-grd_*_"$(dpkg --print-architecture)".deb | head -1)
 echo "== happy: install resolves every declared dependency =="
-apt-get install -y "$deb" >/dev/null 2>&1
+quiet_apt apt-get install -y "$deb"
 daemon=/opt/wayland-vnc/grd/libexec/gnome-remote-desktop-daemon
 test -x "$daemon" || { echo "daemon missing after install" >&2; exit 1; }
 if ldd "$daemon" | grep -q "not found"; then

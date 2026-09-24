@@ -28,9 +28,18 @@ trap 'rm -f "$runner"' EXIT
 cat >"$runner" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
-apt-get install -y --no-install-recommends \
-  build-essential debhelper dpkg-dev devscripts lintian python3 >/dev/null
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
+quiet_apt apt-get install -y --no-install-recommends \
+  build-essential debhelper dpkg-dev devscripts lintian python3
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 rm -rf debian/wayland-vnc debian/.debhelper debian/files ../wayland-vnc_* 2>/dev/null || true
 

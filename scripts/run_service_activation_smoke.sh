@@ -64,6 +64,15 @@ runner=$(mktemp)
 cat >"$runner" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 rm -rf debian/wayland-vnc debian/.debhelper debian/files ../wayland-vnc_*.deb 2>/dev/null || true
 
@@ -131,7 +140,7 @@ printf 'smokepw1\nsmokepw1\n' | runuser -u ready -- env PYTHONPATH=/build/src \
 echo "  ok: 'ready' stored a credential; 'bare' has none"
 
 echo "== install the real .deb: the real postinst must enable AND activate =="
-apt-get install -y "$deb" >/dev/null 2>&1
+quiet_apt apt-get install -y "$deb"
 ustate() {
   uid=$(id -u "$1")
   runuser -u "$1" -- env XDG_RUNTIME_DIR="/run/user/$uid" \

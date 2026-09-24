@@ -23,9 +23,18 @@ trap 'rm -f "$runner"' EXIT
 cat >"$runner" <<'INNER'
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-apt-get update >/dev/null
-apt-get install -y --no-install-recommends \
-  build-essential debhelper dpkg-dev python3 python3-pil systemd >/dev/null 2>&1
+# Quiet on success; on failure show apt's own output, refresh the index and try once
+# more. Ubuntu's archive is briefly inconsistent at times (an index naming a package
+# version the pool answers 404 for), which the discarded output used to hide.
+quiet_apt() {
+  "$@" >/tmp/apt.log 2>&1 && return
+  cat /tmp/apt.log >&2
+  sleep 30
+  apt-get update >/dev/null && "$@"
+}
+quiet_apt apt-get update
+quiet_apt apt-get install -y --no-install-recommends \
+  build-essential debhelper dpkg-dev python3 python3-pil systemd
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 rm -rf debian/wayland-vnc debian/.debhelper debian/files ../wayland-vnc_*.deb obj-* 2>/dev/null || true
 echo "== build =="
@@ -35,14 +44,14 @@ cp "$deb" /out/ 2>/dev/null || true
 echo "built $(basename "$deb")"
 
 echo "== happy: install (pulls wayvnc/openssl deps) =="
-apt-get install -y "$deb" >/dev/null 2>&1
+quiet_apt apt-get install -y "$deb"
 command -v wayland-vnc >/dev/null || { echo "CLI missing after install" >&2; exit 1; }
 test -f /usr/lib/systemd/user/wayland-vnc.service || { echo "user unit missing" >&2; exit 1; }
 echo "== scenarios =="
 WAYLAND_VNC_CLI=wayland-vnc bash /build/scripts/package_smoke_scenarios.sh
 
 echo "== reinstall is idempotent =="
-apt-get install -y --reinstall "$deb" >/dev/null 2>&1
+quiet_apt apt-get install -y --reinstall "$deb"
 command -v wayland-vnc >/dev/null || { echo "CLI missing after reinstall" >&2; exit 1; }
 
 echo "== bad: dpkg refuses a truncated package =="
