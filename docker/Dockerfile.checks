@@ -1,10 +1,27 @@
-FROM ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
+# ubuntu 26.04 (resolute), pinned by digest alone: a tag beside it is never read.
+FROM ubuntu@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
 # Bootstrap image only; release publication requires a resolved digest and locked packages.
 # Package snapshot locking is a release blocker, not a lint exception for release images.
 RUN apt-get update && apt-get install -y --no-install-recommends \
 ca-certificates gcc git libc6-dev python3 python3-coverage python3-jsonschema python3-pil \
     python3-pip python3-pytest python3-venv shellcheck shfmt systemd \
     && rm -rf /var/lib/apt/lists/*
+# The suite runs as the image's unprivileged account, in a tree that account owns.
+RUN install -d -o ubuntu -g ubuntu /project
 WORKDIR /project
-COPY . .
+# Named paths, never the whole context: a file a developer leaves in the checkout
+# cannot reach an image layer unless it is listed here.
+COPY --chown=ubuntu:ubuntu VERSION pyproject.toml requirements-dev.txt sources.json ./
+COPY --chown=ubuntu:ubuntu debian debian/
+COPY --chown=ubuntu:ubuntu docker docker/
+COPY --chown=ubuntu:ubuntu docs docs/
+COPY --chown=ubuntu:ubuntu native native/
+COPY --chown=ubuntu:ubuntu packaging packaging/
+COPY --chown=ubuntu:ubuntu patches patches/
+COPY --chown=ubuntu:ubuntu po po/
+COPY --chown=ubuntu:ubuntu qualification qualification/
+COPY --chown=ubuntu:ubuntu scripts scripts/
+COPY --chown=ubuntu:ubuntu src src/
+COPY --chown=ubuntu:ubuntu tests tests/
+USER ubuntu
 CMD ["bash", "scripts/build-and-test.sh", "--unit"]

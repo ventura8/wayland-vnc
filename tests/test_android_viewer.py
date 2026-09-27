@@ -317,6 +317,11 @@ def test_parse_ui_and_find_read_bounds_ids_and_text():
     assert find(nodes, rid="nothing") is None
 
 
+def test_parse_ui_reads_attributes_only_where_they_start():
+    nodes = parse_ui('<node text="a b=&quot;c" resource-id="x/y" bounds="[0,0][2,4]">')
+    assert [(n.text, n.resource_id, n.center) for n in nodes] == [("a b=&quot;c", "x/y", (1, 2))]
+
+
 def test_connect_answers_every_screen_in_order_and_keeps_the_secret_off_argv():
     viewer, scripted = _viewer([CONTINUE_XML, IDENTITY_XML, AUTH_XML, DESKTOP_XML])
     outcome = viewer.connect("fixture", "s3cr3tpw", sleep=lambda _s: None)

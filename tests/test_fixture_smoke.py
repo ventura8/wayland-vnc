@@ -321,6 +321,22 @@ def test_named_matches_truncated_comm_by_executable(tmp_path):
     assert [p.pid for p in fixture_smoke.named(processes, "xdg-desktop-portal")] == [1]
 
 
+def test_comm_matches_only_the_kernel_truncation_of_the_name():
+    assert fixture_smoke.comm_matches("sway", "sway")
+    assert fixture_smoke.comm_matches("xdg-desktop-por", "xdg-desktop-portal")
+    assert not fixture_smoke.comm_matches("sw", "sway")
+    assert not fixture_smoke.comm_matches("xdg-desktop", "xdg-desktop-portal")
+    assert not fixture_smoke.comm_matches("swayidle", "sway")
+
+
+def test_host_looks_in_the_session_runtime_dir(monkeypatch, tmp_path):
+    monkeypatch.setenv("XDG_RUNTIME_DIR", str(tmp_path))
+    assert Host().runtime_dir == tmp_path
+    monkeypatch.delenv("XDG_RUNTIME_DIR")
+    monkeypatch.setattr(fixture_smoke.os, "getuid", lambda: 4242)
+    assert Host().runtime_dir == Path("/run/user/4242")
+
+
 def test_named_sees_through_the_qemu_user_interpreter(tmp_path):
     """In a foreign-architecture container on a developer machine, argv[0] of every
     process is qemu-<arch>; the program is argv[1]. comm still names the program."""

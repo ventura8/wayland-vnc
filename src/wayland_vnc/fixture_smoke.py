@@ -15,7 +15,7 @@ import subprocess
 import sys
 import time
 from collections.abc import Callable
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 SCENE_MARKER = "/fixture/scene.py"
@@ -158,12 +158,21 @@ def executable(cmdline: tuple[str, ...]) -> str | None:
     return Path(cmdline[0]).name
 
 
+# /proc/<pid>/comm holds the executable name truncated to this many characters.
+COMM_LENGTH = 15
+
+
+def comm_matches(comm: str, name: str) -> bool:
+    """Whether a /proc comm is `name` as the kernel truncates it."""
+    return len(comm) == min(len(name), COMM_LENGTH) and name.startswith(comm)
+
+
 def named(processes: list[Process], name: str) -> list[Process]:
     """Match by executable name; /proc comm is truncated to fifteen characters."""
     return [
         p
         for p in processes
-        if p.comm == name[:15] and (not p.cmdline or executable(p.cmdline) == name)
+        if comm_matches(p.comm, name) and (not p.cmdline or executable(p.cmdline) == name)
     ]
 
 
@@ -298,12 +307,19 @@ class Expectation:
         return FIXTURES[self.fixture]
 
 
+def session_runtime_dir() -> Path:
+    """The session's runtime directory: `XDG_RUNTIME_DIR` as the fixture image sets it
+    for the compositor, or the systemd per-user default when it is unset."""
+    configured = os.environ.get("XDG_RUNTIME_DIR")
+    return Path(configured) if configured else Path("/run/user") / str(os.getuid())
+
+
 @dataclass(frozen=True)
 class Host:
     """Where the checker looks; overridable so unit tests never touch real /proc."""
 
     proc_root: Path = Path("/proc")
-    runtime_dir: Path = Path("/tmp/wayland-vnc-runtime")
+    runtime_dir: Path = field(default_factory=session_runtime_dir)
     tcp_table: Path = Path("/proc/net/tcp")
     tcp6_table: Path = Path("/proc/net/tcp6")
     outputs: Callable[[Path], list[dict]] = wayvnc_outputs

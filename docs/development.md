@@ -74,6 +74,24 @@ rule (AGENTS.md) covers marking an issue "won't fix" or "false positive" on the
 dashboard exactly as it covers a `# noqa`. If a whole rule is wrong for this project,
 turn that rule off in the quality profile and say why, rather than silencing instances.
 
+### Path arguments
+
+A developer script that takes a path on its command line -- `check-coverage.py`,
+`compile_catalogue.py`, `prepare-source.py`, `record-manual-input.py`, and the KVM
+`make-edid.py` and `render-user-data.py` -- resolves it and refuses it unless it lies
+under the working directory, this checkout or the system temporary directory, so a
+mistyped or generated argument cannot read or overwrite anything else on the machine.
+`settings_app_e2e_scenarios.py` accepts only a work directory under the temporary
+directory, which is where its runner makes one. `publish-evidence.py` runs git inside
+the evidence store (`cwd=`) instead of passing the store's path to git as an argument,
+so no path can be read as a git option.
+
+The fixture Dockerfiles pin their base by digest alone (a tag beside a digest is
+never read, and only suggests a version the digest may not hold) and fetch upstream
+archives with `ADD --checksum`, which checks the same sources.json digest the old
+`curl | sha256sum -c` did before any build step can use the file. Linting that syntax
+needs hadolint v2.14.0 or later, which `scripts/lint-containers.sh` pins.
+
 ## Safety and evidence
 
 Do not attach fixtures to the personal session, restart its services, or reuse its

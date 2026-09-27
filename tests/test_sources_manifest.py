@@ -41,10 +41,10 @@ def _grd_debian_build_depends() -> set[str]:
 def test_grd_ppa_build_depends_cover_the_dockerfile_toolchain():
     """The wayland-vnc-grd source package must declare every build dependency the
     proven Dockerfile.gnome recipe uses, or Launchpad's offline sbuild fails where the
-    container succeeded. The Dockerfile's ca-certificates/curl are for fetching, which
-    the source package does not do (the tarballs are vendored); gcc/make come with
+    container succeeded. The Dockerfile's ca-certificates is a TLS trust store, which
+    the offline source build never uses (the tarballs are vendored); gcc/make come with
     build-essential, which dpkg-buildpackage requires implicitly."""
-    fetch_only = {"ca-certificates", "curl"}
+    fetch_only = {"ca-certificates"}
     implied_by_build_essential = {"gcc", "make"}
     needed = _dockerfile_gnome_build_deps() - fetch_only - implied_by_build_essential
     missing = needed - _grd_debian_build_depends()

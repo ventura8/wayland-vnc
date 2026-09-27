@@ -14,6 +14,7 @@ import gettext as _gettext
 import os
 import subprocess
 import sys
+import tempfile
 from functools import partial
 from pathlib import Path
 from types import SimpleNamespace
@@ -22,6 +23,8 @@ from types import SimpleNamespace
 CREDENTIAL_ROW = "Viewer Credential"
 CONFIG_ROW = "Server Configuration"
 LAN_ROW = "Local Network Access"
+# A globally routable address (RIPE space) that belongs to no well-known service.
+PUBLIC_ADDRESS = "2.5.0.1"
 AUTOSTART_ROW = "Start at Login"
 RUNNING_ROW = "Running Now"
 
@@ -632,9 +635,18 @@ def _gui_application(settings_app):
     return application, adw, gtk
 
 
+def scratch_dir(argument: str) -> Path:
+    """The runner's `mktemp -d` work directory, refused anywhere outside the system
+    temporary directory: every file the scenarios write lands in it."""
+    work = Path(argument).resolve()
+    if not work.is_relative_to(Path(tempfile.gettempdir()).resolve()):
+        raise SystemExit(f"{argument}: the work directory must be under the temp dir")
+    return work
+
+
 def main() -> int:
     staged_lib = Path(sys.argv[1])
-    work = Path(sys.argv[2])
+    work = scratch_dir(sys.argv[2])
     sys.path.insert(0, str(staged_lib))
     fake_systemctl(work)
 
@@ -781,7 +793,7 @@ def main() -> int:
     actions.set_lan_access(False)
     check(actions.status().config.loopback_only, "the switch goes back to this machine only")
     print("== bad: a public address is shouted about ==")
-    actions.apply_network("8.8.8.8", 5900)
+    actions.apply_network(PUBLIC_ADDRESS, 5900)
     exposed = dict(settings_app.status_rows(actions.status()))
     check(
         "PUBLIC ADDRESS" in exposed[CONFIG_ROW],

@@ -20,7 +20,9 @@ python3 scripts/prepare-source.py gnome-remote-desktop /path/to/archive.tar.xz
 python3 scripts/prepare-source.py libvncserver /path/to/archive.tar.gz
 ```
 
-The helper verifies hashes, extracts into a new artifact directory, then applies
+The archive must lie under the working directory, this checkout or the system
+temporary directory (see "Path arguments" in [development.md](development.md)). The
+helper verifies hashes, extracts into a new artifact directory, then applies
 patches with zero fuzz. Use the printed source directories below.
 
 ```sh

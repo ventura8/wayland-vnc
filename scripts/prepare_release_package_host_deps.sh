@@ -28,7 +28,7 @@ grd-deb)
   command -v docker >/dev/null || apt_install docker.io
   ;;
 appimage)
-  apt_install wget file fuse3 python3
+  apt_install curl file fuse3 python3
   ;;
 flatpak)
   apt_install flatpak flatpak-builder

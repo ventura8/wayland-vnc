@@ -1,21 +1,21 @@
 # Development fixture only; package snapshot locking is required before qualification.
 # Stage 1 builds TigerVNC w0vncserver from the checksum-verified upstream archive pinned
 # in sources.json. Only the Wayland server targets are built; no X11 server is installed.
-FROM ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78 AS tigervnc-build
+# ubuntu 26.04 (resolute), pinned by digest alone: a tag beside it is never read.
+FROM ubuntu@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78 AS tigervnc-build
 RUN apt-get update && apt-get install -y --no-install-recommends \
-ca-certificates cmake curl g++ libglib2.0-dev libgnutls28-dev libjpeg-dev libpam0g-dev \
+ca-certificates cmake g++ libglib2.0-dev libgnutls28-dev libjpeg-dev libpam0g-dev \
     libpipewire-0.3-dev libpixman-1-dev libwayland-dev libx11-dev libxdamage-dev libxext-dev \
     libxfixes-dev libxkbcommon-dev libxrandr-dev libxtst-dev make nettle-dev pkg-config uuid-dev \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /build
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-# The archive digest must match sources.json; a mismatch fails the build.
-RUN curl -fsSL -o /tmp/tigervnc.tar.gz \
+# The archive digest must match sources.json; ADD fails the build on a mismatch.
+ADD --checksum=sha256:b107c0c8b8a962594281690366c24186e95c2ea4a169acbc0076aa62ed01f467 \
     https://codeload.github.com/TigerVNC/tigervnc/tar.gz/refs/tags/v1.16.2 \
-    && echo "b107c0c8b8a962594281690366c24186e95c2ea4a169acbc0076aa62ed01f467  /tmp/tigervnc.tar.gz" \
-    | sha256sum -c - \
-    && tar xzf /tmp/tigervnc.tar.gz --strip-components=1 \
+    /tmp/tigervnc.tar.gz
+RUN tar xzf /tmp/tigervnc.tar.gz --strip-components=1 \
     && cmake -S . -B out -DCMAKE_BUILD_TYPE=Release -DENABLE_WAYLAND=ON -DBUILD_VIEWER=OFF \
     -DENABLE_NLS=OFF -DENABLE_H264=OFF -DINSTALL_SYSTEMD_UNITS=OFF \
     && cmake --build out --target w0vncserver w0vncserver-forget vncpasswd -j "$(nproc)" \
@@ -25,7 +25,8 @@ RUN curl -fsSL -o /tmp/tigervnc.tar.gz \
 
 # Stage 2: genuine KWin (virtual backend, QPainter compositing), PipeWire, and the KDE
 # RemoteDesktop/ScreenCast portals. No GPU, no X11, no host desktop access.
-FROM ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
+# ubuntu 26.04 (resolute), pinned by digest alone: a tag beside it is never read.
+FROM ubuntu@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
 RUN apt-get update && apt-get install -y --no-install-recommends \
 at-spi2-core dbus-daemon dbus-user-session fonts-dejavu-core gir1.2-gtk-4.0 kscreen kwin-wayland \
     libcap2-bin libgl1-mesa-dri libglib2.0-bin libgnutls30t64 libhogweed6t64 libjpeg8 \

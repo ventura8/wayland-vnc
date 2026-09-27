@@ -15,6 +15,7 @@ hash table is omitted, which readers handle by falling back to that binary searc
 import argparse
 import struct
 import sys
+import tempfile
 from pathlib import Path
 
 MAGIC = 0x950412DE
@@ -161,13 +162,28 @@ def compile_catalogue(source: Path, destination: Path) -> int:
     return len(entries)
 
 
+# A path argument must lie under the working directory, this checkout or the system
+# temporary directory, so a mistyped or generated argument cannot reach anything else
+# on the machine.
+CHECKOUT = Path(__file__).resolve().parents[1]
+
+
+def confined(argument: str | Path) -> Path:
+    """`argument` as an absolute path, refused when it lies outside the allowed roots."""
+    path = Path(argument).resolve()
+    roots = (Path.cwd().resolve(), CHECKOUT, Path(tempfile.gettempdir()).resolve())
+    if not any(path.is_relative_to(root) for root in roots):
+        raise SystemExit(f"{argument}: outside the working directory, checkout and temp dir")
+    return path
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("source", type=Path, help="the .po catalogue to compile")
     parser.add_argument("destination", type=Path, help="the .mo file to write")
     args = parser.parse_args(argv)
     try:
-        written = compile_catalogue(args.source, args.destination)
+        written = compile_catalogue(confined(args.source), confined(args.destination))
     except (OSError, ValueError) as error:
         print(f"{args.source}: {error}", file=sys.stderr)
         return 1

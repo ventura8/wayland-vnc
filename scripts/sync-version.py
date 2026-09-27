@@ -72,7 +72,8 @@ def main(argv: list[str] | None = None) -> int:
     # landed on the key packaging reads, and left the file valid TOML.
     if tomllib.loads(updated)["project"]["version"] != version:
         raise SystemExit("pyproject.toml rewrite did not land on [project] version")
-    PYPROJECT.write_text(updated, encoding="utf-8")
+    with PYPROJECT.open("w", encoding="utf-8") as handle:
+        handle.write(updated)
     print(f"pyproject.toml version set to {version}")
     return 0
 

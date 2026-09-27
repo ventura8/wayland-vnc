@@ -253,7 +253,7 @@ def read_language(directory: Path) -> str:
     open, in the desktop's own language.
     """
     try:
-        stored = json.loads(preferences_path(directory).read_text())
+        stored = json.loads(preferences_path(directory).read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return AUTOMATIC
     language = stored.get("language") if isinstance(stored, dict) else None
@@ -266,12 +266,14 @@ def write_language(directory: Path, language: str) -> Path:
         raise ValueError(f"Unknown language: {language}")
     path = preferences_path(directory)
     try:
-        stored = json.loads(path.read_text())
+        stored = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(stored, dict):
             stored = {}
     except (OSError, ValueError):
         stored = {}
     stored["language"] = language
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(stored, indent=2, ensure_ascii=False) + "\n")
+    with path.open("w", encoding="utf-8") as handle:
+        json.dump(stored, handle, indent=2, ensure_ascii=False)
+        handle.write("\n")
     return path
