@@ -117,7 +117,8 @@ build_appimage() {
   esac
   if [[ ! -x "$tool" ]]; then
     # HTTPS for the request and for every redirect GitHub answers it with.
-    curl -fsSL --proto =https --proto-redir =https -o "$tool.download" \
+    curl -fsSL --proto =https --proto-redir =https --connect-timeout 30 --max-time 600 \
+      -o "$tool.download" \
       "https://github.com/AppImage/appimagetool/releases/download/${tool_version}/appimagetool-${arch}.AppImage"
     mv -- "$tool.download" "$tool"
     chmod +x "$tool"
