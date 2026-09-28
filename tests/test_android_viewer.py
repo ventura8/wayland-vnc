@@ -857,3 +857,27 @@ def test_a_lab_without_the_viewer_points_at_the_provisioning_script():
     problem = lab.lab_problem()
     assert "not installed" in problem
     assert "scripts/android-provision-viewer.sh" in problem
+
+
+def test_an_adb_probe_that_times_out_is_reported_not_raised():
+    def run(args, **kwargs):
+        if args[3:] == ["emu", "avd", "name"]:
+            raise subprocess.TimeoutExpired(args, kwargs["timeout"])
+        return subprocess.CompletedProcess(args, 0, "device\n", "")
+
+    viewer = AndroidViewer(
+        Adb("/sdk/adb", "emulator-5554", {}, run=run), pointer_report=lambda: None
+    )
+    problem = viewer.lab_problem()
+    assert "adb did not answer `emu avd name` within 30s" in problem
+    assert "scripts/android-stage.sh" in problem
+
+
+def test_an_adb_that_cannot_run_is_reported_not_raised():
+    def run(args, **kwargs):
+        raise FileNotFoundError(2, "No such file or directory", args[0])
+
+    viewer = AndroidViewer(
+        Adb("/sdk/adb", "emulator-5554", {}, run=run), pointer_report=lambda: None
+    )
+    assert "could not run adb at /sdk/adb" in viewer.lab_problem()

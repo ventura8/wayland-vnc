@@ -37,7 +37,8 @@ start)
   # AVD's lock files behind, and the next boot refuses with "Running multiple
   # emulators with the same AVD". They are cleared only when no emulator anywhere on
   # this machine is running the AVD, so a live one is never pulled out from under.
-  if pgrep -f -- "-avd $avd_name( |$)" >/dev/null; then
+  # The emulator takes the AVD as `-avd NAME` or `@NAME`; either one counts.
+  if pgrep -f -- "(-avd |@)$avd_name( |$)" >/dev/null; then
     echo "an emulator is already running $avd_name; stop it first" >&2
     exit 2
   fi
@@ -79,6 +80,14 @@ stop)
     echo "Usage: $0 stop" >&2
     exit 2
   }
+  # Only the lab's own emulator is ever stopped: with no lab container running there
+  # is nothing to stop, and the console at emulator-5554 may be another emulator's.
+  # While the container runs it holds ports 5554/5555 on the host network, so the
+  # emulator answering there is the lab's.
+  if [[ "$(docker container inspect -f '{{.State.Running}}' "$container_name" 2>/dev/null)" != true ]]; then
+    echo "no running $container_name container; nothing to stop"
+    exit 0
+  fi
   # Through the console first, so the emulator shuts down cleanly and removes its own
   # AVD locks; `docker stop` only if it has not gone within a minute.
   adb="${ANDROID_SDK_ROOT:-$HOME/Android/Sdk}/platform-tools/adb"

@@ -20,11 +20,18 @@ SCRIPT = REPO / "scripts" / "android-emulator.sh"
 FAKE_DOCKER = """#!/usr/bin/env bash
 printf '%s\\n' "$*" >> "$RECORD/docker.calls"
 if [[ "$1 $2" == "container inspect" ]]; then
-  exit "${CONTAINER_EXISTS_RC:-1}"
+  if [[ "$3" == "-f" ]]; then
+    # The running-state check: "true" only when the test says the lab runs.
+    [[ -n "${LAB_RUNNING:-}" ]] && echo true && exit 0
+    exit 1
+  fi
+  # Existence, as the start check and the stop's wait loop ask it: gone by then.
+  exit 1
 fi
 """
+# Matches the pattern against the command lines the test says are running.
 FAKE_PGREP = """#!/usr/bin/env bash
-exit "${PGREP_RC:-1}"
+grep -qE -- "$3" <<<"${FAKE_PROCS:-}"
 """
 FAKE_STAT = """#!/usr/bin/env bash
 echo 993
@@ -100,13 +107,27 @@ def test_stale_locks_are_cleared_when_no_emulator_runs_the_avd(lab):
     assert sorted(p.name for p in lab["avd"].iterdir()) == []
 
 
-def test_a_running_emulator_keeps_its_locks_and_the_start_is_refused(lab):
+@pytest.mark.parametrize(
+    "command",
+    [
+        "qemu-system-x86_64 -avd wayland-vnc-api36 -no-window",
+        "emulator @wayland-vnc-api36 -no-snapshot",
+    ],
+)
+def test_a_running_emulator_keeps_its_locks_and_the_start_is_refused(lab, command):
     _stale_locks(lab)
-    result = _run(lab, "start", str(lab["sdk"]), PGREP_RC="0")
+    result = _run(lab, "start", str(lab["sdk"]), FAKE_PROCS=command)
     assert result.returncode == 2
     assert "already running wayland-vnc-api36" in result.stderr
     assert (lab["avd"] / "hardware-qemu.ini.lock").exists()
     assert not (lab["record"] / "docker.calls").read_text(encoding="utf-8").count("run ")
+
+
+def test_another_avd_running_does_not_count_as_the_lab(lab):
+    _stale_locks(lab)
+    result = _run(lab, "start", str(lab["sdk"]), FAKE_PROCS="emulator @wayland-vnc-api36-old")
+    assert result.returncode == 0, result.stderr
+    assert not (lab["avd"] / "hardware-qemu.ini.lock").exists()
 
 
 def test_the_container_uses_the_hosts_console_token(lab):
@@ -128,9 +149,17 @@ def test_a_missing_token_is_created_private_before_the_container_starts(lab):
 
 
 def test_stop_asks_the_emulator_to_quit_before_any_docker_stop(lab):
-    result = _run(lab, "stop")
+    result = _run(lab, "stop", LAB_RUNNING="1")
     assert result.returncode == 0, result.stderr
     adb = (lab["record"] / "adb.calls").read_text(encoding="utf-8")
     assert "-s emulator-5554 emu kill" in adb
     docker = (lab["record"] / "docker.calls").read_text(encoding="utf-8")
     assert "stop " not in docker
+
+
+def test_stop_leaves_an_emulator_alone_when_the_lab_container_is_not_running(lab):
+    result = _run(lab, "stop")
+    assert result.returncode == 0, result.stderr
+    assert "nothing to stop" in result.stdout
+    assert not (lab["record"] / "adb.calls").exists()
+    assert "stop " not in (lab["record"] / "docker.calls").read_text(encoding="utf-8")

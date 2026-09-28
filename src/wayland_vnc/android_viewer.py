@@ -293,8 +293,18 @@ class AndroidViewer:
         frame" and the record named the viewer "unknown", which read as a viewer
         defect. The console matters as much as the device: the two-finger gestures and
         the rotation go through `adb emu`, which only answers the emulator whose
-        console token this adb holds."""
+        console token this adb holds. A probe that times out, or an adb that cannot be
+        run at all, is a problem to report like the others, not a traceback."""
         stage = "start the isolated lab with scripts/android-stage.sh"
+        try:
+            return self._lab_problem(stage)
+        except subprocess.TimeoutExpired as error:
+            probe = " ".join(str(word) for word in error.cmd[3:])
+            return f"adb did not answer `{probe}` within {error.timeout:.0f}s; {stage}"
+        except OSError as error:
+            return f"could not run adb at {self.adb.binary} ({error}); {stage}"
+
+    def _lab_problem(self, stage: str) -> str | None:
         state = self.adb.run("get-state", timeout=30)
         if state.returncode != 0 or state.stdout.strip() != "device":
             detail = " ".join((state.stdout + state.stderr).split()) or "no answer"

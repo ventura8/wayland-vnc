@@ -33,8 +33,10 @@ hands the container the host's console token (`~/.emulator_console_auth_token`,
 created if missing): the emulator otherwise writes a fresh token into the container's
 own home, and the host's `adb emu`, which the gestures and the rotation go through,
 is refused. `start` clears the lock files a lab stopped from outside leaves in the AVD
-directory, but only when no emulator is running the AVD; `stop` shuts the emulator
-down through its console and falls back to `docker stop`.
+directory, but only when no emulator is running the AVD (launched as `-avd` or `@`);
+`stop` acts only while the lab container runs -- the console at `emulator-5554` may
+otherwise be another emulator's -- and shuts the emulator down through its console
+before falling back to `docker stop`.
 
 ## Provisioning the viewer: mirrors are permitted, RealVNC's signature is mandatory
 
