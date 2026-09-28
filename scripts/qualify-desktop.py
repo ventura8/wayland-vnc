@@ -654,6 +654,10 @@ class HarnessViewerMixin:
         if text == "\n":
             self._inject("key", "0xff0d")
             return
+        # The key that wakes the GNOME and Plasma lock shields (desktop_scenarios).
+        if text == " ":
+            self._inject("key", "0x0020")
+            return
         if not text.replace("-", "").isalnum():
             raise ValueError("only alphanumeric text is typed")
         self._inject("type", text)

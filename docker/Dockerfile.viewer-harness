@@ -3,7 +3,8 @@
 # the image) and exposes WayVNC virtual input on a unix socket so a runner can type,
 # click, scroll and drag through the real viewer. XWayland exists here only for the
 # proprietary viewer binary; no VNC server under test ever runs in this container.
-FROM ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
+# ubuntu 26.04 (resolute), pinned by digest alone: a tag beside it is never read.
+FROM ubuntu@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
 RUN apt-get update && apt-get install -y --no-install-recommends \
 ca-certificates dbus-daemon fonts-dejavu-core libgl1-mesa-dri libx11-6 libxau6 libxcb1 libxdmcp6 \
     libxext6 python3 sway wayvnc xwayland \

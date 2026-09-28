@@ -13,6 +13,7 @@ files are staged in the clone for the maintainer to look at first.
 import argparse
 import subprocess
 import sys
+from functools import partial
 from pathlib import Path
 
 from wayland_vnc.evidence_store import publish
@@ -38,12 +39,11 @@ def main(argv: list[str] | None = None) -> int:
             ["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True, timeout=30
         ).stdout.strip()
     )
-    if not (args.store / ".git").exists():
+    store = args.store.resolve()
+    if not (store / ".git").exists():
         parser.error(f"{args.store} is not a git clone of the evidence repository")
 
-    result = publish(
-        args.evidence_root, args.store, commit, include_incomplete=args.include_incomplete
-    )
+    result = publish(args.evidence_root, store, commit, include_incomplete=args.include_incomplete)
     for line in result.skipped:
         print(f"skipped: {line}", file=sys.stderr)
     print(
@@ -56,11 +56,13 @@ def main(argv: list[str] | None = None) -> int:
         print("nothing to publish for this commit", file=sys.stderr)
         return 1
     if args.push:
-        git = ["git", "-C", str(args.store)]
-        subprocess.run([*git, "add", "--", commit], check=True, timeout=120)
+        # The store is the working directory of each git call, never an argument, so
+        # no path given on the command line can be read by git as an option.
+        git = partial(subprocess.run, check=True, cwd=store)
+        git(["git", "add", "--", commit], timeout=120)
         message = f"evidence for {commit}: {len(result.records)} record(s)"
-        subprocess.run([*git, "commit", "--quiet", "-m", message], check=True, timeout=120)
-        subprocess.run([*git, "push", "--quiet"], check=True, timeout=600)
+        git(["git", "commit", "--quiet", "-m", message], timeout=120)
+        git(["git", "push", "--quiet"], timeout=600)
         print("pushed")
     return 0
 

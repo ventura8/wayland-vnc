@@ -20,8 +20,22 @@ import os
 import pathlib
 import re
 import sys
+import tempfile
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
+
+
+def confined(argument: str) -> pathlib.Path:
+    """`argument` as an absolute path, refused unless it lies under the working
+    directory, this checkout or the system temporary directory, so a mistyped or
+    generated argument cannot reach anything else on the machine."""
+    path = pathlib.Path(argument).resolve()
+    roots = (pathlib.Path.cwd().resolve(), REPO, pathlib.Path(tempfile.gettempdir()).resolve())
+    if not any(path.is_relative_to(root) for root in roots):
+        raise SystemExit(f"{argument}: outside the working directory, checkout and temp dir")
+    return path
+
+
 # Packages the container needs that mean nothing in a virtual machine.
 CONTAINER_ONLY = {"dbus-daemon"}
 
@@ -104,7 +118,7 @@ def _credential_values(env) -> dict[str, str]:
 
 
 def main() -> None:
-    template_path, out_path = (pathlib.Path(arg) for arg in sys.argv[1:3])
+    template_path, out_path = (confined(arg) for arg in sys.argv[1:3])
     env = os.environ
     target = env["WAYLAND_VNC_TEMPLATE_TARGET"]
     template = template_path.read_text(encoding="utf-8")

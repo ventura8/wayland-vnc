@@ -226,7 +226,9 @@ On these guests the runner's machine capabilities add what the headless containe
 cannot offer: output modes and the second connector through Mutter's DisplayConfig
 (`tests/fixtures/gnome/mutter-monitors.py`) or `kscreen-doctor`, and the desktops'
 own lock screens (`org.gnome.ScreenSaver`, `org.freedesktop.ScreenSaver`), which the
-viewer wakes with a key before typing the password. Two guest facts shape the code:
+viewer wakes with a key before typing the password (the desktop harness sends that
+space as a key event; it types only alphanumeric words, so a space refused as text
+used to fail `lock` and leave the desktop locked for `monitor-change`). Two guest facts shape the code:
 in a logind session the fixture account cannot read even its own processes' `/proc`
 entries, so the smoke runs as root and hands only the Mutter query to the session bus
 owner; and the guest's runtime directory is logind's `/run/user/1000`, whose sweep is

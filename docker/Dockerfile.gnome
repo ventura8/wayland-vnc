@@ -2,9 +2,10 @@
 # Stage 1 builds the private LibVNCServer and the patched GNOME Remote Desktop VNC daemon
 # from the checksum-verified archives pinned in sources.json, applying the project's
 # ordered patch series with zero fuzz. Nothing is installed into the distribution paths.
-FROM ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78 AS grd-build
+# ubuntu 26.04 (resolute), pinned by digest alone: a tag beside it is never read.
+FROM ubuntu@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78 AS grd-build
 RUN apt-get update && apt-get install -y --no-install-recommends \
-ca-certificates cmake curl gcc libcairo2-dev libdbus-1-dev libdrm-dev libei-dev libepoxy-dev \
+ca-certificates cmake gcc libcairo2-dev libdbus-1-dev libdrm-dev libei-dev libepoxy-dev \
     libglib2.0-dev libjpeg-dev libkrb5-dev libnotify-dev libpipewire-0.3-dev libpng-dev \
     libsecret-1-dev libtss2-dev libxkbcommon-dev make meson ninja-build patch pkg-config xz-utils \
     zlib1g-dev \
@@ -21,11 +22,11 @@ ARG WAYLAND_VNC_EMULATED=0
 ENV WAYLAND_VNC_EMULATED=${WAYLAND_VNC_EMULATED}
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /build/libvnc
-RUN curl -fsSL -o /tmp/libvncserver.tar.gz \
+# ADD verifies the archive against the sources.json digest; a mismatch fails the build.
+ADD --checksum=sha256:62352c7795e231dfce044beb96156065a05a05c974e5de9e023d688d8ff675d7 \
     https://codeload.github.com/LibVNC/libvncserver/tar.gz/refs/tags/LibVNCServer-0.9.15 \
-    && echo "62352c7795e231dfce044beb96156065a05a05c974e5de9e023d688d8ff675d7  /tmp/libvncserver.tar.gz" \
-    | sha256sum -c - \
-    && tar xzf /tmp/libvncserver.tar.gz --strip-components=1 -C /build/libvnc \
+    /tmp/libvncserver.tar.gz
+RUN tar xzf /tmp/libvncserver.tar.gz --strip-components=1 -C /build/libvnc \
     && for p in /patches/libvncserver/*.patch; do patch --batch --forward --fuzz=0 -p1 -i "$p"; done \
     && cmake -G Ninja -S . -B out -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_SHARED_LIBS=ON \
     -DWITH_EXAMPLES=OFF -DWITH_TESTS=OFF -DWITH_GNUTLS=OFF -DWITH_OPENSSL=OFF -DWITH_SDL=OFF \
@@ -34,11 +35,10 @@ RUN curl -fsSL -o /tmp/libvncserver.tar.gz \
     && cmake --build out -j "$(nproc)" && cmake --install out \
     && bash /build/scripts/test-encoding.sh /build/libvnc /build/libvnc/out
 WORKDIR /build/grd
-RUN curl -fsSL -o /tmp/grd.tar.xz \
+ADD --checksum=sha256:31df628f4113573f136ffc8dc001763aed633cd85bed21e58bc61f8a17df091f \
     https://download.gnome.org/sources/gnome-remote-desktop/50/gnome-remote-desktop-50.2.tar.xz \
-    && echo "31df628f4113573f136ffc8dc001763aed633cd85bed21e58bc61f8a17df091f  /tmp/grd.tar.xz" \
-    | sha256sum -c - \
-    && tar xJf /tmp/grd.tar.xz --strip-components=1 -C /build/grd \
+    /tmp/grd.tar.xz
+RUN tar xJf /tmp/grd.tar.xz --strip-components=1 -C /build/grd \
     && for p in /patches/gnome-remote-desktop/*.patch; do patch --batch --forward --fuzz=0 -p1 -i "$p"; done \
     && PKG_CONFIG_PATH=/opt/wayland-vnc/libvnc/lib/pkgconfig meson setup out \
     -Dvnc=true -Drdp=false -Dman=false -Dtests=false -Dsystemd=false \
@@ -48,7 +48,8 @@ RUN curl -fsSL -o /tmp/grd.tar.xz \
 
 # Stage 2: real headless GNOME Shell (Mutter virtual monitor, software rendering),
 # PipeWire, and the private daemon. No GPU, no X11, no host desktop access.
-FROM ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
+# ubuntu 26.04 (resolute), pinned by digest alone: a tag beside it is never read.
+FROM ubuntu@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
 RUN apt-get update && apt-get install -y --no-install-recommends \
 dbus-daemon dbus-user-session fonts-dejavu-core gir1.2-gtk-4.0 gnome-shell \
     gsettings-desktop-schemas libcairo2 libdrm2 libei1 libepoxy0 libgl1-mesa-dri libglib2.0-bin \

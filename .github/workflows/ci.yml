@@ -54,8 +54,11 @@ jobs:
           # front matter and sets the project's 140-column Markdown standard.
           pymarkdown -c .pymarkdown.json scan AGENTS.md CLAUDE.md README.md \
             SECURITY.md .github/copilot-instructions.md docs .agents
-          shellcheck scripts/*.sh packaging/*.sh
-          shfmt -d -i 2 scripts/*.sh packaging/*.sh
+          # Every shell file, as scripts/build-and-test.sh finds them: a top-level glob
+          # never reached scripts/kvm/ or packaging/snap/.
+          mapfile -t shell_scripts < <(find scripts packaging -type f -name '*.sh' | sort)
+          shellcheck "${shell_scripts[@]}"
+          shfmt -d -i 2 "${shell_scripts[@]}"
           yamllint .github .yamllint.yaml packaging/flatpak packaging/snap
 
       - name: Translation catalogues (template in sync, all 101 compile)

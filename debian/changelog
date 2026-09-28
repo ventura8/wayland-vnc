@@ -1,3 +1,23 @@
+wayland-vnc (1.0.2) resolute; urgency=medium
+
+  * Hardening release. This package behaves exactly as in 1.0.1: the payload,
+    the systemd user unit, the default 127.0.0.1:5900 bind and the Local Network
+    Access switch. wayland-vnc-grd is unchanged.
+  * The settings app reads and writes its language preference as explicit UTF-8
+    instead of the locale's encoding.
+  * The AppImage now embeds a pinned, checksummed type2 runtime. appimagetool
+    used to download the runtime from a mutable "continuous" release, unverified,
+    into every AppImage it built.
+  * Every open SonarQube finding was fixed in code, none suppressed: base images
+    pinned by digest alone, upstream archives verified with ADD --checksum,
+    unprivileged lab images, HTTPS-only bounded downloads, and developer scripts
+    that refuse path arguments outside the checkout or the temp directory.
+  * Qualification harness: the desktop viewer can now wake the GNOME and Plasma
+    lock screens (it refused the space it must type), which also failed Plasma's
+    monitor-change scenario. No desktop is release-qualified at this version.
+
+ -- ventura8 <alexandrescu.sergiu@gmail.com>  Mon, 28 Sep 2026 00:00:00 +0300
+
 wayland-vnc (1.0.1) resolute; urgency=medium
 
   * Quality release. This package behaves exactly as in 1.0.0: the payload, the

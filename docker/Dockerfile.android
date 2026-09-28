@@ -1,4 +1,5 @@
-FROM ubuntu:26.04@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
+# ubuntu 26.04 (resolute), pinned by digest alone: a tag beside it is never read.
+FROM ubuntu@sha256:da6fc2be547864451aa253836dd926da33623312df4a9a243e35dc877c378a78
 # SDK/system image are official, separately provisioned read-only mounts, never redistributed.
 # Development fixture only; pin apt snapshot before release qualification.
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -7,4 +8,7 @@ libasound2t64 libegl1 libgl1 libglu1-mesa libnss3 libpulse0 libx11-6 libxcb1 lib
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /lab
 COPY tests/fixtures/android-session.sh /lab/android-session.sh
+# scripts/android-emulator.sh runs the lab as the invoking account; left to itself the
+# image is unprivileged too, and the emulator needs no root inside it.
+USER ubuntu
 ENTRYPOINT ["/lab/android-session.sh"]

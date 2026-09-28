@@ -144,7 +144,9 @@ EV_SYN = "EV_SYN:0:0"
 PINCH_REPEATS = 3
 
 NODE_RE = re.compile(r"<node [^>]*>")
-ATTR_RE = re.compile(r'([^\s=]++)="([^"]*+)"')
+# Every attribute follows whitespace; anchoring on it means a name is only ever tried
+# from its first character, so a long unquoted run is scanned once, not once per start.
+ATTR_RE = re.compile(r'\s([^\s=]++)="([^"]*+)"')
 
 
 def parse_ui(xml: str) -> list[UiNode]:

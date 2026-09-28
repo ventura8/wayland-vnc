@@ -22,9 +22,9 @@ packaging/snap/prime
 *.vnc
 *.avd
 # Local secret material must never reach a build context: docker/Dockerfile.checks
-# copies the whole tree, so anything matching here would otherwise be baked into an
-# image layer. None of these are tracked; these rules keep a developer's working
-# copy out of the context too.
+# copies whole source directories, so anything matching here inside them would
+# otherwise be baked into an image layer. None of these are tracked; these rules keep
+# a developer's working copy out of the context too.
 .env
 .env.*
 *.env

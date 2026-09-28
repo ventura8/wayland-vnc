@@ -159,7 +159,9 @@ echo "== base cloud image =="
 # guest contents while both claiming to be the same evidence environment. Refresh
 # image_sha256 deliberately when moving to a newer image, and re-record the evidence.
 if [[ ! -f "$base" ]]; then
-  curl -fSL -o "$base.part" "$image_url"
+  # A cloud image is several hundred MB; half an hour bounds a stalled mirror.
+  curl -fSL --proto =https --proto-redir =https --connect-timeout 30 --max-time 1800 \
+    -o "$base.part" "$image_url"
   if ! printf '%s  %s\n' "$image_sha256" "$base.part" | sha256sum -c - >/dev/null 2>&1; then
     echo "Cloud image does not match the pinned digest $image_sha256." >&2
     echo "Ubuntu has republished $image_url; verify the new image and update" >&2

@@ -18,7 +18,9 @@ explicitly asks.
 1. **Version from the current branch only** — parse `git branch --show-current`. Write
    that semver into the repo-root **`VERSION`** (single source of truth, no `v`
    prefix), then run `scripts/sync-version.py` so `pyproject.toml` `[project] version`
-   matches. Do not invent a version from tags or prior docs.
+   matches, and `scripts/build-translations.sh extract` so the translation template's
+   `Project-Id-Version` follows (CI's translation gate fails a stale template). Do not
+   invent a version from tags or prior docs.
 2. **Review ALL changes** — every file and theme in this release: product (CLI, runtime,
    serving path, installer, native patches), fixtures and the qualification harness,
    CI / Docker / scripts / workflows, packaging (deb/rpm/arch/appimage/flatpak/snap),
@@ -118,6 +120,7 @@ pushed tip without an explicit confirmed `--force-with-lease`.
 Release progress:
 - [ ] Version parsed from current branch only
 - [ ] VERSION written + scripts/sync-version.py (pyproject synced)
+- [ ] scripts/build-translations.sh extract (po/wayland-vnc.pot carries the version; CI fails a stale one)
 - [ ] PPA_UPLOAD_REVISION reset to 1 (new VERSION) or left as a re-upload bump
 - [ ] debian/changelog top entry added
 - [ ] Human install URLs / docs TAG updated

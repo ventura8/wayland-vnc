@@ -2,6 +2,7 @@
 
 import json
 import subprocess
+from pathlib import Path
 
 import pytest
 from PIL import Image
@@ -234,3 +235,12 @@ def test_grd_stored_password_returns_none_when_the_keyring_has_no_secret(monkeyp
         ),
     )
     assert hardware.grd_stored_password() is None
+
+
+def test_the_default_package_follows_the_version_file():
+    """The run installs the .deb the deb smoke built for VERSION. A pinned version in
+    the default kept installing the previous release after a bump."""
+    script = Path(__file__).resolve().parents[1] / "scripts" / "run_hardware_validation.sh"
+    default = next(line for line in script.read_text().splitlines() if line.startswith("deb="))
+    assert "<VERSION" in default
+    assert not any(char.isdigit() for char in default.split("wayland-vnc_", 1)[1])

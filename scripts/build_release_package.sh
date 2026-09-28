@@ -96,40 +96,20 @@ build_appimage() {
   install -m 755 packaging/appimage/AppRun "$appdir/AppRun"
   install -m 644 packaging/appimage/wayland-vnc.desktop "$appdir/wayland-vnc.desktop"
   install -m 644 packaging/appimage/wayland-vnc.png "$appdir/wayland-vnc.png"
-  # The AppImage runtime is architecture-specific, so the tool (and the runtime it
-  # embeds) follows scripts/target-arch.sh: the host's architecture, or the one an
-  # emulated run asks for. Both builds of the tool are pinned to a tagged release and
-  # verified before ever being made executable. The previous URL was the mutable
-  # `continuous` tag fetched without a checksum, so whatever that tag pointed at on
-  # the day was executed with the privileges of the release build, and every AppImage
-  # it produced depended on it.
-  local arch tool tool_sha256
+  # The AppImage runtime is architecture-specific, so the tool and the runtime it
+  # embeds follow scripts/target-arch.sh: the host's architecture, or the one an
+  # emulated run asks for. Both are pinned to tagged releases and verified by
+  # packaging/appimage-pins.sh before use (the cache under packaging/appimage/ is
+  # re-verified on every run). appimagetool is handed the runtime explicitly: left to
+  # itself it downloads one from type2-runtime's mutable `continuous` release with no
+  # checksum, and every AppImage it built shipped that unverified stub.
+  local arch
   arch=$(bash scripts/target-arch.sh appimage)
-  tool="packaging/appimage/appimagetool-$arch"
-  local tool_version=1.9.1
-  case "$arch" in
-  x86_64) tool_sha256=ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0 ;;
-  aarch64) tool_sha256=f0837e7448a0c1e4e650a93bb3e85802546e60654ef287576f46c71c126a9158 ;;
-  *)
-    echo "no pinned appimagetool checksum for architecture '$arch'" >&2
-    return 1
-    ;;
-  esac
-  if [[ ! -x "$tool" ]]; then
-    wget -qO "$tool.download" \
-      "https://github.com/AppImage/appimagetool/releases/download/${tool_version}/appimagetool-${arch}.AppImage"
-    mv -- "$tool.download" "$tool"
-    chmod +x "$tool"
-  fi
-  # Verify on EVERY run, not only after a download: the cached copy under
-  # packaging/appimage/ survives between builds and is executed with the privileges of
-  # the release build, so a tampered or half-written one must never reach exec.
-  if ! printf '%s  %s\n' "$tool_sha256" "$tool" | sha256sum -c - >/dev/null 2>&1; then
-    rm -f -- "$tool" "$tool.download"
-    echo "appimagetool ${tool_version} failed its checksum; refusing to run it" >&2
-    return 1
-  fi
-  ARCH="$arch" "$tool" --appimage-extract-and-run \
+  # shellcheck source=packaging/appimage-pins.sh
+  . packaging/appimage-pins.sh
+  appimage_toolchain "$arch" packaging/appimage
+  ARCH="$arch" "packaging/appimage/appimagetool-$arch" --appimage-extract-and-run \
+    --runtime-file "packaging/appimage/runtime-$arch" \
     "$appdir" "$out/wayland-vnc-${version}-${arch}.AppImage"
 }
 
