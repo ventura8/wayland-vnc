@@ -779,7 +779,10 @@ executed on arm64.
       `DOCKER_DEFAULT_PLATFORM` when a run is emulated. `build_grd_package.sh`
       builds and packages `wayland-vnc-grd_<v>_<arch>.deb` for it (explicit
       `--platform` on every docker call), the AppImage build and smoke pick
-      `appimagetool-<arch>` with a pinned checksum per architecture and name the
+      `appimagetool-<arch>` and the type2 `runtime-<arch>` it embeds from one pin
+      file (`packaging/appimage-pins.sh`: tagged releases, SHA-256 per architecture,
+      handed to the tool with `--runtime-file`; left to itself appimagetool fetched
+      the runtime from the mutable `continuous` release unverified) and name the
       output `-x86_64` or `-aarch64`, and the GRD deb smoke looks for the
       container's own `dpkg --print-architecture`. The pinned `ubuntu:26.04` digest
       is a multi-arch manifest list, so the fixture images build unchanged.

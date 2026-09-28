@@ -44,13 +44,13 @@ quiet_apt() {
 }
 quiet_apt apt-get update
 quiet_apt apt-get install -y --no-install-recommends \
-  python3 wget file binutils ca-certificates zsync squashfs-tools openssl
+  python3 curl file binutils ca-certificates zsync squashfs-tools openssl
 mkdir -p /build && cp -a /src/. /build/ && cd /build
 
 echo "== build AppImage =="
 WAYLAND_VNC_ARTIFACTS_DIR=/out bash -c '
-  # Without this the inner shell keeps going after a failed wget or sha256sum and
-  # chmod+executes whatever landed in /tmp/appimagetool.
+  # Without this the inner shell keeps going after a failed download or checksum and
+  # executes whatever landed in /tmp.
   set -euo pipefail
   out=/out; version=$(tr -d "[:space:]" < VERSION)
   appdir=packaging/appimage/AppDir; rm -rf "$appdir"
@@ -59,19 +59,12 @@ WAYLAND_VNC_ARTIFACTS_DIR=/out bash -c '
   install -m 644 packaging/appimage/wayland-vnc.desktop "$appdir/wayland-vnc.desktop"
   install -m 644 packaging/appimage/wayland-vnc.png "$appdir/wayland-vnc.png"
   # The container is the target architecture (its own uname), so the tool and the
-  # runtime it embeds are picked from inside, pinned per architecture.
-  tool_version=1.9.1
-  case "$(uname -m)" in
-  x86_64) arch=x86_64; tool_sha256=ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0 ;;
-  aarch64) arch=aarch64; tool_sha256=f0837e7448a0c1e4e650a93bb3e85802546e60654ef287576f46c71c126a9158 ;;
-  *) echo "unsupported container architecture $(uname -m)" >&2; exit 1 ;;
-  esac
-  wget -qO /tmp/appimagetool \
-    "https://github.com/AppImage/appimagetool/releases/download/${tool_version}/appimagetool-${arch}.AppImage"
-  printf "%s  %s\n" "$tool_sha256" /tmp/appimagetool | sha256sum -c - >/dev/null
-  chmod +x /tmp/appimagetool
-  ARCH="$arch" /tmp/appimagetool --appimage-extract-and-run \
-    "$appdir" "$out/wayland-vnc-${version}-${arch}.AppImage"
+  # runtime it embeds are picked from inside, from the same pins as the release build.
+  . packaging/appimage-pins.sh
+  arch=$(uname -m)
+  appimage_toolchain "$arch" /tmp
+  ARCH="$arch" "/tmp/appimagetool-$arch" --appimage-extract-and-run \
+    --runtime-file "/tmp/runtime-$arch" "$appdir" "$out/wayland-vnc-${version}-${arch}.AppImage"
 '
 # The one this run built, by version and architecture: /out is the host's artifacts
 # directory and may hold an AppImage of another version or architecture from an

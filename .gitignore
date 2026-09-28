@@ -278,6 +278,7 @@ __marimo__/
 /packaging/appimage/AppDir/
 /packaging/appimage/appimagetool
 /packaging/appimage/appimagetool-*
+/packaging/appimage/runtime-*
 /packaging/flatpak/builddir/
 /packaging/flatpak/repo/
 /.flatpak-builder/
