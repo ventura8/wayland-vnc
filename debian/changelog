@@ -1,3 +1,20 @@
+wayland-vnc (1.0.3) resolute; urgency=medium
+
+  * Release-plumbing release. This package behaves exactly as in 1.0.2, and
+    wayland-vnc-grd as in 1.0.1.
+  * PPA uploads go over SFTP with the account's upload key instead of anonymous
+    FTP. From 1.0.1 on, Launchpad's FTP accepted the first source upload of a
+    release and refused the second with "550 internal server error", so
+    wayland-vnc-grd never reached the PPA after 1.0.0 and the 1.0.1 and 1.0.2
+    GitHub releases were never published. This upload brings the GNOME backend's
+    1.0.1 fix (a resize of the mirrored monitor no longer freezes the session)
+    to the PPA for the first time.
+  * A re-run of a half-finished release skips a source version Launchpad already
+    has, instead of uploading it again. No desktop is release-qualified at this
+    version.
+
+ -- ventura8 <alexandrescu.sergiu@gmail.com>  Mon, 28 Sep 2026 00:00:00 +0300
+
 wayland-vnc (1.0.2) resolute; urgency=medium
 
   * Hardening release. This package behaves exactly as in 1.0.1: the payload,
