@@ -163,7 +163,8 @@ jobs:
           set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y \
-            build-essential debhelper dpkg-dev devscripts dput gpg python3
+            build-essential debhelper dpkg-dev devscripts dput gpg python3 \
+            python3-paramiko jq openssh-client
 
       - name: Carry the validated version into this job
         env:
@@ -265,7 +266,13 @@ jobs:
           dpkg-buildpackage -S -sa -d -k"$GPG_KEY_ID" \
             --sign-backend=gpg --sign-command="$SIGN_DIR/sign.sh"
 
+      # Over SFTP with the account's upload key: anonymous FTP accepted the first
+      # upload of a run and refused the second with "550 internal server error".
+      # scripts/ppa-upload.sh skips a version Launchpad already records, so re-running
+      # this job after a partial upload completes it (docs/ppa-setup.md).
       - name: Upload to the PPA
+        env:
+          PPA_SSH_PRIVATE_KEY: ${{ secrets.PPA_SSH_PRIVATE_KEY }}
         run: |
           set -euo pipefail
           shopt -s nullglob
@@ -277,9 +284,11 @@ jobs:
             echo "Expected exactly one ../*.changes file, found ${#changes[@]}" >&2
             exit 1
           fi
-          dput "$PPA_NAME" "${changes[0]}"
+          scripts/ppa-upload.sh "${changes[0]}"
 
       - name: Upload wayland-vnc-grd to the PPA
+        env:
+          PPA_SSH_PRIVATE_KEY: ${{ secrets.PPA_SSH_PRIVATE_KEY }}
         run: |
           set -euo pipefail
           shopt -s nullglob
@@ -288,7 +297,7 @@ jobs:
             echo "Expected exactly one grd source .changes, found ${#changes[@]}" >&2
             exit 1
           fi
-          dput "$PPA_NAME" "${changes[0]}"
+          scripts/ppa-upload.sh "${changes[0]}"
 
   build-packages:
     name: Build ${{ matrix.pkg }} (${{ matrix.arch }})
