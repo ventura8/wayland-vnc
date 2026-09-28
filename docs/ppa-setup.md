@@ -14,7 +14,10 @@ account and a signing key that only the maintainer holds. This is the whole list
 3. rewrites `debian/changelog` to `<version>+1ppa<revision>~<series>1` for the series
    in the matrix (`resolute`, Ubuntu 26.04);
 4. builds a source-only package and signs it with that key, using `GPG_PASSPHRASE`;
-5. runs `dput ppa:ventura8/wayland-vnc` on the resulting `.changes`.
+5. uploads the resulting `.changes` with `scripts/ppa-upload.sh`: over SFTP as
+   `ventura8`, with the `PPA_SSH_PRIVATE_KEY` secret and Launchpad's pinned host key
+   (`packaging/launchpad-known-hosts`), skipping a source version the PPA already
+   records, so re-running a half-failed job finishes it instead of repeating it.
 
 Steps 3 and 4 are already verified locally: `scripts/run_ppa_source_smoke.sh` builds
 the same source package unsigned in a clean Ubuntu 26.04 container and checks the
@@ -49,7 +52,7 @@ Then add the fingerprint at <https://launchpad.net/~ventura8/+editpgpkeys>. Laun
 sends an encrypted confirmation mail; decrypting and following it is what proves the
 key is yours.
 
-### 4. The two GitHub secrets, in the `ppa-release` environment
+### 4. The signing secrets, in the `ppa-release` environment
 
 The upload job runs under `environment: ppa-release`, so the secrets live there rather
 than at repository scope, and the environment can require a reviewer: with one, no PPA
@@ -67,10 +70,34 @@ gh secret list --repo ventura8/wayland-vnc --env ppa-release                # bo
 ```
 
 The key needs a non-empty passphrase: the signing step refuses an empty one. The
-workflow reads only these two secrets. It never prints them, and the key file it writes
-is removed by a trap.
+workflow never prints either secret, and the key file it writes is removed by a trap.
 
-### 5. Prove the signing path once, without uploading
+### 5. The SFTP upload key
+
+Uploads go over SFTP, not anonymous FTP. From 1.0.1 on, Launchpad's FTP accepted the
+first source upload of a release run and answered the second (`wayland-vnc-grd`) with
+`550 Requested action not taken: internal server error` every time, so the GNOME
+backend stopped reaching the PPA and the GitHub release, which waits on the upload,
+was never published. mixxx met the same failure and moved to SFTP as well
+([mixxxdj/mixxx#17107](https://github.com/mixxxdj/mixxx/pull/17107)).
+
+The key is a dedicated one with no passphrase, since the job uses it unattended; it
+can only upload to this account's PPAs, and removing it on Launchpad revokes it.
+
+```bash
+ssh-keygen -t ed25519 -N "" -C "wayland-vnc PPA upload (GitHub Actions)" \
+  -f "$HOME/.ssh/wayland-vnc-launchpad"
+cat "$HOME/.ssh/wayland-vnc-launchpad.pub"   # paste at https://launchpad.net/~ventura8/+editsshkeys
+gh secret set PPA_SSH_PRIVATE_KEY --repo ventura8/wayland-vnc --env ppa-release \
+  < "$HOME/.ssh/wayland-vnc-launchpad"
+```
+
+Prove it once without uploading: `sftp -i "$HOME/.ssh/wayland-vnc-launchpad"
+-o UserKnownHostsFile=packaging/launchpad-known-hosts ventura8@ppa.launchpad.net`
+must log in (then `bye`). Without the secret the upload step fails naming it; it never
+falls back to FTP.
+
+### 6. Prove the signing path once, without uploading
 
 `scripts/run_ppa_source_smoke.sh` builds the source package unsigned in a container;
 what it cannot exercise is this key. Sign a throwaway build with it and let `dput`
@@ -104,7 +131,9 @@ into the tree, because Launchpad builds offline; its `debian/rules`
 **Re-uploading the same version.** Launchpad rejects a source version it has seen
 before, even after deleting it. Bump `PPA_UPLOAD_REVISION` in the workflow's `env`
 block for a second upload of the same `VERSION`, and reset it to `1` when `VERSION`
-itself changes.
+itself changes. Re-running a release job whose first upload went through is safe:
+`scripts/ppa-upload.sh` asks Launchpad which source versions it already records and
+skips those.
 
 ## Checking the result
 
