@@ -790,7 +790,13 @@ executed on arm64.
       smoke (deb, rpm; the official Arch image is x86_64-only), service activation and
       the portable smokes gained an `arch` axis on `ubuntu-24.04-arm` runners; the
       release workflow builds `grd-deb`, `appimage`, `flatpak` and `snap` on an arm64
-      runner as well and names the artifacts per architecture.
+      runner as well and names the artifacts per architecture. Until 1.0.4 that was
+      untrue for two of them: `wayland-vnc_<v>.snap` and `wayland-vnc-<v>.flatpak`
+      carried no architecture, the release job merged every runner's files into one
+      directory, and one runner's bundle silently replaced the other's, so v1.0.0 to
+      v1.0.3 each shipped one of each. They are now `wayland-vnc_<v>_<amd64|arm64>.snap`
+      and `wayland-vnc-<v>-<x86_64|aarch64>.flatpak`, and the release job keeps each
+      build job's files apart and fails on a name two jobs produced.
 - [x] **Verified under emulation on this laptop** (qemu-user via Ubuntu's `qemu-user` and
       `qemu-user-binfmt`, 2026-09-17): `wayland-vnc-grd_1.0.0_arm64.deb` builds
       (ELF aarch64 daemon linking the private LibVNCServer) once LeakSanitizer is
