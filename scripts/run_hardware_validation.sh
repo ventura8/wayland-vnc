@@ -33,7 +33,9 @@ export PYTHONPATH="$PWD/src${PYTHONPATH:+:$PYTHONPATH}"
 PATH="$(bash scripts/ensure-venv.sh):$PATH"
 export PATH
 
-deb=${WAYLAND_VNC_DEB:-artifacts/deb/wayland-vnc_1.0.0_all.deb}
+# The package the deb smoke builds for the current VERSION; a hard-coded version here
+# once went on installing the previous release after a bump.
+deb=${WAYLAND_VNC_DEB:-artifacts/deb/wayland-vnc_$(tr -d '[:space:]' <VERSION)_all.deb}
 stamp=$(date -u +%Y%m%dT%H%M%SZ)
 out="artifacts/hardware/$stamp"
 mkdir -p "$out"

@@ -29,8 +29,8 @@ The script refuses rather than guesses if any are missing:
 - passwordless `sudo` for `apt`
 - the real **RealVNC Viewer** (`vncviewer`; the banner is checked for "RealVNC")
 - `Xvfb`, to host the viewer without disturbing the desktop
-- a built package: run `scripts/run_deb_package_smoke.sh` first, or set
-  `WAYLAND_VNC_DEB=/path/to.deb`
+- a built package: run `scripts/run_deb_package_smoke.sh` first (the default is
+  `artifacts/deb/wayland-vnc_<VERSION>_all.deb`), or set `WAYLAND_VNC_DEB=/path/to.deb`
 
 ## Running it
 
