@@ -53,3 +53,40 @@ def test_anything_else_is_refused_before_it_reaches_a_shell(text):
     with pytest.raises(ValueError):
         viewer.type_text(text)
     assert not viewer.injected
+
+
+class UnreadyViewer:
+    def __init__(self):
+        self.prepared = False
+
+    def lab_problem(self):
+        return "no Android emulator ready at emulator-5554 (no answer)"
+
+    def prepare(self, port):
+        self.prepared = True
+
+
+class FixtureSide:
+    def __init__(self):
+        self.started = False
+
+    def start(self):
+        self.started = True
+
+
+class AndroidOnFixture(qualify.AndroidViewerMixin, FixtureSide):
+    """The Android viewer mixed onto a fixture that only records being started."""
+
+    def __init__(self, viewer):
+        FixtureSide.__init__(self)
+        self.viewer = viewer
+        self.port = 5911
+
+
+def test_an_android_run_stops_before_the_fixture_when_the_lab_is_not_ready():
+    viewer = UnreadyViewer()
+    driver = AndroidOnFixture(viewer)
+    with pytest.raises(SystemExit, match="Android lab not ready: no Android emulator"):
+        driver.start()
+    assert not driver.started
+    assert not viewer.prepared

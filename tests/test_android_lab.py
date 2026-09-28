@@ -72,3 +72,9 @@ def test_unrelated_lines_survive():
     configured = lab.configure(AS_CREATED)
     assert "hw.lcd.density=420\n" in configured
     assert "tag.id=google_apis_playstore\n" in configured
+
+
+def test_the_runner_expects_the_avd_this_script_creates():
+    from wayland_vnc.android_viewer import AVD_NAME
+
+    assert lab.AVD_NAME == AVD_NAME

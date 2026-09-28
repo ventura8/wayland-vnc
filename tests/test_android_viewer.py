@@ -804,3 +804,56 @@ def test_the_desktop_is_not_visible_under_a_form():
     for screen in (PASSWORD_ONLY_XML, UNENCRYPTED_XML):
         viewer, _scripted = _viewer([screen])
         assert viewer.desktop_visible(parse_ui(f"<hierarchy>{screen}</hierarchy>")) is False
+
+
+def _lab(answers):
+    """An AndroidViewer whose adb answers each command line from `answers`, keyed by
+    the words after the serial; anything unlisted fails like a missing device."""
+
+    def run(args, **kwargs):
+        key = " ".join(args[3:])
+        returncode, stdout = answers.get(key, (1, ""))
+        return subprocess.CompletedProcess(args, returncode, stdout, "")
+
+    return AndroidViewer(Adb("/sdk/adb", "emulator-5554", {}, run=run), pointer_report=lambda: None)
+
+
+READY_LAB = {
+    "get-state": (0, "device\n"),
+    "emu avd name": (0, "wayland-vnc-api36\nOK\n"),
+    "shell getprop sys.boot_completed": (0, "1\n"),
+    "shell dumpsys package com.realvnc.viewer.android": (0, "    versionName=4.9.4.60176\n"),
+}
+
+
+def test_a_ready_lab_has_no_problem():
+    assert _lab(READY_LAB).lab_problem() is None
+
+
+def test_no_emulator_is_reported_with_the_way_to_start_one():
+    problem = _lab({}).lab_problem()
+    assert "no Android emulator ready at emulator-5554" in problem
+    assert "scripts/android-stage.sh" in problem
+
+
+def test_an_emulator_whose_console_does_not_answer_is_not_the_lab():
+    problem = _lab({**READY_LAB, "emu avd name": (1, "")}).lab_problem()
+    assert "is not the isolated AVD wayland-vnc-api36" in problem
+    assert "'nothing'" in problem
+
+
+def test_another_avd_is_not_the_lab():
+    problem = _lab({**READY_LAB, "emu avd name": (0, "Pixel_9\nOK\n")}).lab_problem()
+    assert "'Pixel_9'" in problem
+
+
+def test_a_lab_still_booting_is_not_ready():
+    lab = _lab({**READY_LAB, "shell getprop sys.boot_completed": (0, "\n")})
+    assert "has not finished booting" in lab.lab_problem()
+
+
+def test_a_lab_without_the_viewer_points_at_the_provisioning_script():
+    lab = _lab({**READY_LAB, "shell dumpsys package com.realvnc.viewer.android": (0, "")})
+    problem = lab.lab_problem()
+    assert "not installed" in problem
+    assert "scripts/android-provision-viewer.sh" in problem
