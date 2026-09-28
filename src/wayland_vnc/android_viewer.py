@@ -40,6 +40,9 @@ from functools import partial
 from pathlib import Path
 
 PACKAGE = "com.realvnc.viewer.android"
+# The isolated lab AVD (scripts/android-lab.py creates it, scripts/android-stage.sh
+# boots it). Its console answers `adb emu avd name` with this name.
+AVD_NAME = "wayland-vnc-api36"
 SCREEN = (1920, 1080)
 # The touch surface that is neither a system gesture zone nor the app's toolbar.
 SAFE_LEFT, SAFE_TOP, SAFE_RIGHT, SAFE_BOTTOM = 160, 230, 1760, 900
@@ -283,6 +286,45 @@ class AndroidViewer:
         self.gain = {"fast": 1.2, "slow": 0.6}
 
     # -- device state -----------------------------------------------------------------
+
+    def lab_problem(self) -> str | None:
+        """Why the lab cannot run a scenario, or None when it can. Asked before a run
+        starts: with no emulator attached every scenario used to "fail" on "no valid
+        frame" and the record named the viewer "unknown", which read as a viewer
+        defect. The console matters as much as the device: the two-finger gestures and
+        the rotation go through `adb emu`, which only answers the emulator whose
+        console token this adb holds. A probe that times out, or an adb that cannot be
+        run at all, is a problem to report like the others, not a traceback."""
+        stage = "start the isolated lab with scripts/android-stage.sh"
+        try:
+            return self._lab_problem(stage)
+        except subprocess.TimeoutExpired as error:
+            probe = " ".join(str(word) for word in error.cmd[3:])
+            return f"adb did not answer `{probe}` within {error.timeout:.0f}s; {stage}"
+        except OSError as error:
+            return f"could not run adb at {self.adb.binary} ({error}); {stage}"
+
+    def _lab_problem(self, stage: str) -> str | None:
+        state = self.adb.run("get-state", timeout=30)
+        if state.returncode != 0 or state.stdout.strip() != "device":
+            detail = " ".join((state.stdout + state.stderr).split()) or "no answer"
+            return f"no Android emulator ready at {self.adb.serial} ({detail}); {stage}"
+        console = self.adb.run("emu", "avd", "name", timeout=30)
+        attached = console.stdout.splitlines()[0].strip() if console.stdout else ""
+        if attached != AVD_NAME:
+            return (
+                f"the emulator at {self.adb.serial} is not the isolated AVD {AVD_NAME}, or"
+                f" its console does not answer this adb (it reports {attached or 'nothing'!r});"
+                f" {stage}"
+            )
+        if self.adb.shell("getprop", "sys.boot_completed", timeout=30).strip() != "1":
+            return f"{AVD_NAME} has not finished booting; {stage}"
+        if "versionName=" not in self.adb.shell("dumpsys", "package", PACKAGE, timeout=30):
+            return (
+                f"RealVNC Viewer for Android is not installed in {AVD_NAME};"
+                " install it with scripts/android-provision-viewer.sh"
+            )
+        return None
 
     def prepare(self, local_port: int) -> None:
         """The VNC port bridged, the app not running, auto-rotate on (the virtual

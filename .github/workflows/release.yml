@@ -367,19 +367,27 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+      # One directory per build job, not merge-multiple: merging let two runners'
+      # identically named files overwrite each other in silence, which is how v1.0.0 to
+      # v1.0.3 each shipped one .snap and one .flatpak for two architectures.
       - name: Download release artifacts
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
         with:
           path: downloaded
           pattern: release-pkg-*
-          merge-multiple: true
       - name: Assemble artifact set and checksums
         run: |
           set -euo pipefail
           mkdir -p artifacts
-          find downloaded -type f \( -name '*.deb' -o -name '*.rpm' \
+          while IFS= read -r -d '' file; do
+            if [ -e "artifacts/$(basename "$file")" ]; then
+              echo "Two build jobs produced $(basename "$file"); refusing to let one replace the other" >&2
+              exit 1
+            fi
+            cp -a "$file" artifacts/
+          done < <(find downloaded -type f \( -name '*.deb' -o -name '*.rpm' \
             -o -name '*.pkg.tar.*' -o -name '*.AppImage' -o -name '*.flatpak' \
-            -o -name '*.snap' \) -exec cp -a {} artifacts/ \;
+            -o -name '*.snap' \) -print0)
           cd artifacts
           shopt -s nullglob
           files=( *.deb *.rpm *.pkg.tar.* *.AppImage *.flatpak *.snap )

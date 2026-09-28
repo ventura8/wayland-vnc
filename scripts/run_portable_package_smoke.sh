@@ -170,7 +170,8 @@ apps:
     restart-condition: on-failure
     restart-delay: 30s
 YAML
-snap=/out/wayland-vnc_${version}.snap
+# Named per architecture, as the release build names it (build_release_package.sh).
+snap=/out/wayland-vnc_${version}_$(dpkg --print-architecture).snap
 mksquashfs "$stage" "$snap" -noappend -comp xz -all-root -no-xattrs >/dev/null
 echo "built $(basename "$snap") ($(stat -c%s "$snap") bytes)"
 

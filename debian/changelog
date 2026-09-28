@@ -1,3 +1,18 @@
+wayland-vnc (1.0.4) resolute; urgency=medium
+
+  * This package behaves exactly as in 1.0.3, and wayland-vnc-grd as in 1.0.1.
+  * The GitHub release carries the snap and the flatpak for both amd64 and arm64.
+    Their names had no architecture, and one runner's bundle silently replaced
+    the other's, so 1.0.0 to 1.0.3 each shipped one of each. The release now
+    fails rather than let two builds overwrite each other.
+  * Qualification lab: an Android run stops before it starts anything when no
+    emulator is ready, naming the fix, instead of failing every scenario and
+    recording the viewer as "unknown"; the headless container lab now shares the
+    host's emulator console token and clears the lock files a stopped lab leaves.
+    No desktop is release-qualified at this version.
+
+ -- ventura8 <alexandrescu.sergiu@gmail.com>  Mon, 28 Sep 2026 00:00:00 +0300
+
 wayland-vnc (1.0.3) resolute; urgency=medium
 
   * Release-plumbing release. This package behaves exactly as in 1.0.2, and

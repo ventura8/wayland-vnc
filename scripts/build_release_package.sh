@@ -113,16 +113,23 @@ build_appimage() {
     "$appdir" "$out/wayland-vnc-${version}-${arch}.AppImage"
 }
 
+# The snap and the flatpak are built on a runner of each architecture, and the release
+# job gathers every runner's files into one directory: a name without the architecture
+# let one runner's bundle replace the other's, so a release shipped a single .snap and
+# a single .flatpak. Each spells the architecture the way its ecosystem does.
 build_flatpak() {
+  local arch
+  arch=$(bash scripts/target-arch.sh appimage)
   # --user: the runtime and SDK were installed into the user scope by the prepare step.
   flatpak-builder --user --force-clean --repo=packaging/flatpak/repo \
     packaging/flatpak/builddir packaging/flatpak/io.github.ventura8.wayland_vnc.yaml
   flatpak build-bundle packaging/flatpak/repo \
-    "$out/wayland-vnc-${version}.flatpak" io.github.ventura8.wayland_vnc
+    "$out/wayland-vnc-${version}-${arch}.flatpak" io.github.ventura8.wayland_vnc
 }
 
 build_snap() {
-  local snap="wayland-vnc_${version}.snap"
+  local snap
+  snap="wayland-vnc_${version}_$(bash scripts/target-arch.sh deb).snap"
   rm -f -- "$snap"
   # snapcraft mounts the project tree (the one holding snap/snapcraft.yaml) into its
   # LXD build container, so it must be the repo root for the part's `source: .` to be

@@ -951,6 +951,11 @@ class AndroidViewerMixin:
         self.viewer.pointer_report = self._pointer
 
     def start(self):
+        # Before the fixture or guest starts: a lab with no emulator (after a reboot,
+        # say) otherwise fails every scenario and records the viewer as "unknown".
+        problem = self.viewer.lab_problem()
+        if problem:
+            raise SystemExit(f"Android lab not ready: {problem}")
         super().start()
         self.viewer.prepare(self.port)
 

@@ -20,6 +20,24 @@ host. The AVD's `adb` key lives under `artifacts/android/user`; a plain `adb dev
 that does not export `ANDROID_AVD_HOME`/`ANDROID_USER_HOME` presents a different key and
 sees the device as `unauthorized`. `--wipe-data` resets this AVD only.
 
+The emulator does not survive a reboot, and the runner does not start it: a run first
+asks the lab whether it is ready (`AndroidViewer.lab_problem`: a device at
+`emulator-5554`, a console that answers `adb emu avd name` with `wayland-vnc-api36`, a
+finished boot, the app installed) and stops before any fixture or guest starts if it is
+not, naming the fix. Before that check an absent emulator failed every scenario on "no
+valid frame" and recorded the viewer as "unknown", which read as a viewer defect.
+
+Without a display, `scripts/android-emulator.sh start /path/to/Android/Sdk` runs the
+same AVD headless in a container (`stop`, `status`), unprivileged and with KVM. It
+hands the container the host's console token (`~/.emulator_console_auth_token`,
+created if missing): the emulator otherwise writes a fresh token into the container's
+own home, and the host's `adb emu`, which the gestures and the rotation go through,
+is refused. `start` clears the lock files a lab stopped from outside leaves in the AVD
+directory, but only when no emulator is running the AVD (launched as `-avd` or `@`);
+`stop` acts only while the lab container runs -- the console at `emulator-5554` may
+otherwise be another emulator's -- and shuts the emulator down through its console
+before falling back to `docker stop`.
+
 ## Provisioning the viewer: mirrors are permitted, RealVNC's signature is mandatory
 
 RealVNC publishes no first-party APK download (their Android page links only to Google

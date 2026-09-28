@@ -28,7 +28,7 @@ and full multi-format packaging (deb, rpm, Arch, AppImage, Flatpak, Snap) with P
 GitHub release automation.
 
 - **Version single source of truth**: the release number lives only in the repo-root
-  [`VERSION`](VERSION) file (currently `1.0.3`, displayed as `v1.0.3`). After bumping
+  [`VERSION`](VERSION) file (currently `1.0.4`, displayed as `v1.0.4`). After bumping
   `VERSION`, run [`scripts/sync-version.py`](scripts/sync-version.py) so
   `pyproject.toml` `[project] version` matches; `--full` runs `--check` and fails if
   they diverge. The deb/rpm/Arch builders read `VERSION` at build time. Cut notes with
