@@ -16,7 +16,8 @@ appimage_runtime_version=20251108
 # appimage_pins ARCH: set appimagetool_sha256 and appimage_runtime_sha256 for ARCH
 # (x86_64 or aarch64); fails for any other architecture.
 appimage_pins() {
-  case "$1" in
+  local arch=$1
+  case "$arch" in
   x86_64)
     appimagetool_sha256=ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0
     appimage_runtime_sha256=2fca8b443c92510f1483a883f60061ad09b46b978b2631c807cd873a47ec260d
@@ -26,7 +27,7 @@ appimage_pins() {
     appimage_runtime_sha256=00cbdfcf917cc6c0ff6d3347d59e0ca1f7f45a6df1a428a0d6d8a78664d87444
     ;;
   *)
-    echo "no pinned AppImage toolchain for architecture '$1'" >&2
+    echo "no pinned AppImage toolchain for architecture '$arch'" >&2
     return 1
     ;;
   esac

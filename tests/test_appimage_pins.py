@@ -34,7 +34,8 @@ def test_each_supported_architecture_pins_both_the_tool_and_the_runtime(arch):
     assert result.returncode == 0, result.stderr
     tool, runtime = result.stdout.split()
     for digest in (tool, runtime):
-        assert len(digest) == 64 and int(digest, 16) >= 0
+        assert len(digest) == 64
+        assert int(digest, 16) >= 0
     assert tool != runtime
 
 
