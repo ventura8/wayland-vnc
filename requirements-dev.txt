@@ -1,7 +1,7 @@
 # Pinned development/CI toolchain. Kept in a requirements file (not inline in the
 # workflow) so Dependabot's pip ecosystem can actually see and bump these pins.
 ruff==0.16.8
-pylint==4.0.8
+pylint==4.0.9
 yamllint==1.38.0
 pytest==9.1.1
 coverage==7.16.1
