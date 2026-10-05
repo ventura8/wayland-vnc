@@ -4,7 +4,7 @@ ruff==0.16.9
 pylint==4.0.9
 yamllint==1.38.0
 pytest==9.1.1
-coverage==7.16.1
+coverage==7.16.2
 Pillow==12.3.0
 jsonschema==4.26.0
 # jsonschema's date-time format check is a no-op without this; the release gate
